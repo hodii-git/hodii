@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, Crown, Rocket } from "lucide-react";
@@ -43,7 +44,7 @@ function Promote() {
     return () => clearInterval(t);
   }, [state, paymentId, slug, refetch]);
 
-  if (isPending) return <p className="text-sm text-muted-foreground">Loading…</p>;
+  if (isPending) return <LoaderBlock className="py-10" />;
   if (isError) return <p role="alert" className="text-sm text-destructive">{errorText(error)}</p>;
   const maxDays = data.config.maxDays;
   const chosenDays = days ?? data.config.defaultDays;

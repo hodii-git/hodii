@@ -15,7 +15,7 @@
  },
  {
   "capability": "database (stories, sections, trends, reports, comments, likes, saves, admin data)",
-  "source": "MongoDB database 'midnight'",
+  "source": "MongoDB database 'hodii'",
   "outcome": "preserve MongoDB (user confirmed in this migration)",
   "status": "verified",
   "next_action": "none; live stories load in preview"
@@ -78,7 +78,7 @@
  },
  {
   "capability": "cutover",
-  "source": "themidnightnews.com",
+  "source": "thehodiinews.com",
   "outcome": "pending",
   "status": "pending",
   "next_action": "publish, connect domain"

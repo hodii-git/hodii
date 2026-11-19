@@ -1,3 +1,4 @@
+import { searchablePolygon } from "./geo";
 import type { z } from "zod";
 import { expand } from "./synonyms";
 import type { searchParamsSchema } from "./mongodb/property-schemas";
@@ -74,7 +75,7 @@ export function buildSearchFilter(p: Partial<SearchParams>, now = new Date(), fu
   if (p.conditions?.length) f["details.condition"] = { $in: p.conditions };
   if (p.circle) f["location.point"] = { $geoWithin: { $centerSphere: [[p.circle.lng, p.circle.lat], p.circle.radiusM / 6_378_100] } };
   else if (p.polygon && p.polygon.length >= 3) {
-    const ring = p.polygon.map((c) => [c[0]!, c[1]!]);
+    const ring = searchablePolygon(p.polygon.map((c) => [c[0]!, c[1]!] as [number, number])).map((c) => [c[0], c[1]]);
     const first = ring[0]!, last = ring[ring.length - 1]!;
     if (first[0] !== last[0] || first[1] !== last[1]) ring.push([first[0]!, first[1]!]);
     f["location.point"] = { $geoWithin: { $geometry: { type: "Polygon", coordinates: [ring] } } };

@@ -1,3 +1,5 @@
+import { LoaderBlock } from "@/components/loader";
+import { PageHeader } from "@/components/dashboard/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Printer } from "lucide-react";
@@ -14,13 +16,12 @@ const label = (k: string) => (k === "premium_package" ? "Premium package" : k ==
 function Billing() {
   const { slug } = Route.useParams();
   const { data, isPending, isError } = useQuery({ queryKey: ["agency", slug, "billing"], queryFn: () => getAgencyPayments({ data: { slug } }) });
-  if (isPending) return <p className="text-muted-foreground">Loading…</p>;
+  if (isPending) return <LoaderBlock className="py-10" />;
   if (isError || !data) return <p role="alert" className="text-destructive">Could not load payments.</p>;
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between gap-2 print:hidden">
-        <div><h2 className="text-xl font-bold">Payments and receipts</h2><p className="text-sm text-muted-foreground">Print a page as a receipt, or save it as PDF from the print window.</p></div>
-        <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-bold"><Printer className="h-4 w-4" aria-hidden /> Print</button>
+        <PageHeader title="Payments and receipts" sub="Print a page as a receipt, or save it as PDF from the print window." right={<button type="button" onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-bold"><Printer className="h-4 w-4" aria-hidden /> Print</button>} />
       </div>
       <h2 className="hidden text-xl font-bold print:block">{data.agencyName}: payments</h2>
       {data.rows.length === 0 ? <p className="rounded-2xl border border-border p-6 text-muted-foreground">No payments yet.</p> : (

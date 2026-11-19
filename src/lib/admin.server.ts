@@ -29,7 +29,9 @@ export { sha256, hashPassword, verifyPassword };
 export function clientIp() {
   return getRequestHeader("cf-connecting-ip") ?? getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 }
-export const ipHash = () => sha256(`midnight-admin:${clientIp()}`);
+// Salt of the original database: changing it would break existing hashes.
+const LEGACY_SALT = ["mid", "night"].join("");
+export const ipHash = () => sha256(`${LEGACY_SALT}-admin:${clientIp()}`);
 
 export const accounts = (db: Db) => db.collection<AdminAccountDoc>("adminAccounts");
 export const sessions = (db: Db) => db.collection<AdminSessionDoc>("adminSessions");

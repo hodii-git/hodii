@@ -44,3 +44,6 @@ export const postToNeighbourhood = createServerFn({ method: "POST" })
   .handler(async ({ data }) => { const me = await member(); return (await cm()).withDb((db) => nb().then((s) => s.addPost(db, me.id, data.key, data.text, data.parentId))); });
 export const removeNeighbourhoodPost = createServerFn({ method: "POST" }).inputValidator(input(z.object({ id: z.string().max(64) })))
   .handler(async ({ data }) => { const me = await member(); return (await cm()).withDb((db) => nb().then((s) => s.removePost(db, me.id, data.id))); });
+
+export const reportNeighbourhoodItem = createServerFn({ method: "POST" }).inputValidator(input(z.object({ kind: z.enum(["review", "post"]), id: z.string().max(64) })))
+  .handler(async ({ data }) => { const me = await member(); return (await cm()).withDb((db) => nb().then((s) => s.reportItem(db, me.id, data.kind, data.id))); });

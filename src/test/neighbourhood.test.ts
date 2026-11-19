@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { passes, rankScore, reviewInput, summarise, makeKey, splitKey } from "@/lib/neighbourhood";
+import { shouldHide, viewReviews, passes, rankScore, reviewInput, summarise, makeKey, splitKey } from "@/lib/neighbourhood";
 
 describe("neighbourhood ratings", () => {
   it("averages each aspect over the reviews that rated it", () => {
@@ -32,4 +32,22 @@ describe("neighbourhood ratings", () => {
     expect(reviewInput.safeParse({ ...base, areaKey: "../etc", ratings: { security: 4 } }).success).toBe(false);
   });
   it("builds and splits keys", () => { expect(splitKey(makeKey("nairobi", "kilimani"))).toEqual({ countySlug: "nairobi", areaSlug: "kilimani" }); });
+  it("hides after three different reporters, not three reports from one person", () => {
+    expect(shouldHide(["a", "b"])).toBe(false);
+    expect(shouldHide(["a", "a", "a"])).toBe(false);
+    expect(shouldHide(["a", "b", "c"])).toBe(true);
+  });
+  it("filters and sorts reviews", () => {
+    const rows = [
+      { id: "1", ratings: { security: 5 }, relation: "live", text: "Very safe at night", at: "2026-01-01" },
+      { id: "2", ratings: { security: 2, quiet: 2 }, relation: "visit", text: "Noisy bars", at: "2026-03-01" },
+      { id: "3", ratings: { quiet: 4 }, relation: "live", text: "", at: "2026-02-01" },
+    ];
+    expect(viewReviews(rows, { sort: "newest" }).map((r) => r.id)).toEqual(["2", "3", "1"]);
+    expect(viewReviews(rows, { sort: "highest" }).map((r) => r.id)).toEqual(["1", "3", "2"]);
+    expect(viewReviews(rows, { sort: "lowest" }).map((r) => r.id)).toEqual(["2", "3", "1"]);
+    expect(viewReviews(rows, { sort: "newest", relation: "live" }).map((r) => r.id)).toEqual(["3", "1"]);
+    expect(viewReviews(rows, { sort: "newest", q: "NOISY" }).map((r) => r.id)).toEqual(["2"]);
+    expect(viewReviews(rows, { sort: "newest", aspect: "security" }).map((r) => r.id)).toEqual(["2", "1"]);
+  });
 });

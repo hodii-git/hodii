@@ -52,3 +52,27 @@ export const radiusLabel = (m: number) => (m < 1000 ? `${m} m` : `${m / 1000} km
 
 export const directionsUrl = (lat: number, lng: number) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
 export const osmDirectionsUrl = (lat: number, lng: number) => `https://www.openstreetmap.org/directions?to=${lat}%2C${lng}`;
+
+const cross = (o: LngLat, a: LngLat, b: LngLat) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+const segmentsCross = (a: LngLat, b: LngLat, c: LngLat, d: LngLat) => cross(a, b, c) * cross(a, b, d) < 0 && cross(c, d, a) * cross(c, d, b) < 0;
+
+/** True when the outline crosses itself, which MongoDB refuses to search. */
+export function selfIntersects(pts: LngLat[]): boolean {
+  const n = pts.length;
+  for (let i = 0; i < n; i++) for (let j = i + 2; j < n; j++) {
+    if (i === 0 && j === n - 1) continue;
+    if (segmentsCross(pts[i]!, pts[(i + 1) % n]!, pts[j]!, pts[(j + 1) % n]!)) return true;
+  }
+  return false;
+}
+
+/** The smallest convex outline around the points (monotone chain). */
+export function convexHull(points: LngLat[]): LngLat[] {
+  const p = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  if (p.length < 3) return p;
+  const build = (list: LngLat[]) => { const h: LngLat[] = []; for (const q of list) { while (h.length >= 2 && cross(h[h.length - 2]!, h[h.length - 1]!, q) <= 0) h.pop(); h.push(q); } h.pop(); return h; };
+  return [...build(p), ...build([...p].reverse())];
+}
+
+/** A hand-drawn outline that can always be searched: crossed lines are replaced by the outline around the whole shape. */
+export const searchablePolygon = (pts: LngLat[]): LngLat[] => (selfIntersects(pts) ? convexHull(pts) : pts);

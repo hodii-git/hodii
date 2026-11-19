@@ -64,4 +64,4 @@ Switch it on or off and set the limits in Admin, Settings, "Voice search". It ne
 
 ## Developments and neighbourhoods
 
-Agencies add developments in their dashboard. Neighbourhood reviews and chat are written by members; there is no admin screen for them yet, so for now remove abuse by deleting the document in `neighbourhoodReviews` or setting `deletedAt` on a `neighbourhoodPosts` document.
+Agencies add developments in their dashboard. Neighbourhood reviews and chat are written by members. Reported items show under Admin, Reviews (below the agency reviews); three different reporters hide an item until staff keep or remove it.

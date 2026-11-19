@@ -35,29 +35,30 @@ function Compare() {
     { label: "Listed by", value: (p) => p.agency ? <Link to="/agency/$slug" params={{ slug: p.agency.slug }} className="font-semibold text-primary">{p.agency.name}{p.agency.rating ? ` (${p.agency.rating.avg.toFixed(1)}★)` : ""}</Link> : "Private seller" },
   ];
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-24">
-      <h1 className="text-3xl font-extrabold tracking-tight md:text-4xl">Compare properties</h1>
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-24">
+      <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">Compare properties</h1>
       <p className="mt-2 text-muted-foreground">Up to four listings side by side. Copy the address of this page to share your comparison.</p>
       {ids.length === 0 ? (
         <div className="empty-card mt-8"><p className="font-semibold">Nothing to compare yet.</p><p className="mt-1 text-sm text-muted-foreground">Use the Compare button on a listing, then come back here.</p><Link to="/properties" className="mt-4 inline-block rounded-full bg-primary px-5 py-2 font-bold text-primary-foreground">Browse properties</Link></div>
       ) : isPending ? <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-busy="true" aria-label="Loading comparison">{Array.from({ length: Math.max(2, ids.length) }, (_, i) => <div key={i} className="h-64 animate-pulse rounded-2xl bg-muted" />)}</div> : !data?.length ? <p className="mt-8">These listings are no longer available.</p> : (
-        <div className="mt-8 overflow-x-auto">
-          <table className="w-full min-w-[40rem] border-separate border-spacing-0 text-sm">
+        <div className="mx-auto mt-8 max-w-full overflow-x-auto" style={{ width: `${9 + data.length * 16}rem` }}>
+          <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: `${9 + data.length * 16}rem` }}>
             <thead>
-              <tr><th className="w-32 p-2" />{data.map((p) => (
-                <th key={p.id} scope="col" className="p-2 text-left align-top">
-                  <div className="glass overflow-hidden rounded-2xl">
+              <tr><th className="w-36 p-2" />{data.map((p) => (
+                <th key={p.id} scope="col" className="w-64 p-2 text-left align-top font-normal">
+                  <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:shadow-md">
+                    <Link to="/property/$slug" params={{ slug: p.slug }} className="absolute inset-0 z-0" aria-label={p.title} />
                     {p.image ? <img src={p.image.thumbUrl ?? p.image.url} alt={p.image.alt || p.title} loading="lazy" className="aspect-[4/3] w-full object-cover" /> : <div className="aspect-[4/3] bg-muted" />}
-                    <div className="p-3"><Link to="/property/$slug" params={{ slug: p.slug }} className="line-clamp-2 font-bold hover:underline">{p.title}</Link>
-                      {!raw && <button type="button" onClick={() => toggleCompare(p.id)} className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground"><X className="h-3 w-3" aria-hidden />Remove</button>}
+                    <div className="p-3"><span className="line-clamp-2 text-sm font-bold">{p.title}</span>
+                      {!raw && <button type="button" onClick={() => toggleCompare(p.id)} className="relative z-10 mt-2 inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground"><X className="h-3 w-3" aria-hidden />Remove</button>}
                     </div>
                   </div>
                 </th>))}</tr>
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.label} className="odd:bg-muted/40">
-                  <th scope="row" className="p-3 text-left font-semibold text-muted-foreground">{r.label}</th>
+                <tr key={r.label} className="odd:bg-muted/50">
+                  <th scope="row" className="p-3 pl-2 text-left text-xs font-bold uppercase tracking-wide text-muted-foreground">{r.label}</th>
                   {data.map((p) => <td key={p.id} className="p-3">{r.value(p)}</td>)}
                 </tr>))}
             </tbody>

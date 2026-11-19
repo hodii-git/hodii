@@ -55,3 +55,18 @@ export function passes(s: Summary, f: NbFilter): boolean {
 }
 export const makeKey = (countySlug: string, areaSlug: string) => `${countySlug}/${areaSlug}`;
 export const splitKey = (k: string) => { const [c, a] = k.split("/"); return { countySlug: c ?? "", areaSlug: a ?? "" }; };
+
+/** How many different people must report a review or message before it is hidden pending a staff decision. */
+export const HIDE_AFTER_REPORTS = 3;
+export const shouldHide = (reporters: readonly string[]) => new Set(reporters).size >= HIDE_AFTER_REPORTS;
+
+export type ReviewSort = "newest" | "highest" | "lowest";
+export type ReviewView = { id: string; ratings: Ratings; relation: string; text: string; at: string };
+/** Filters and orders reviews already loaded for an area: by connection, by words in the text, and by their average rating. */
+export function viewReviews<T extends ReviewView>(rows: readonly T[], o: { sort: ReviewSort; relation?: string | undefined; q?: string | undefined; aspect?: AspectKey | undefined }): T[] {
+  const avg = (r: T) => { const v = Object.values(r.ratings).filter((x): x is number => typeof x === "number"); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : 0; };
+  const q = o.q?.trim().toLowerCase();
+  return rows
+    .filter((r) => (!o.relation || r.relation === o.relation) && (!q || r.text.toLowerCase().includes(q)) && (!o.aspect || r.ratings[o.aspect] !== undefined))
+    .sort((a, b) => o.sort === "highest" ? avg(b) - avg(a) || b.at.localeCompare(a.at) : o.sort === "lowest" ? avg(a) - avg(b) || b.at.localeCompare(a.at) : b.at.localeCompare(a.at));
+}

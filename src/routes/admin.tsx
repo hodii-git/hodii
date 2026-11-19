@@ -13,6 +13,7 @@ import { Payments } from "@/components/admin/payments";
 import { Errors } from "@/components/admin/errors";
 import { Feedback } from "@/components/admin/feedback";
 import { AppSettings } from "@/components/admin/app-settings";
+import { useGreeting } from "@/components/use-greeting";
 import { Reviews } from "@/components/admin/reviews";
 import { TypedConfirm } from "@/components/typed-confirm";
 import { ColorGlow } from "@/components/color-glow";
@@ -187,16 +188,16 @@ function Dashboard({ me }: { me: Me }) {
       )}
       <aside className="admin-sidebar glass-strong shadow-float" data-collapsed={collapsed}>{nav(true)}</aside>
       <main key={tab} className="admin-main admin-enter mx-auto w-full max-w-[90rem] space-y-6" data-collapsed={collapsed}>
-        {tab === "overview" && <Overview />}
+        {tab === "overview" && <Overview name={me.username} />}
         {tab === "analytics" && <Analytics />}
         {tab === "moderation" && <Moderation isAdmin={me.role === "admin"} />}
         {tab === "listings" && <Listings />}
         {tab === "comments" && <Comments />}
-        {tab === "reviews" && <Reviews />}
+        {tab === "reviews" && <><H sub="Agency reviews and neighbourhood reviews and chat that people reported.">Reviews</H><Reviews /></>}
         {tab === "agencies" && <Agencies />}
-        {tab === "payments" && <Payments />}
-        {tab === "errors" && <Errors />}
-        {tab === "feedback" && <Feedback />}
+        {tab === "payments" && <><H sub="Revenue, receipts, refunds and stuck payments.">Payments</H><Payments /></>}
+        {tab === "errors" && <><H sub="Problems the site has run into, newest first.">Errors</H><Errors /></>}
+        {tab === "feedback" && <><H sub="What visitors told us from the feedback button.">Feedback</H><Feedback /></>}
         {tab === "settings" && <><H sub="Prices, limits, AI quotas and ranking. Changes reach the site within about 30 seconds.">Settings</H><AppSettings /></>}
         {tab === "users" && <Users_ />}
         {tab === "site" && <SiteSecurity />}
@@ -362,20 +363,22 @@ function BarList({ title, rows }: { title: string; rows: { label: string; value:
 
 const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "—");
 
-function Overview() {
+function Overview({ name }: { name: string }) {
+  const greeting = useGreeting();
   const q = useQuery({ queryKey: ["admin", "overview"], queryFn: () => adminOverview(), refetchInterval: 30_000 });
-  if (!q.data) return <><H>Overview</H><State q={q} /></>;
+  if (!q.data) return <><H>{`${greeting}, ${name}`}</H><State q={q} /></>;
   const { stats, settings, failedLogins24h, platform: p } = q.data;
   return (
     <>
-      <H sub="Last 30 days">Overview</H>
+      <H sub="Here is the platform for the last 30 days.">{`${greeting}, ${name}`}</H>
       {settings.maintenance_mode && <div className="admin-card flex flex-wrap items-center gap-2"><span className="admin-badge" data-tone="warn">Site paused</span> Visitors currently see the maintenance message.</div>}
-      {(p.pendingListings > 0 || p.openReports > 0 || (p.agencies["pending"] ?? 0) > 0) && (
+      {(p.pendingListings > 0 || p.openReports > 0 || p.neighbourhoodFlags > 0 || (p.agencies["pending"] ?? 0) > 0) && (
         <div className="admin-card flex flex-wrap items-center gap-x-6 gap-y-2" role="note">
           <span className="admin-badge" data-tone="warn">Needs attention</span>
           {p.pendingListings > 0 && <span>{p.pendingListings} listings waiting for review</span>}
           {(p.agencies["pending"] ?? 0) > 0 && <span>{p.agencies["pending"]} agencies waiting for verification</span>}
           {p.openReports > 0 && <span>{p.openReports} open reports</span>}
+          {p.neighbourhoodFlags > 0 && <span>{p.neighbourhoodFlags} reported neighbourhood reviews or messages</span>}
         </div>
       )}
       <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 xl:grid-cols-4">

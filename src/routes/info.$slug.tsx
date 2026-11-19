@@ -42,7 +42,7 @@ function InfoPage() {
     <main className="mx-auto max-w-3xl px-4 pt-28 pb-24">
       <div className="glass rounded-[2rem] p-8 md:p-12">
         <p className="text-xs font-bold tracking-wider uppercase text-muted-foreground">{BRAND.name}</p>
-        <h1 className="mt-2 text-4xl font-extrabold tracking-tight md:text-5xl">{page.title}</h1>
+        <h1 className="mt-2 text-2xl font-extrabold tracking-tight md:text-3xl">{page.title}</h1>
         <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{page.text}</p>
 
         {page.facts && (

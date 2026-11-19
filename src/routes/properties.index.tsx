@@ -1,3 +1,6 @@
+import { LoaderBlock } from "@/components/loader";
+import { X } from "lucide-react";
+import { RadiusEditor } from "@/components/property/radius-editor";
 import { ShareButton } from "@/components/share-button";
 import { ViewPill } from "@/components/property/view-pill";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -59,12 +62,20 @@ function PropertiesPage() {
   const setGeo = (g: Pick<SearchParams, "circle" | "polygon">) => change({ circle: undefined, polygon: undefined, ...g, page: 1 });
 
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-24">
-      <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">{heading.title}</h1>
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-24">
+      <div className="lg:hidden">
+      <h1  className="text-2xl font-extrabold tracking-tight md:text-3xl">{heading.title}</h1>
       <p className="mt-2 text-muted-foreground">{heading.subtitle}</p>
-      <div className="mt-6"><SearchForm value={params} onChange={change} /></div>
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-muted-foreground" aria-live="polite">{!result || result.unavailable ? (updating || q.isPending ? "Searching…" : "") : `${result.total.toLocaleString("en-KE")} ${result.total === 1 ? "property" : "properties"}`}</p>
+      </div>
+      <div className="mt-6 lg:mt-0 lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+      <aside aria-label="Filters"><SearchForm value={params} onChange={change} side /></aside>
+      <div className="min-w-0">
+        <div className="mb-6 hidden lg:block">
+      <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">{heading.title}</h1>
+      <p className="mt-2 text-muted-foreground">{heading.subtitle}</p>
+        </div>
+      <div className="mt-8 lg:mt-0 flex flex-wrap items-center gap-3">
+        <p className="mr-auto text-sm font-semibold text-muted-foreground" aria-live="polite">{!result || result.unavailable ? (updating || q.isPending ? "Searching…" : "") : `${result.total.toLocaleString("en-KE")} ${result.total === 1 ? "property" : "properties"}`}</p>
         <SaveSearchButton params={params} />
         <ShareButton title={heading.title} />
         <label className="flex items-center gap-2 text-sm">
@@ -72,13 +83,22 @@ function PropertiesPage() {
           <div className="w-48"><Pick label="Sort by" value={params.sort} onChange={(v) => change({ sort: v as SearchParams["sort"], page: 1 })} options={SORTS.map(([k, l]) => ({ value: k, label: l }))} className="h-10" /></div>
         </label>
       </div>
-      {map && <div className="mt-4"><Suspense fallback={<p className="text-sm text-muted-foreground">Loading map…</p>}><SearchMap params={params} onGeo={setGeo} /></Suspense></div>}
-      {!map && params.circle && <p className="mt-3 text-sm text-muted-foreground">Within {params.circle.radiusM >= 1000 ? `${params.circle.radiusM / 1000} km` : `${params.circle.radiusM} m`} of a point you chose on the map. <button type="button" className="font-bold underline" onClick={() => setGeo({})}>Clear</button></p>}
-      {!map && params.polygon && <p className="mt-3 text-sm text-muted-foreground">Inside the area you drew on the map. <button type="button" className="font-bold underline" onClick={() => setGeo({})}>Clear</button></p>}
+      {map && <div className="mt-4"><Suspense fallback={<LoaderBlock className="py-10" />}><SearchMap params={params} onGeo={setGeo} /></Suspense></div>}
+      {!map && (params.circle || params.polygon) && (
+        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm">
+          <span className="text-sm font-bold">{params.circle ? "Within" : "Inside the area you drew"}</span>
+          {params.circle && <RadiusEditor radiusM={params.circle.radiusM} onChange={(m) => change({ circle: { ...params.circle!, radiusM: m }, page: 1 })} compact />}
+          {params.circle && <span className="text-sm text-muted-foreground">of your pin</span>}
+          <button type="button" onClick={() => setView("map")} className="ml-auto text-sm font-bold text-primary underline">Edit on map</button>
+          <button type="button" onClick={() => setGeo({})} aria-label="Remove area" className="grid size-8 place-items-center rounded-full border border-input hover:bg-muted"><X className="size-4" aria-hidden /></button>
+        </div>
+      )}
       <div className={`mt-4 transition-opacity ${updating ? "opacity-60" : ""}`} aria-busy={updating}>
         {result ? <InfiniteResults first={result} unavailable={result.unavailable} resetKey={JSON.stringify({ ...urlFromParams({ ...params, page: 1 }) })} fetchPage={(page) => searchListings({ data: { ...params, page } })} />
           : q.isError ? <p role="alert" className="rounded-2xl border border-border p-6 text-center text-muted-foreground">Could not load results. <button type="button" className="font-bold underline" onClick={() => q.refetch()}>Try again</button></p>
           : <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(16rem,1fr))]" aria-label="Loading results">{Array.from({ length: 8 }, (_, i) => <div key={i} className="h-72 animate-pulse rounded-2xl bg-muted" />)}</div>}
+      </div>
+      </div>
       </div>
     <ViewPill map={map} onChange={setView} />
     </main>

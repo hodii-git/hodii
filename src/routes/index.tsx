@@ -1,3 +1,4 @@
+import { RotatingHeadline } from "@/components/rotating-headline";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Building2, Home, KeyRound, Search, ShieldCheck, Trees } from "lucide-react";
 import { useState } from "react";
@@ -49,8 +50,8 @@ function HomePage() {
 
   return (
     <main>
-      <section className="mx-auto max-w-[112rem] px-4 pt-32 pb-12 text-center md:pt-40">
-        <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">Find your next place in Kenya</h1>
+      <section className="mx-auto max-w-[82rem] px-4 pt-32 pb-12 text-center md:pt-40">
+        <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl"><RotatingHeadline /></h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">Houses, apartments, land and commercial property from verified agencies and owners.</p>
         <form onSubmit={go} role="search" aria-label="Search properties" className="glass mx-auto mt-8 max-w-3xl rounded-3xl p-4 text-left">
           <div className="mb-3 inline-flex rounded-full bg-muted p-1" role="tablist" aria-label="Listing type">
@@ -61,30 +62,32 @@ function HomePage() {
             <button className="h-12 rounded-xl bg-primary px-7 font-bold text-primary-foreground">Search</button>
           </div>
         </form>
-        <ul className="mt-6 flex flex-wrap justify-center gap-2">
-          {SHORTCUTS.map((s) => <li key={s.label}><Link to="/properties" search={s.search} className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-4 py-2 text-sm font-semibold hover:bg-muted"><s.icon className="h-4 w-4" aria-hidden />{s.label}</Link></li>)}
+        <ul className="mt-6 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center">
+          {SHORTCUTS.map((s) => <li key={s.label}><Link to="/properties" search={s.search} className="inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-border bg-background/70 px-3 py-1.5 text-[0.8125rem] font-semibold hover:bg-muted sm:w-auto"><s.icon className="h-3.5 w-3.5" aria-hidden />{s.label}</Link></li>)}
         </ul>
       </section>
 
-      {data.unavailable ? <div className="mx-auto max-w-[112rem] px-4 pb-24"><DataUnavailable /></div> : (
-        <div className="mx-auto max-w-[112rem] space-y-16 px-4 pb-24">
-          <LocationBar label={nearby?.place?.label ?? null} onChange={setPlace} />
-          {([["premium", "Premium properties", "From Premium agencies"], ["boost", "Boosted properties", "Promoted by their agencies"]] as const).map(([tier, title, sub]) => {
-            const items = featured.filter((c) => c.tier === tier);
+      {data.unavailable ? <div className="mx-auto max-w-[82rem] px-4 pb-24"><DataUnavailable /></div> : (
+        <div className="mx-auto max-w-[82rem] space-y-16 px-4 pb-24">
+          {(() => {
+            const items = [...featured.filter((c) => c.tier === "premium"), ...featured.filter((c) => c.tier === "boost")];
             return items.length > 0 && (
-              <section key={tier} aria-labelledby={`tier-${tier}`}>
-                <h2 id={`tier-${tier}`} className="text-2xl font-extrabold">{title}</h2>
-                <p className="mb-5 mt-1 text-sm text-muted-foreground">{sub}{featuredNote ? `, in ${featuredNote}` : ""}</p>
+              <section aria-labelledby="top-properties">
+                <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+                  <div><h2 id="top-properties" className="text-xl font-extrabold">Top properties</h2>
+                    <p className="mt-1 text-sm text-muted-foreground">Featured by their agencies{featuredNote ? `, in ${featuredNote}` : ""}</p></div>
+                  <LocationBar label={nearby?.place?.label ?? null} onChange={setPlace} />
+                </div>
                 <PropertyGrid items={items} saved={saved} />
               </section>
             );
-          })}
+          })()}
           <section aria-labelledby="latest">
-            <div className="mb-5 flex items-end justify-between gap-3"><div><h2 id="latest" className="text-2xl font-extrabold">{latestNote ? "Latest near you" : "Latest listings"}</h2>{latestNote && <p className="mt-1 text-sm text-muted-foreground">In {latestNote}</p>}</div><Link to="/properties" className="inline-flex items-center gap-1 text-sm font-bold text-primary">See all<ArrowRight className="h-4 w-4" aria-hidden /></Link></div>
+            <div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><h2 id="latest" className="text-xl font-extrabold">{latestNote ? "Latest near you" : "Latest listings"}</h2>{latestNote && <p className="mt-1 text-sm text-muted-foreground">In {latestNote}</p>}</div>{!featured.some((c) => c.tier !== "none") && <LocationBar label={nearby?.place?.label ?? null} onChange={setPlace} />}<Link to="/properties" className="inline-flex items-center gap-1 text-sm font-bold text-primary">See all<ArrowRight className="h-4 w-4" aria-hidden /></Link></div>
             <PropertyGrid items={latest} saved={saved} empty={<div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">New listings will appear here soon.</p></div>} />
           </section>
           {data.counties.length > 0 && (
-            <section aria-labelledby="where"><h2 id="where" className="mb-5 text-2xl font-extrabold">Browse by county</h2>
+            <section aria-labelledby="where"><h2 id="where" className="mb-5 text-xl font-extrabold">Browse by county</h2>
               <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {data.counties.map((c) => <li key={c.code}><Link to="/properties" search={{ county: String(c.code) }} className="glass block rounded-2xl p-4 hover:bg-muted/50"><span className="block font-bold">{c.name}</span><span className="text-sm text-muted-foreground">{c.count.toLocaleString("en-KE")} {c.count === 1 ? "property" : "properties"}</span></Link></li>)}
               </ul></section>

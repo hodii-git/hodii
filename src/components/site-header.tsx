@@ -1,7 +1,6 @@
-import { Link } from "@tanstack/react-router";
-import { ArrowLeftRight, ChevronDown, Menu, Search, X } from "lucide-react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { Menu, Search } from "lucide-react";
 import { useCompare } from "@/lib/compare";
-import { useEffect, useState } from "react";
 import { NotificationBell } from "@/components/notification-bell";
 import { AccountButton } from "@/components/account-button";
 import { HodiiLogo } from "@/components/brand-logo";
@@ -12,68 +11,82 @@ import { moreCategories, primaryCategories } from "@/data/categories";
 import { BRAND } from "@/lib/brand";
 import { categorySearch } from "@/lib/search-url";
 
-const linkCls = "rounded-full px-3 py-2 text-sm font-semibold text-foreground/80 whitespace-nowrap transition hover:bg-navigation-highlight hover:text-foreground";
 
 /** A navigation category opens the property search it stands for. */
-function CategoryLink({ name, className = linkCls, onClick }: { name: string; className?: string; onClick?: () => void }) {
+function CategoryLink({ name, className = "", onClick }: { name: string; className?: string; onClick?: () => void }) {
   const c = categorySearch(name);
   return c ? <Link to="/properties" search={c.search} className={className} onClick={onClick} activeOptions={{ exact: true }}>{name}</Link> : null;
 }
 
-/** One header for every page: logo, categories, search, List a property, theme and account. */
+type Kind = "browse" | "search" | "content" | "app";
+/** What each kind of page needs from the header. Listing pages that already have a search on them skip the header search; guides and info pages get reading links; signed-in work areas get a quiet bar with a place label. */
+function kindOf(path: string): { kind: Kind; label?: string } {
+  if (path.startsWith("/dashboard")) return { kind: "app", label: "Dashboard" };
+  if (path.startsWith("/profile")) return { kind: "app", label: "My account" };
+  if (path.startsWith("/saved")) return { kind: "app", label: "Saved" };
+  if (path.startsWith("/notifications")) return { kind: "app", label: "Notifications" };
+  if (path.startsWith("/admin")) return { kind: "app", label: "Admin" };
+  if (/^\/(info|help|tools|feedback)/.test(path)) return { kind: "content" };
+  if (path === "/" || path === "/properties") return { kind: "browse" };
+  return { kind: "search" };
+}
+const READING = [{ to: "/info/$slug", slug: "buying-guide", label: "Buying guide" }, { to: "/info/$slug", slug: "renting-guide", label: "Renting guide" }, { to: "/tools", label: "Calculators" }, { to: "/help", label: "Help" }] as const;
+
+/** One header, in four quiet styles chosen by page. */
 export function SiteHeader() {
-  const [open, setOpen] = useState(false);
   const compareCount = useCompare().length;
-  useEffect(() => {
-    if (!open) return;
-    const key = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", key);
-    return () => window.removeEventListener("keydown", key);
-  }, [open]);
-
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  const { kind, label } = kindOf(path);
+  const item = "rounded-xl px-3 py-2 font-medium";
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-[112rem] items-center gap-2 px-4">
-        <Link to="/" className="mr-2 flex shrink-0 items-center gap-2 font-extrabold tracking-tight" aria-label={`${BRAND.name} home`} onClick={() => setOpen(false)}>
-          <HodiiLogo /><span className="text-xl">{BRAND.name}</span>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background">
+      <div className="mx-auto flex h-16 max-w-[82rem] items-center gap-3 px-4 md:px-6 xl:px-8">
+        <Link to="/" className="flex shrink-0 items-center gap-2 font-extrabold tracking-tight text-primary" aria-label={`${BRAND.name} home`}>
+          <HodiiLogo /><span className="hidden text-xl sm:inline">{BRAND.name}</span>
         </Link>
+        {kind === "app" && label && <span className="ml-1 hidden items-center gap-3 sm:flex"><span className="h-5 w-px bg-border" aria-hidden /><span className="text-sm font-bold">{label}</span></span>}
 
-        <nav aria-label="Property categories" className="hidden flex-1 items-center gap-0.5 2xl:flex">
-          {primaryCategories.map((c) => <CategoryLink key={c} name={c} />)}
-          <DropdownMenu>
-            <DropdownMenuTrigger className={`${linkCls} inline-flex items-center gap-1 outline-hidden focus-visible:ring-2 focus-visible:ring-ring`}>More<ChevronDown className="h-4 w-4" aria-hidden /></DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="glass-strong grid w-80 max-w-[calc(100vw-2rem)] grid-cols-2 gap-1 rounded-2xl p-2">
-              {moreCategories.map((c) => <DropdownMenuItem key={c} asChild className="rounded-xl px-3 py-2 font-medium"><CategoryLink name={c} className="w-full" /></DropdownMenuItem>)}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Link to="/agencies" className={linkCls}>Agents</Link>
-          <Link to="/tools" className={linkCls}>Calculators</Link>
-        </nav>
+        {kind === "search" && (
+          <Link to="/properties" data-tour="search" aria-label="Search properties" className="mx-auto hidden h-11 w-full max-w-md items-center gap-3 rounded-full border border-border bg-background pl-5 pr-2 text-sm shadow-sm transition hover:shadow-md md:flex">
+            <span className="font-semibold">Anywhere in Kenya</span>
+            <span className="h-5 w-px bg-border" aria-hidden />
+            <span className="flex-1 truncate text-left text-muted-foreground">Area, estate or type</span>
+            <span className="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground"><Search className="size-4" aria-hidden /></span>
+          </Link>
+        )}
+        {kind === "content" && (
+          <nav aria-label="Reading" className="mx-auto hidden items-center gap-1 md:flex">
+            {READING.map((r) => "slug" in r
+              ? <Link key={r.label} to={r.to} params={{ slug: r.slug }} className="rounded-full px-3 py-2 text-sm font-semibold text-foreground/80 hover:bg-navigation-highlight hover:text-foreground">{r.label}</Link>
+              : <Link key={r.label} to={r.to} className="rounded-full px-3 py-2 text-sm font-semibold text-foreground/80 hover:bg-navigation-highlight hover:text-foreground">{r.label}</Link>)}
+          </nav>
+        )}
 
         <div className="ml-auto flex items-center gap-1">
-          <Button asChild variant="ghost" size="icon" className="rounded-full"><Link to="/properties" aria-label="Search properties" data-tour="search"><Search className="h-5 w-5" /></Link></Button>
-          <Button asChild variant="ghost" size="icon" className="relative hidden rounded-full sm:inline-flex"><Link to="/compare" aria-label={compareCount ? `Compare ${compareCount} properties` : "Compare properties"} title="Compare"><ArrowLeftRight className="h-5 w-5" />{compareCount > 0 && <span className="absolute -right-0.5 -top-0.5 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] font-extrabold leading-4 text-primary-foreground">{compareCount}</span>}</Link></Button>
-          <Button asChild className="hidden rounded-full font-bold sm:inline-flex"><Link to="/list-property" data-tour="list">List a property</Link></Button>
+          {kind === "search" && <Button asChild variant="ghost" size="icon" className="rounded-full md:hidden"><Link to="/properties" aria-label="Search properties"><Search className="h-5 w-5" /></Link></Button>}
+          {kind !== "app" && <Button asChild variant="ghost" className="hidden rounded-full text-sm font-semibold lg:inline-flex"><Link to="/list-property" data-tour="list">List a property</Link></Button>}
+          {kind !== "app" && (
+          <DropdownMenu>
+            <DropdownMenuTrigger aria-label="Browse" className="relative grid h-10 w-10 place-items-center rounded-full outline-hidden hover:bg-navigation-highlight focus-visible:ring-2 focus-visible:ring-ring">
+              <Menu className="h-5 w-5" aria-hidden />
+              {compareCount > 0 && <span className="dot-pulse absolute right-1 top-1 size-2.5 rounded-full bg-primary" aria-hidden />}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="max-h-[min(80dvh,34rem)] w-72 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-2xl border border-border bg-popover p-2 shadow-xl">
+              <p className="px-3 pb-1 pt-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">Browse</p>
+              {[...primaryCategories, ...moreCategories].map((c) => <DropdownMenuItem key={c} asChild className={item}><CategoryLink name={c} className="w-full" /></DropdownMenuItem>)}
+              <div className="my-2 h-px bg-border" />
+              <DropdownMenuItem asChild className={item}><Link to="/agencies" className="w-full">Agents and developers</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild className={item}><Link to="/tools" className="w-full">Calculators</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild className={item}><Link to="/compare" className="w-full">Compare{compareCount ? ` (${compareCount})` : ""}{compareCount > 0 && <span className="dot-pulse ml-2 inline-block size-2.5 rounded-full bg-primary" aria-hidden />}</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild className={`${item} lg:hidden`}><Link to="/list-property" className="w-full font-bold text-primary">List a property</Link></DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>)}
+          {kind === "app" && <Button asChild variant="ghost" className="hidden rounded-full text-sm font-semibold sm:inline-flex"><Link to="/properties">Browse listings</Link></Button>}
           <ThemeHeaderButton />
           <span data-tour="bell" className="inline-flex"><NotificationBell /></span>
           <span data-tour="account" className="inline-flex"><AccountButton /></span>
-          <button type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobile-nav" onClick={() => setOpen((o) => !o)} className="grid h-10 w-10 place-items-center rounded-full hover:bg-navigation-highlight 2xl:hidden">
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
         </div>
       </div>
-
-      {open && (
-        <nav id="mobile-nav" aria-label="Property categories" className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-background px-4 pb-6 pt-3 2xl:hidden">
-          <ul className="grid gap-1 sm:grid-cols-2">
-            {[...primaryCategories, ...moreCategories].map((c) => <li key={c}><CategoryLink name={c} className="block rounded-xl px-3 py-3 font-semibold hover:bg-navigation-highlight" onClick={() => setOpen(false)} /></li>)}
-          </ul>
-          <Link to="/compare" onClick={() => setOpen(false)} className="mt-2 block rounded-xl px-3 py-3 font-semibold hover:bg-navigation-highlight">Compare{compareCount ? ` (${compareCount})` : ""}</Link>
-          <Link to="/tools" onClick={() => setOpen(false)} className="mt-2 block rounded-xl px-3 py-3 font-semibold hover:bg-navigation-highlight">Calculators</Link>
-          <Link to="/agencies" onClick={() => setOpen(false)} className="mt-2 block rounded-xl px-3 py-3 font-semibold hover:bg-navigation-highlight">Agents and developers</Link>
-          <Button asChild className="mt-4 h-12 w-full rounded-full text-base font-bold"><Link to="/list-property" onClick={() => setOpen(false)}>List a property</Link></Button>
-        </nav>
-      )}
     </header>
   );
 }

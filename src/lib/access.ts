@@ -24,6 +24,17 @@ const ADMIN: readonly Action[] = [
 const OWNER: readonly Action[] = [...ADMIN, "team.change_role", "agency.delete"];
 
 export const ROLE_ACTIONS: Record<MemberRole, readonly Action[]> = { agent: AGENT, admin: ADMIN, owner: OWNER };
+/** The same rules in plain words, grouped, so the Team page shows what each role can do straight from ROLE_ACTIONS. */
+export const ACTION_GROUPS: readonly { group: string; items: readonly { action: Action; label: string }[] }[] = [
+  { group: "Listings", items: [
+    { action: "listing.create", label: "Create listings" }, { action: "listing.edit.own", label: "Edit their own listings" }, { action: "listing.edit.any", label: "Edit anyone's listings" },
+    { action: "listing.publish", label: "Publish listings" }, { action: "listing.assign", label: "Assign a listing to an agent" }, { action: "listing.delete", label: "Delete listings" }, { action: "development.manage", label: "Manage developments" } ] },
+  { group: "Enquiries", items: [
+    { action: "lead.view.assigned", label: "See and reply to enquiries on their listings" }, { action: "lead.view.all", label: "See every enquiry in the agency" }, { action: "lead.manage.all", label: "Assign and close any enquiry" } ] },
+  { group: "Numbers", items: [{ action: "analytics.view.own", label: "See stats for their own listings" }, { action: "analytics.view.all", label: "See stats for the whole agency" }] },
+  { group: "Team", items: [{ action: "team.view", label: "See the team" }, { action: "team.invite", label: "Add people" }, { action: "team.remove", label: "Remove agents" }, { action: "team.change_role", label: "Change roles and remove admins" }] },
+  { group: "Agency", items: [{ action: "agency.edit", label: "Edit agency profile and settings" }, { action: "agency.submit_verification", label: "Submit for verification" }, { action: "billing.manage", label: "Buy boosts and Premium" }, { action: "agency.delete", label: "Delete the agency" }] },
+];
 export const can = (role: MemberRole, action: Action) => ROLE_ACTIONS[role].includes(action);
 
 export type Membership = { agencyId: string; userId: string; role: MemberRole };

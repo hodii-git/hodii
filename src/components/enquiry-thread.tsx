@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -20,7 +21,7 @@ export function EnquiryThread({ queryKey, load, send, canReply = true, note, pla
     onSuccess: () => { setText(""); qc.invalidateQueries({ queryKey }); qc.invalidateQueries({ queryKey: ["me", "enquiries"] }); qc.invalidateQueries({ queryKey: ["agency"] }); },
     onError: (e) => toast.error(errorText(e)),
   });
-  if (isPending) return <p className="text-sm text-muted-foreground">Loading conversation…</p>;
+  if (isPending) return <LoaderBlock className="py-10" />;
   if (isError) return <p role="alert" className="text-sm text-destructive">{errorText(error, "Could not load the conversation.")}</p>;
   const reply = canReply && (data.canReply ?? true);
   return (

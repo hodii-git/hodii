@@ -1,10 +1,11 @@
+import { LoaderBlock } from "@/components/loader";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Sel } from "@/components/ui/sel";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Mail, Phone } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Badge, areaCls, btnGhost, errorText, inputCls, label } from "@/components/dashboard/ui";
+import { Badge, areaCls, btnGhost, errorText, inputCls, label, PageHeader } from "@/components/dashboard/ui";
 import { Pager } from "@/components/property/results";
 import { EnquiryThread } from "@/components/enquiry-thread";
 import { getAgencyEnquiries, getAgencyThread, replyAsAgency, updateAgencyEnquiry } from "@/lib/dashboard.functions";
@@ -35,14 +36,15 @@ function Enquiries() {
 
   return (
     <div>
+      <PageHeader title="Enquiries" sub="People who asked about your listings. Move each one along as you speak to them." />
       <div className="mb-5 flex gap-1 overflow-x-auto">
         {[undefined, ...ENQUIRY_STATUSES].map((s) => <button key={s ?? "all"} type="button" aria-pressed={status === s} onClick={() => navigate({ search: s ? { status: s } : {} })} className={`shrink-0 rounded-full border px-4 py-1.5 text-sm font-semibold ${status === s ? "border-primary bg-primary text-primary-foreground" : "border-input bg-background"}`}>{s ? label(s) : "All"}</button>)}
       </div>
-      {isPending ? <p className="text-sm text-muted-foreground">Loading…</p> : isError ? <p role="alert" className="text-sm text-destructive">{errorText(error, "Could not load enquiries.")}</p> : !data.items.length ? <div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">No enquiries here yet.</p></div> : (
+      {isPending ? <LoaderBlock className="py-10" /> : isError ? <p role="alert" className="text-sm text-destructive">{errorText(error, "Could not load enquiries.")}</p> : !data.items.length ? <div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">No enquiries here yet.</p></div> : (
         <>
           <ul className="space-y-3">
             {data.items.map((e) => (
-              <li key={e.id} className="glass rounded-2xl p-4">
+              <li key={e.id} className="border border-border bg-card shadow-sm rounded-2xl p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div><p className="font-bold">{e.name}</p><p className="text-xs text-muted-foreground">About {e.propertyTitle} (ref {e.propertyRef}) · {timeAgo(e.createdAt)}</p></div>
                   <Badge value={e.status} />

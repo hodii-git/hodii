@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -32,7 +33,7 @@ export function Moderation({ isAdmin }: { isAdmin: boolean }) {
   const report = useMutation({ mutationFn: (v: { id: string; decision: "dismiss" | "pause_listing" | "remove_listing"; note?: string }) => adminDecideReport({ data: v }), onSuccess: done("Done"), onError: fail });
   const [open, setOpen] = useState<string | null>(null);
 
-  if (isPending) return <p className="text-sm text-muted-foreground">Loading…</p>;
+  if (isPending) return <LoaderBlock className="py-10" />;
   if (isError) return <p role="alert" className="text-sm text-destructive">Could not load the moderation queue.</p>;
 
   return (

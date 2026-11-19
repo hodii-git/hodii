@@ -684,3 +684,20 @@ export const adminUpdateFeedback = createServerFn({ method: "POST" })
     const f = await import("./feedback.server");
     return adminDb((db) => f.updateFeedback(db, data));
   });
+
+export const adminListNeighbourhoodFlags = createServerFn({ method: "GET" }).handler(async () => {
+  const { requireAdmin, adminDb } = await srv();
+  await requireAdmin("editor");
+  const { listFlagged } = await import("./neighbourhoods.server");
+  return adminDb((db) => listFlagged(db));
+});
+export const adminModerateNeighbourhoodItem = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ kind: z.enum(["review", "post"]), id: z.string().min(1).max(64), action: z.enum(["restore", "remove"]) }).parse(d))
+  .handler(async ({ data }) => {
+    const { requireAdmin, adminDb, audit } = await srv();
+    const me = await requireAdmin("editor");
+    const { moderateItem } = await import("./neighbourhoods.server");
+    const out = await adminDb((db) => moderateItem(db, data.kind, data.id, data.action));
+    await audit(me, data.action === "remove" ? "neighbourhood_item_removed" : "neighbourhood_item_restored", { kind: data.kind, id: data.id });
+    return out;
+  });

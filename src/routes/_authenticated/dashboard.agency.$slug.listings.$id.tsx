@@ -32,7 +32,7 @@ const intOrNull = (v: string) => { const n = Number(v.replace(/[, ]/g, "")); ret
 const numOrNull = (v: string) => { const n = Number(v); return v.trim() === "" || !Number.isFinite(n) ? null : Math.max(0, n); };
 
 function Section({ id, title, hint, children }: { id: string; title: string; hint?: string; children: ReactNode }) {
-  return <section aria-labelledby={id} className="glass rounded-3xl p-5 md:p-6"><h2 id={id} className="text-lg font-extrabold">{title}</h2>{hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}<div className="mt-5 grid gap-5 sm:grid-cols-2">{children}</div></section>;
+  return <section aria-labelledby={id} className="border border-border bg-card shadow-sm rounded-3xl p-5 md:p-6"><h2 id={id} className="text-lg font-extrabold">{title}</h2>{hint && <p className="mt-1 text-sm text-muted-foreground">{hint}</p>}<div className="mt-5 grid gap-5 sm:grid-cols-2">{children}</div></section>;
 }
 const Num = ({ id, label, value, onChange, int = true, hint, max }: { id: string; label: string; value: number | null; onChange: (v: number | null) => void; int?: boolean; hint?: string; max?: number }) => (
   <Field id={id} label={label} {...(hint ? { hint } : {})}><input id={id} inputMode={int ? "numeric" : "decimal"} defaultValue={value ?? ""} key={value ?? "blank"} onBlur={(e) => { const v = int ? intOrNull(e.target.value) : numOrNull(e.target.value); onChange(v !== null && max !== undefined ? Math.min(v, max) : v); }} className={inputCls} /></Field>
@@ -155,7 +155,7 @@ function Editor() {
   return (
     <form onSubmit={(e) => { e.preventDefault(); if (step === STEPS.length - 1) save("publish"); else next(); }} className="space-y-6" noValidate>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3"><h2 className="text-2xl font-extrabold">{listingId ? "Edit listing" : "New listing"}</h2>{listingId && <Badge value={status} />}</div>
+        <div className="flex items-center gap-3"><h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">{listingId ? "Edit listing" : "New listing"}</h1>{listingId && <Badge value={status} />}</div>
         <Link to="/dashboard/agency/$slug/listings" params={{ slug }} className="text-sm font-semibold text-muted-foreground hover:underline">Back to listings</Link>
       </div>
       {loaded?.rejectionReason && <p role="note" className="rounded-2xl bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300"><strong>Not approved:</strong> {loaded.rejectionReason}. Fix this and publish again.</p>}
@@ -259,7 +259,7 @@ function Editor() {
       </Section>}
       {form.sale && !land && <Section id="s-pay" title="Payment options (optional)"><fieldset className="sm:col-span-2"><legend className="sr-only">Payment options</legend><div className="flex flex-wrap gap-2">{PAYMENT_PLANS.map((p) => { const on = form.sale!.paymentPlans.includes(p); return <button key={p} type="button" aria-pressed={on} onClick={() => set({ sale: { paymentPlans: on ? form.sale!.paymentPlans.filter((k) => k !== p) : [...form.sale!.paymentPlans, p] } })} className={`rounded-full border px-3 py-1.5 text-sm capitalize ${on ? "border-primary bg-primary text-primary-foreground" : "border-input bg-background"}`}>{p}</button>; })}</div></fieldset></Section>}
 
-      <section aria-labelledby="s-feat" className="glass rounded-3xl p-5 md:p-6">
+      <section aria-labelledby="s-feat" className="border border-border bg-card shadow-sm rounded-3xl p-5 md:p-6">
         <h2 id="s-feat" className="text-lg font-extrabold">Features</h2>
         <p className="mt-1 text-sm text-muted-foreground">Tick what applies, up to {LISTING_LIMITS.featuresMax}. People filter by these.</p>
         <div className="mt-5 space-y-5">
@@ -273,7 +273,7 @@ function Editor() {
 
       </StepPane>
       <StepPane n={3} step={step}>
-      <section aria-labelledby="s-photos" className="glass rounded-3xl p-5 md:p-6">
+      <section aria-labelledby="s-photos" className="border border-border bg-card shadow-sm rounded-3xl p-5 md:p-6">
         <h2 id="s-photos" className="text-lg font-extrabold">Photos</h2>
         <p className="mb-4 mt-1 text-sm text-muted-foreground">JPG, PNG or WebP, at least {LISTING_LIMITS.imageMinWidth}×{LISTING_LIMITS.imageMinHeight} pixels. Listings with good photos get far more enquiries.</p>
         {err("images") && <p role="alert" className="mb-3 text-sm font-semibold text-destructive">{err("images")}</p>}

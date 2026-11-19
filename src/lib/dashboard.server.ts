@@ -45,22 +45,27 @@ export async function overview(db: Db, m: Member) {
   const scope = listingScope(m);
   const since = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
   const leadScope = can(m.role, "lead.view.all") ? { agencyId: m.agencyId } : { agencyId: m.agencyId, $or: [{ agentId: m.userId }, { assignedTo: m.userId }] };
-  const [byStatus, newLeads, daily] = await Promise.all([
+  const all = can(m.role, "analytics.view.all");
+  // People who may only see their own numbers get the stats of their own listings, never the whole agency's.
+  const ownIds = !all && can(m.role, "analytics.view.own") ? (await propertiesCol(db).find(scope, { projection: { _id: 1 } }).limit(5000).toArray()).map((p) => String(p._id)) : [];
+  const statScope = all ? { agencyId: m.agencyId } : { agencyId: m.agencyId, propertyId: { $in: ownIds } };
+  const [byStatus, newLeads, daily, user] = await Promise.all([
     propertiesCol(db).aggregate([{ $match: scope }, { $group: { _id: "$status", count: { $sum: 1 } } }]).toArray(),
     db.collection("enquiries").countDocuments({ ...leadScope, status: "new" }),
-    can(m.role, "analytics.view.all") || can(m.role, "analytics.view.own")
+    all || can(m.role, "analytics.view.own")
       ? db.collection("propertyDailyStats").aggregate([
-          { $match: { agencyId: m.agencyId, date: { $gte: since } } },
+          { $match: { ...statScope, date: { $gte: since } } },
           { $group: { _id: "$date", views: { $sum: "$views" }, enquiries: { $sum: "$enquiries" }, phoneReveals: { $sum: "$phoneReveals" }, saves: { $sum: "$saves" } } },
           { $sort: { _id: 1 } },
         ]).toArray()
       : [],
+    db.collection("users").findOne({ _id: m.userId as never }, { projection: { username: 1 } }),
   ]);
   const statuses: Record<string, number> = {};
   for (const s of byStatus) statuses[str(s["_id"])] = Number(s["count"]);
   const total = (k: string) => daily.reduce((n, d) => n + Number(d[k] ?? 0), 0);
   return {
-    statuses, newLeads,
+    statuses, newLeads, username: str(user?.["username"], "there"), scope: (can(m.role, "listing.edit.any") ? "agency" : "own") as "agency" | "own", canSeeStats: all || can(m.role, "analytics.view.own"),
     last30: { views: total("views"), enquiries: total("enquiries"), phoneReveals: total("phoneReveals"), saves: total("saves") },
     series: daily.map((d) => ({ date: str(d["_id"]), views: Number(d["views"]), enquiries: Number(d["enquiries"]) })),
     verification: m.agency.verification.status,
@@ -86,7 +91,7 @@ export async function listAgencyListings(db: Db, m: Member, f: z.infer<typeof li
       { $project: {
         slug: 1, referenceCode: 1, title: 1, listingType: 1, category: 1, propertyType: 1, price: 1, priceHistory: 1, agencyId: 1, agentId: 1, createdBy: 1, publishedAt: 1, status: 1, expiresAt: 1, "moderation.rejectionReason": 1, stats: 1, promotion: 1,
         "verified.isVerified": 1, "location.county": 1, "location.areaName": 1, "details.bedrooms": 1, "details.bathrooms": 1, "details.parkingSpaces": 1, "details.floorAreaSqm": 1, "details.plotAreaSqm": 1,
-        cover: { $arrayElemAt: ["$images", 0] }, imageCount: { $size: "$images" },
+        cover: { $arrayElemAt: ["$images", 0] }, more: { $slice: ["$images", 1, 4] }, imageCount: { $size: "$images" },
       } },
     ]).toArray(),
     propertiesCol(db).countDocuments(filter),

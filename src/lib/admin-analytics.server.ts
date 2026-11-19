@@ -24,7 +24,8 @@ export async function platformOverview(db: Db) {
   const now = new Date();
   const week = new Date(now.getTime() - 7 * 86_400_000);
   const since = dayKey(new Date(now.getTime() - 29 * 86_400_000));
-  const [byStatus, agencies, users, newUsers, openReports, pendingListings, daily, leads] = await Promise.all([
+  const flaggedQ = { $or: [{ hidden: true }, { "reportedBy.0": { $exists: true } }] };
+  const [byStatus, agencies, users, newUsers, openReports, pendingListings, daily, leads, nbReviewFlags, nbPostFlags] = await Promise.all([
     db.collection("properties").aggregate([{ $group: { _id: "$status", n: { $sum: 1 } } }]).toArray(),
     db.collection("agencies").aggregate([{ $group: { _id: "$verification.status", n: { $sum: 1 } } }]).toArray(),
     db.collection("users").countDocuments({}),
@@ -33,13 +34,15 @@ export async function platformOverview(db: Db) {
     db.collection("properties").countDocuments({ status: "pending_review" }),
     db.collection("propertyDailyStats").aggregate([{ $match: { date: { $gte: since } } }, { $group: { _id: null, views: { $sum: "$views" }, enquiries: { $sum: "$enquiries" }, phoneReveals: { $sum: "$phoneReveals" }, saves: { $sum: "$saves" } } }]).toArray(),
     db.collection("enquiries").aggregate([{ $match: { createdAt: { $gte: new Date(now.getTime() - 30 * 86_400_000) } } }, { $group: { _id: "$status", n: { $sum: 1 } } }]).toArray(),
-  ]);
+    db.collection("neighbourhoodReviews").countDocuments(flaggedQ),
+  db.collection("neighbourhoodPosts").countDocuments({ ...flaggedQ, deletedAt: null }),
+]);
   const map = (rows: Document[]) => Object.fromEntries(rows.map((r) => [str(r["_id"], "none"), num(r["n"])]));
   const d = daily[0] ?? {};
   const l = map(leads);
   const total = Object.values(l).reduce((a, b) => a + b, 0);
   return {
-    listings: map(byStatus), agencies: map(agencies), users, newUsers, openReports, pendingListings,
+    listings: map(byStatus), agencies: map(agencies), users, newUsers, openReports, pendingListings, neighbourhoodFlags: nbReviewFlags + nbPostFlags,
     last30: { views: num(d["views"]), enquiries: num(d["enquiries"]), phoneReveals: num(d["phoneReveals"]), saves: num(d["saves"]) },
     // Share of the last month's enquiries that somebody has moved past "new": a quick read on how responsive agencies are.
     responseRate: total ? Math.round(((total - (l["new"] ?? 0)) / total) * 100) : null,

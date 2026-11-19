@@ -10,9 +10,9 @@ import { understand } from "@/lib/query-intent";
 import { VoiceButton } from "./voice-button";
 import { pickCriteria, replaceCriteria, useAiSearch } from "./ai-search-panel";
 
-type Props = { value: SearchParams; onChange: (next: Partial<SearchParams>) => void };
+type Props = { value: SearchParams; onChange: (next: Partial<SearchParams>) => void; /** From large screens the form becomes a sticky sidebar with every filter always open. */ side?: boolean };
 
-const field = "h-11 w-full rounded-xl border border-input bg-background px-3 text-sm outline-hidden focus-visible:ring-2 focus-visible:ring-ring";
+const field = "h-9 w-full rounded-lg border border-input bg-background px-2.5 text-[0.8125rem] outline-hidden focus-visible:ring-2 focus-visible:ring-ring";
 const label = "mb-1.5 block text-xs font-bold uppercase tracking-wide text-muted-foreground";
 const num = (s: string) => { const n = Number(s.replace(/[, ]/g, "")); return s.trim() !== "" && Number.isFinite(n) && n >= 0 ? Math.floor(n) : undefined; };
 
@@ -22,7 +22,7 @@ const BATHS = [{ value: "1", label: "1+ bathroom" }, { value: "2", label: "2+ ba
 const RENT_STEPS = [10_000, 20_000, 30_000, 50_000, 80_000, 120_000, 200_000, 400_000];
 const SALE_STEPS = [2_000_000, 5_000_000, 8_000_000, 12_000_000, 20_000_000, 40_000_000, 80_000_000, 200_000_000];
 
-export function SearchForm({ value, onChange }: Props) {
+export function SearchForm({ value, onChange, side = false }: Props) {
   const [q, setQ] = useState(value.q ?? "");
   const [open, setOpen] = useState(false);
   const [understood, setUnderstood] = useState<string[]>([]);
@@ -60,17 +60,17 @@ export function SearchForm({ value, onChange }: Props) {
   const active = [value.category, value.propertyTypes?.length, value.priceMin, value.priceMax, value.bedroomsMin, value.bathroomsMin, value.areaSqmMin, value.areaSqmMax, value.features?.length, value.furnishing, value.conditions?.length, value.verifiedOnly].filter(Boolean).length;
 
   return (
-    <form role="search" aria-label="Search properties" data-tour="filters" onSubmit={(e) => { e.preventDefault(); clearTimeout(timers.current.get("q")); search(true); }} className="glass rounded-3xl p-4 md:p-5">
+    <form role="search" aria-label="Search properties" data-tour="filters" onSubmit={(e) => { e.preventDefault(); clearTimeout(timers.current.get("q")); search(true); }} className={`rounded-2xl border border-border bg-card p-4 shadow-sm md:p-5 ${side ? "lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:overscroll-contain" : ""}`}>
       <div className="mb-4 inline-flex rounded-full bg-muted p-1" role="tablist" aria-label="Listing type">
         {[{ key: undefined, label: "All" }, ...LISTING_TYPES.map((t) => ({ key: t.key as string | undefined, label: t.short }))].map((t) => (
-          <button key={t.label} type="button" role="tab" aria-selected={value.listingType === t.key} onClick={() => set({ listingType: t.key as SearchParams["listingType"] })} className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${value.listingType === t.key ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}>{t.label}</button>
+          <button key={t.label} type="button" role="tab" aria-selected={value.listingType === t.key} onClick={() => set({ listingType: t.key as SearchParams["listingType"] })} className={`rounded-full px-3 py-1 text-[0.8125rem] font-semibold transition ${value.listingType === t.key ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}>{t.label}</button>
         ))}
       </div>
-      <div className="grid gap-3 md:grid-cols-[1fr_14rem_auto]">
+      <div className={`grid gap-3 ${side ? "md:grid-cols-[1fr_14rem_auto] lg:grid-cols-1" : "md:grid-cols-[1fr_14rem_auto]"}`}>
         <div className="relative">
           <label htmlFor="sf-q" className="sr-only">Area, estate or keyword</label>
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
-          <input id="sf-q" value={q} onChange={(e) => { const s = e.target.value; setQ(s); later("q", () => searchText(s)); }} placeholder="Area, estate or reference, e.g. Kilimani" className={`${field} pl-9 pr-14`} maxLength={100} />
+          <input id="sf-q" value={q} onChange={(e) => { const s = e.target.value; setQ(s); later("q", () => searchText(s)); }} placeholder="Area, estate or keyword" className={`${field} pl-9 pr-14`} maxLength={100} />
           <VoiceButton onText={(t) => { setQ(t); ai.ask(t); }} />
         </div>
         <div>
@@ -78,9 +78,9 @@ export function SearchForm({ value, onChange }: Props) {
           <Pick id="sf-county" label="County" clearLabel="All counties" value={county ? String(county) : ""} onChange={(v) => set({ countyCodes: v ? [Number(v)] : undefined })} options={COUNTY_OPTIONS} searchable />
         </div>
         <div className="flex gap-2">
-          <button type="submit" className="h-11 flex-1 rounded-xl bg-primary px-6 text-sm font-bold text-primary-foreground md:flex-none">Search</button>
+          <button type="submit" className="h-9 flex-1 rounded-lg bg-primary px-5 text-[0.8125rem] font-bold text-primary-foreground md:flex-none">Search</button>
           {ai.button}
-          <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="inline-flex h-11 items-center gap-2 rounded-xl border border-input bg-background px-4 text-sm font-semibold">
+          <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className={`inline-flex h-9 items-center gap-1.5 rounded-lg border border-input bg-background px-3 text-[0.8125rem] font-semibold ${side ? "lg:hidden" : ""}`}>
             <SlidersHorizontal className="h-4 w-4" aria-hidden />Filters{active ? <span className="rounded-full bg-primary px-1.5 text-xs text-primary-foreground">{active}</span> : null}
           </button>
         </div>
@@ -91,8 +91,8 @@ export function SearchForm({ value, onChange }: Props) {
         <p className="mt-4 mb-4 text-sm" role="status"><span className="font-semibold">Filters set from your words:</span> {understood.join(" · ")}. <span className="text-muted-foreground">Open Filters to change any of them.</span></p>
       )}
 
-      {open && (
-        <div className="mt-5 grid max-h-[min(60dvh,30rem)] gap-5 overflow-y-auto overscroll-contain border-t border-border pt-5 pr-1 sm:grid-cols-2 lg:grid-cols-4">
+      {(open || side) && (
+        <div className={`mt-5 grid grid-cols-2 gap-x-3 gap-y-4 border-t border-border pt-4 ${side ? `${open ? "" : "max-lg:hidden"} max-lg:max-h-[min(60dvh,30rem)] max-lg:overflow-y-auto lg:grid-cols-1` : "max-h-[min(60dvh,30rem)] overflow-y-auto overscroll-contain pr-1 lg:grid-cols-4"}`}>
           <div>
             <span className={label}>Category</span>
             <Pick label="Category or type" clearLabel="Any" value={value.propertyTypes?.length === 1 ? `type:${value.propertyTypes[0]}` : value.category ? `cat:${value.category}` : ""} options={CATEGORY_TYPE_OPTIONS}

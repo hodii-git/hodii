@@ -6356,6 +6356,18 @@
             },
             "updatedAt": {
               "bsonType": "date"
+            },
+            "reportedBy": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "maxItems": 50
+            },
+            "hidden": {
+              "bsonType": "bool"
             }
           },
           "required": [
@@ -6459,6 +6471,18 @@
                   "bsonType": "null"
                 }
               ]
+            },
+            "reportedBy": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "maxItems": 50
+            },
+            "hidden": {
+              "bsonType": "bool"
             }
           },
           "required": [

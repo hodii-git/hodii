@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { BadgeCheck, Flag, Trash2 } from "lucide-react";
@@ -32,7 +33,7 @@ export function AgencyReviews({ slug, agencyName }: { slug: string; agencyName: 
   const [replyText, setReplyText] = useState("");
   const reply = useMutation({ mutationFn: (id: string) => replyToAgencyReview({ data: { slug, id, body: replyText } }), onSuccess: () => { setReplyFor(null); setReplyText(""); refresh(); }, onError: err });
 
-  if (!data) return <section id="reviews" className="mt-12"><h2 className="text-2xl font-extrabold">Reviews</h2><p className="mt-3 text-sm text-muted-foreground">Loading…</p></section>;
+  if (!data) return <section id="reviews" className="mt-12"><h2 className="text-2xl font-extrabold">Reviews</h2><LoaderBlock className="py-10" /></section>;
   const s = data.summary;
   const items = data.items;
   const showForm = !!user && !isStaff && (!data.mine || editing);

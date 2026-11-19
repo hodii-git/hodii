@@ -1,10 +1,11 @@
+import { LoaderBlock } from "@/components/loader";
 import { createFileRoute } from "@tanstack/react-router";
 import { Sel } from "@/components/ui/sel";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { uploadPhoto } from "@/components/dashboard/upload";
-import { Badge, Field, areaCls, btnGhost, btnPrimary, errorText, inputCls } from "@/components/dashboard/ui";
+import { Badge, Field, areaCls, btnGhost, btnPrimary, errorText, inputCls, PageHeader } from "@/components/dashboard/ui";
 import { getAgencyProfile, requestVerification, saveAgencyProfile } from "@/lib/dashboard.functions";
 import { COUNTY_LIST , COUNTY_LIST_NAIROBI_FIRST } from "@/lib/mongodb/kenya";
 import { AGENCY_LIMITS } from "@/lib/mongodb/limits";
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/agency/$slug/set
 function Settings() {
   const { slug } = Route.useParams();
   const { data, isPending, isError, error } = useQuery(profileQuery(slug));
-  if (isPending) return <p className="text-sm text-muted-foreground">Loading…</p>;
+  if (isPending) return <LoaderBlock className="py-10" />;
   if (isError) return <p role="alert" className="text-sm text-destructive">{errorText(error, "Could not load the agency.")}</p>;
   return <ProfileForm slug={slug} p={data} />;
 }
@@ -49,8 +50,10 @@ function ProfileForm({ slug, p }: { slug: string; p: Profile }) {
   });
 
   return (
+    <div>
+    <PageHeader title="Agency settings" sub="Your public profile, contact details and verification." />
     <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
-      <form className="glass grid gap-5 rounded-3xl p-6 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); save.mutate(new FormData(e.currentTarget)); }}>
+      <form className="border border-border bg-card shadow-sm grid gap-5 rounded-3xl p-6 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); save.mutate(new FormData(e.currentTarget)); }}>
         <div className="sm:col-span-2">
           <div className="relative h-36 overflow-hidden rounded-2xl bg-muted sm:h-44">
             {cover ? <img src={cover} alt="Cover photo" className="h-full w-full object-cover" /> : <p className="flex h-full items-center justify-center text-sm text-muted-foreground">No cover photo yet</p>}
@@ -101,7 +104,7 @@ function ProfileForm({ slug, p }: { slug: string; p: Profile }) {
         {!readonly && <div className="sm:col-span-2"><button disabled={save.isPending || uploading} className={btnPrimary}>{save.isPending ? "Saving…" : "Save agency"}</button></div>}
       </form>
 
-      <aside className="glass h-fit space-y-3 rounded-3xl p-5" aria-labelledby="ver">
+      <aside className="border border-border bg-card shadow-sm h-fit space-y-3 rounded-3xl p-5" aria-labelledby="ver">
         <h2 id="ver" className="text-lg font-extrabold">Verification</h2>
         <Badge value={p.verification.status === "verified" ? "verified" : p.verification.status === "pending" ? "pending" : "unverified"} />
         {p.verification.status === "verified" && <p className="text-sm text-muted-foreground">You are verified. Your listings go live straight away and show the verified badge.</p>}
@@ -112,6 +115,7 @@ function ProfileForm({ slug, p }: { slug: string; p: Profile }) {
           {p.canSubmitVerification && <button className={btnPrimary} disabled={verify.isPending} onClick={() => verify.mutate()}>{verify.isPending ? "Sending…" : "Submit for verification"}</button>}
         </>}
       </aside>
+    </div>
     </div>
   );
 }

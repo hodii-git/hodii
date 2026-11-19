@@ -56,7 +56,7 @@ function AgencyPage() {
   const nav = [["#listings", `Listings (${a.liveTotal})`], ["#about", "About"], ...(team.length ? [["#team", "Team"]] : []), ["#reviews", "Reviews"]] as const;
 
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-24">
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-24">
       <header className="overflow-hidden rounded-3xl border border-border">
         <div className="h-36 bg-muted sm:h-52">{a.cover && <img src={a.cover} alt="" className="h-full w-full object-cover" />}</div>
         <div className="flex flex-col gap-5 p-6 sm:flex-row sm:items-end">

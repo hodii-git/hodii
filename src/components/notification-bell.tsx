@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { useEffect, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -77,7 +78,7 @@ export function NotificationBell() {
       <PopoverTrigger asChild>
         <button type="button" aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"} className="relative grid h-10 w-10 place-items-center rounded-full hover:bg-navigation-highlight focus-visible:ring-2 focus-visible:ring-ring">
           <Bell className="h-5 w-5" aria-hidden />
-          {unread > 0 && <span className="absolute right-1 top-1 grid min-w-[1.1rem] place-items-center rounded-full bg-primary px-1 text-[10px] font-extrabold leading-[1.1rem] text-primary-foreground">{unread > 9 ? "9+" : unread}</span>}
+          {unread > 0 && <span className="absolute right-1 top-1 grid min-w-[1.1rem] place-items-center rounded-full bg-primary px-1 text-[10px] dot-pulse font-extrabold leading-[1.1rem] text-primary-foreground">{unread > 9 ? "9+" : unread}</span>}
         </button>
       </PopoverTrigger>
       <PopoverContent align="end" className="glass-strong w-[min(24rem,calc(100vw-1.5rem))] rounded-3xl p-2">
@@ -86,7 +87,7 @@ export function NotificationBell() {
           {unread > 0 && <button type="button" onClick={() => actions.read.mutate("all")} className="inline-flex items-center gap-1 text-xs font-bold text-primary"><CheckCheck className="h-3.5 w-3.5" aria-hidden />Mark all read</button>}
         </div>
         <div className="max-h-[28rem] overflow-y-auto">
-          {list.isPending ? <p className="px-3 py-6 text-center text-sm text-muted-foreground">Loading…</p>
+          {list.isPending ? <LoaderBlock className="py-10" />
             : !list.data?.items.length ? <div className="px-3 py-8 text-center text-sm text-muted-foreground"><Heart className="mx-auto mb-2 h-5 w-5" aria-hidden />Nothing yet. Save a search and we will tell you here when something new matches.</div>
             : <ul className="grid gap-1">{list.data.items.slice(0, 12).map((n) => <NotificationRow key={n.id} n={n} actions={actions} onDone={() => setOpen(false)} />)}</ul>}
         </div>

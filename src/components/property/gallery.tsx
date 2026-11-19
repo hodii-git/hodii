@@ -24,8 +24,23 @@ export function Gallery({ images: photos, plans = [], title }: { images: ImageDt
 
   if (!n) return <div className="flex aspect-[16/10] items-center justify-center rounded-3xl bg-muted text-muted-foreground"><Camera className="h-10 w-10" aria-hidden /></div>;
   const cur = images[i]!;
+  const open = (k: number) => { setI(k); setFull(true); };
+  const tiles = images.slice(0, 5);
   return (
     <section aria-label="Photos">
+      {/* Wide screens: one large photo and up to four more, like a magazine spread. Tapping any opens the full-screen viewer. */}
+      <div className={`relative hidden h-[26rem] gap-2 overflow-hidden rounded-3xl sm:grid lg:h-[30rem] ${tiles.length === 1 ? "" : tiles.length < 3 ? "grid-cols-2" : "grid-cols-4 grid-rows-2"}`}>
+        {tiles.map((im, k) => (
+          <button key={im.url} type="button" onClick={() => open(k)} aria-label={k >= photos.length ? "View floor plan full screen" : `View photo ${k + 1} full screen`}
+            className={`group relative overflow-hidden bg-muted ${k === 0 ? (tiles.length >= 3 ? "col-span-2 row-span-2" : "") : ""}`}>
+            <img src={k === 0 ? im.url : im.thumbUrl ?? im.url} alt={im.alt || (k >= photos.length ? `${title}, floor plan` : `${title}, photo ${k + 1}`)} width={im.width || 1200} height={im.height || 800} loading={k === 0 ? "eager" : "lazy"}
+              className={`h-full w-full transition duration-500 group-hover:scale-[1.03] ${k >= photos.length ? "bg-white object-contain" : "object-cover"}`} />
+            {k >= photos.length && <span className="absolute left-3 top-3 rounded-full bg-background/95 px-3 py-1 text-xs font-bold shadow">Floor plan</span>}
+          </button>
+        ))}
+        {n > 1 && <button type="button" onClick={() => open(0)} className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-background px-4 py-2 text-sm font-bold shadow-lg"><Camera className="size-4" aria-hidden />Show all {n}</button>}
+      </div>
+      <div className="sm:hidden">
       <div className="relative overflow-hidden rounded-3xl bg-muted">
         <button type="button" onClick={() => setFull(true)} className="block w-full cursor-zoom-in" aria-label="View photo full screen">
           <img src={cur.url} alt={cur.alt || (isPlan(i) ? `${title}, floor plan` : `${title}, photo ${i + 1}`)} width={cur.width || 1200} height={cur.height || 800} className={`aspect-[16/10] w-full ${isPlan(i) ? "bg-white object-contain" : "object-cover"}`} fetchPriority={i === 0 ? "high" : "auto"} />
@@ -49,6 +64,7 @@ export function Gallery({ images: photos, plans = [], title }: { images: ImageDt
           ))}
         </ul>
       )}
+      </div>
       {full && (
         <div role="dialog" aria-modal="true" aria-label={`${title} photos`} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95">
           <button ref={closeRef} type="button" onClick={() => setFull(false)} aria-label="Close" className="absolute right-4 top-4 rounded-full bg-white/10 p-3 text-white"><X className="h-5 w-5" /></button>

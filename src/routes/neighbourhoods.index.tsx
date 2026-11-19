@@ -38,8 +38,8 @@ function Page() {
   const [picked, setPicked] = useState<string[]>([]);
   const toggle = (k: string) => setPicked((p) => (p.includes(k) ? p.filter((x) => x !== k) : p.length >= 3 ? p : [...p, k]));
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-32">
-      <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">Neighbourhoods</h1>
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-32">
+      <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">Neighbourhoods</h1>
       <p className="mt-2 max-w-2xl text-muted-foreground">Find the right area, not just the right house. Ratings and chat come from people who know the place.</p>
       <form role="search" aria-label="Search neighbourhoods" onSubmit={(e) => { e.preventDefault(); set({ q: String(new FormData(e.currentTarget).get("q") ?? "").trim() || undefined }); }} className="mt-6 flex flex-wrap gap-3">
         <input name="q" type="search" defaultValue={search.q ?? ""} key={search.q ?? ""} placeholder="Area or county" aria-label="Area or county" className={`${field} min-w-48 flex-1`} />

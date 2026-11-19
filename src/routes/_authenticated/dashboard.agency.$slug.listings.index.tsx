@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { createFileRoute, getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { Sel } from "@/components/ui/sel";
 import { Pick } from "@/components/ui/pick";
@@ -9,7 +10,7 @@ import { useState } from "react";
 import { TypedConfirm } from "@/components/typed-confirm";
 import { deletePhrase } from "@/lib/bulk-rules";
 import { toast } from "sonner";
-import { Badge, btnGhost, btnPrimary, errorText, inputCls } from "@/components/dashboard/ui";
+import { Badge, btnGhost, btnPrimary, errorText, inputCls, PageHeader } from "@/components/dashboard/ui";
 import { Pager } from "@/components/property/results";
 import { can } from "@/lib/access";
 import { bulkListingAction, exportAgencyListings, getAgencyListings, getAgencyAgents, renewListing, setListingStatus } from "@/lib/dashboard.functions";
@@ -75,6 +76,7 @@ function Listings() {
   const u = space.data?.usage;
   return (
     <div>
+      <PageHeader title="Listings" sub="Everything your agency has listed, with its status and results." />
       {u && (
         <div className="mb-5 rounded-2xl border border-border p-4">
           <div data-tour="space-meter"><SpaceMeter usage={u} /></div>
@@ -99,7 +101,7 @@ function Listings() {
         {can(role, "listing.create") && <Link to="/dashboard/agency/$slug/import" params={{ slug }} className={`${btnGhost} h-10 px-3`}><Upload className="h-4 w-4" aria-hidden />Import CSV</Link>}
         {can(role, "listing.create") && <Link data-tour="add-listing" to="/dashboard/agency/$slug/listings/$id" params={{ slug, id: "new" }} className={btnPrimary}><Plus className="h-4 w-4" aria-hidden />Add listing</Link>}
       </div>
-      {isPending ? <p className="text-sm text-muted-foreground">Loading…</p> : isError ? <p role="alert" className="text-sm text-destructive">Could not load listings.</p> : !data.items.length ? (
+      {isPending ? <LoaderBlock className="py-10" /> : isError ? <p role="alert" className="text-sm text-destructive">Could not load listings.</p> : !data.items.length ? (
         <div className="empty-card"><Inbox className="h-6 w-6 text-muted-foreground" aria-hidden /><p className="text-sm font-semibold text-muted-foreground">{search.status || search.q ? "No listings match." : "No listings yet. Add your first one."}</p></div>
       ) : (
         <>
@@ -137,7 +139,7 @@ function Listings() {
           )}
           <ul className="space-y-3">
             {data.items.map((l) => (
-              <li key={l.id} className="glass flex flex-col gap-4 rounded-2xl p-4 sm:flex-row">
+              <li key={l.id} className="border border-border bg-card shadow-sm flex flex-col gap-4 rounded-2xl p-4 sm:flex-row">
                 {l.canEdit && <input type="checkbox" aria-label={`Select ${l.title}`} className="mt-1 size-4 shrink-0" checked={picked.has(l.id)} onChange={() => toggle(l.id)} />}
                 <div className="h-24 w-full shrink-0 overflow-hidden rounded-xl bg-muted sm:w-36">{l.image && <img src={l.image.thumbUrl ?? l.image.url} alt="" width={144} height={96} loading="lazy" className="h-full w-full object-cover" />}</div>
                 <div className="min-w-0 flex-1">

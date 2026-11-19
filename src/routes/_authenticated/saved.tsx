@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { useState } from "react";
 import { Sel } from "@/components/ui/sel";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -24,7 +25,7 @@ function SavedPage() {
   const saved = useQuery(savedQuery);
   const searches = useQuery(searchesQuery);
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-24">
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-24">
       <h1 className="text-3xl font-extrabold tracking-tight md:text-4xl">Saved</h1>
       <p className="mt-1 text-muted-foreground">Properties you saved, and searches we watch for you. New matches and price drops appear in your notifications.</p>
       <div className="mt-6 inline-flex rounded-full bg-muted p-1" role="tablist">
@@ -34,7 +35,7 @@ function SavedPage() {
       </div>
       {tab === "properties" ? (
         <section className="mt-8" aria-label="Saved properties">
-          {saved.isPending ? <p className="text-sm text-muted-foreground">Loading…</p> : saved.isError ? <p role="alert" className="text-sm text-destructive">Could not load your saved properties.</p> : (
+          {saved.isPending ? <LoaderBlock className="py-10" /> : saved.isError ? <p role="alert" className="text-sm text-destructive">Could not load your saved properties.</p> : (
             <>
               {saved.data.unavailable > 0 && <p className="mb-3 text-sm text-muted-foreground">{saved.data.unavailable} saved {saved.data.unavailable === 1 ? "property is" : "properties are"} no longer available.</p>}
               <PropertyGrid items={saved.data.items} saved={new Set(saved.data.items.map((i) => i.id))} empty={<div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">Tap the heart on any listing to keep it here. We will tell you if its price drops.</p></div>} />
@@ -53,7 +54,7 @@ function SearchList({ query }: { query: ReturnType<typeof useQuery<Awaited<Retur
   const refresh = () => qc.invalidateQueries({ queryKey: ["saved", "searches"] });
   const update = useMutation({ mutationFn: (v: { id: string; frequency: (typeof ALERT_FREQUENCIES)[number] }) => updateSavedSearch({ data: v }), onSuccess: refresh, onError: (e) => toast.error((e as Error).message) });
   const remove = useMutation({ mutationFn: (id: string) => deleteSavedSearch({ data: { id } }), onSuccess: () => { toast.success("Search deleted"); refresh(); }, onError: (e) => toast.error((e as Error).message) });
-  if (query.isPending) return <p className="text-sm text-muted-foreground">Loading…</p>;
+  if (query.isPending) return <LoaderBlock className="py-10" />;
   if (!query.data?.length) return <div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">No saved searches yet. Search for properties, then tap “Save search”.</p><Link to="/properties" className="mt-3 inline-block font-bold text-primary underline">Search properties</Link></div>;
   return (
     <ul className="grid gap-3">

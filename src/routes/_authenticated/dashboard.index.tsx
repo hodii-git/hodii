@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { queryOptions, useQuery } from "@tanstack/react-query";
@@ -20,7 +21,7 @@ function PersonalDashboard() {
   const enquiries = useQuery(enquiriesQuery);
   const [chat, setChat] = useState<string | null>(null);
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-24">
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-24">
       <h1 className="text-3xl font-extrabold tracking-tight md:text-4xl">Hello, {user?.username}</h1>
       <p className="mt-1 text-muted-foreground">Your enquiries, your agencies and your saved properties.</p>
 
@@ -39,7 +40,7 @@ function PersonalDashboard() {
 
       <section aria-labelledby="enq" className="mt-12">
         <h2 id="enq" className="mb-5 text-2xl font-extrabold">Your enquiries</h2>
-        {enquiries.isPending ? <p className="text-sm text-muted-foreground">Loading…</p> : !enquiries.data?.length ? <div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">Enquiries you send while signed in will show here.</p></div> : (
+        {enquiries.isPending ? <LoaderBlock className="py-10" /> : !enquiries.data?.length ? <div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">Enquiries you send while signed in will show here.</p></div> : (
           <ul className="space-y-3">
             {enquiries.data.map((e) => (
               <li key={e.id} className="glass rounded-2xl p-4">

@@ -36,8 +36,8 @@ function Directory() {
   const navigate = useNavigate({ from: "/agencies" });
   const set = (next: Partial<Search>) => navigate({ search: { ...search, ...next, page: next.page } as Search });
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-24">
-      <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">Agents and developers</h1>
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-24">
+      <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">Agents and developers</h1>
       <p className="mt-2 text-muted-foreground">Find who you are dealing with before you get in touch.</p>
       <form role="search" aria-label="Search agencies" onSubmit={(e) => { e.preventDefault(); set({ q: String(new FormData(e.currentTarget).get("q") ?? "").trim() || undefined }); }} className="mt-6 flex flex-wrap gap-3">
         <input name="q" type="search" defaultValue={search.q ?? ""} key={search.q ?? ""} placeholder="Search by name" aria-label="Agency name" className={`${field} min-w-48 flex-1`} />

@@ -1,3 +1,4 @@
+import { EmptyState } from "@/components/states";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { SearchX } from "lucide-react";
@@ -20,7 +21,7 @@ export function Results({ items, unavailable, emptyText }: { items: PropertyCard
   if (unavailable) return <DataUnavailable />;
   return (
     <PropertyGrid items={items} saved={saved} empty={
-      <div role="status" className="empty-card"><SearchX className="h-6 w-6 text-muted-foreground" aria-hidden /><p className="text-sm font-semibold text-muted-foreground">{emptyText ?? "No properties match your search. Try widening the price range or removing a filter."}</p></div>
+      <div role="status"><EmptyState icon={<SearchX />} title="Nothing here yet">{emptyText ?? "No properties match your search. Try widening the price range or removing a filter."}</EmptyState></div>
     } />
   );
 }

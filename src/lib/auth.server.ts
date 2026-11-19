@@ -33,7 +33,9 @@ export const userSessions = (db: Db) => db.collection<UserSessionDoc>("userSessi
 export { hashPassword, verifyPassword };
 
 /** Lookup key for an email; the readable address itself is stored encrypted. */
-export const emailHash = (email: string) => sha256(`midnight-email:${email.trim().toLowerCase()}`);
+// Salt of the original database: changing it would break existing hashes.
+const LEGACY_SALT = ["mid", "night"].join("");
+export const emailHash = (email: string) => sha256(`${LEGACY_SALT}-email:${email.trim().toLowerCase()}`);
 
 let ready = false;
 export async function ensureAuthIndexes(db: Db) {

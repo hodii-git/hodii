@@ -9,13 +9,14 @@ export function searchHeading(p: Partial<SearchParams>): { title: string; subtit
   const what = types.length === 1 ? types[0]!.plural : types.length === 2 ? `${types[0]!.plural} and ${types[1]!.plural.toLowerCase()}` : types.length > 2 ? "Properties" : p.category === "land" ? "Land" : p.category === "commercial" ? "Commercial property" : "Properties";
   const beds = p.bedroomsMin ? `${p.bedroomsMin}+ bedroom ` : "";
   const mode = p.listingType === "rent" ? " to rent" : p.listingType === "sale" ? " for sale" : p.listingType === "short_stay" ? " for short stay" : "";
-  const place = county ? ` in ${county}` : p.q ? "" : " in Kenya";
+  const radius = p.circle ? (p.circle.radiusM < 1000 ? `${p.circle.radiusM} m` : `${p.circle.radiusM / 1000} km`) : "";
+  const place = p.circle ? ` within ${radius} of your pin` : p.polygon ? " in the area you drew" : county ? ` in ${county}` : p.q ? "" : " in Kenya";
   const near = p.q ? ` matching “${p.q}”` : "";
   const lead = beds ? beds + what.charAt(0).toLowerCase() + what.slice(1) : what;
   const title = `${lead}${mode}${place}${near}`;
   const money = (n: number) => `KES ${n.toLocaleString("en-KE")}`;
   const price = p.priceMin && p.priceMax ? `${money(p.priceMin)} to ${money(p.priceMax)}` : p.priceMax ? `up to ${money(p.priceMax)}` : p.priceMin ? `from ${money(p.priceMin)}` : "";
-  const filtered = !!(county || p.q || types.length || p.bedroomsMin || price || p.features?.length || p.furnishing || p.verifiedOnly);
+  const filtered = !!(p.circle || p.polygon || county || p.q || types.length || p.bedroomsMin || price || p.features?.length || p.furnishing || p.verifiedOnly);
   const subtitle = filtered ? ["Matching your search", price, p.furnishing ? p.furnishing.replace("_", "-") : "", p.verifiedOnly ? "verified agencies only" : ""].filter(Boolean).join(", ") + "." : "Homes, land and commercial property from verified agents and owners.";
   return { title, subtitle };
 }

@@ -51,7 +51,8 @@ export function cardOf(d: Document, agencies: Map<string, Document>, now = Date.
     county: typeof loc["county"] === "string" ? loc["county"] : null, areaName: str(loc["areaName"]),
     bedrooms: numOrNull(details["bedrooms"]), bathrooms: numOrNull(details["bathrooms"]), parking: numOrNull(details["parkingSpaces"]),
     sizeSqm: numOrNull(details["floorAreaSqm"]) ?? numOrNull(details["plotAreaSqm"]),
-    image: cover ? imageDto(cover) : null, imageCount: numOrNull(d["imageCount"]) ?? (Array.isArray(d["images"]) ? d["images"].length : 0),
+    image: cover ? imageDto(cover) : null,
+    more: (Array.isArray(d["more"]) ? (d["more"] as Document[]) : Array.isArray(d["images"]) ? (d["images"] as Document[]).slice(1, 5) : []).map(imageDto), imageCount: numOrNull(d["imageCount"]) ?? (Array.isArray(d["images"]) ? d["images"].length : 0),
     verified: (d["verified"] as Document | undefined)?.["isVerified"] === true,
     tier: tierNow({ boostUntil: promotion["boostUntil"] as Date | null | undefined, premiumUntil: promotion["premiumUntil"] as Date | null | undefined }, now),
     priceDrop: isPriceDrop(price ? Number(price["amount"]) : null, d["priceHistory"] as never, now),
@@ -64,7 +65,7 @@ export const CARD_PROJECTION = {
   slug: 1, referenceCode: 1, title: 1, listingType: 1, category: 1, propertyType: 1, price: 1, priceHistory: 1, agencyId: 1, publishedAt: 1, promotion: 1,
   "verified.isVerified": 1, "location.county": 1, "location.areaName": 1,
   "details.bedrooms": 1, "details.bathrooms": 1, "details.parkingSpaces": 1, "details.floorAreaSqm": 1, "details.plotAreaSqm": 1,
-  cover: { $arrayElemAt: ["$images", 0] }, imageCount: { $size: "$images" },
+  cover: { $arrayElemAt: ["$images", 0] }, more: { $slice: ["$images", 1, 4] }, imageCount: { $size: "$images" },
 };
 
 export async function agenciesById(db: Db, ids: string[]) {

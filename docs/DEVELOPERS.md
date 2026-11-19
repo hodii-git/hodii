@@ -104,6 +104,12 @@ Use `authDb`, `withDb` or `adminDb` for the database connection.
 
 **Neighbourhoods.** `neighbourhood.ts` (pure rules, tested), `neighbourhoods.server.ts`, `neighbourhoods.functions.ts`, routes `neighbourhoods.index.tsx`, `neighbourhoods.compare.tsx`, `neighbourhoods.$county.$area.tsx`, UI in `components/neighbourhood/parts.tsx`. Keys are `county-slug/area-slug`.
 
+**Neighbourhood moderation.** Signed-in people can report another person's review or chat message. Three different reporters hide it (`shouldHide` in `neighbourhood.ts`); staff see it under Admin, Reviews, and either keep it (clears reports) or remove it. Audit entries: `neighbourhood_item_removed` and `neighbourhood_item_restored`.
+
+**Agency dashboard shell.** `dashboard.agency.$slug.tsx` is a sidebar layout (grouped links; a scrolling pill bar on phones). The overview in `dashboard.agency.$slug.index.tsx` draws its own SVG chart, with no chart library.
+
+**Greetings.** `greeting.ts` picks Good morning (03:00 to 11:59), Good afternoon (12:00 to 16:59) or Good evening (17:00 to 02:59) from the person's own clock; `use-greeting.ts` shows "Hello" until the browser knows the time, so the server and browser output match. Agency dashboard stats are scoped by role: people with only `analytics.view.own` get the numbers of their own listings (`dashboard.server.ts`, `overview`).
+
 **Layout.** Card grids use `repeat(auto-fill, minmax(…))`, and `styles.css` raises the root font size at 1920, 2560, 3200 and 3840 px so everything sized in rem scales on TVs. The List/Map pill is `view-pill.tsx`; card hover and map pins talk through `lib/hover-pin.ts`.
 
 ## 5. Testing
@@ -126,7 +132,7 @@ Backups, restores, error alerts and staff two-step sign-in are in `docs/operatio
 
 ## 8. Known gaps
 
-- Neighbourhood reviews and chat have no admin moderation screen yet; authors can delete their own, and the server has an admin removal path that is not wired to the admin UI.
+- Neighbourhood reports have no notification to staff; they appear under Admin, Reviews.
 - Voice search has not been exercised against live Groq.
 
 - No email or SMS provider: notifications are in-app only.
@@ -134,3 +140,11 @@ Backups, restores, error alerts and staff two-step sign-in are in `docs/operatio
 - Terms re-acceptance after a change is not built.
 - The Python listing scraper is not built.
 - Nothing has been exercised against live Safaricom, Cloudinary or Groq from the build environment; test those flows in a staging deployment first.
+
+## Part 13k notes
+- Theme is a cool blue (`#2563eb`, tokens in `src/styles.css`); the scrollbar uses blue-grey variables.
+- Cards: `PropertyCard.more` holds up to 4 extra photos (card projection `$slice`), shown as a swipe strip with Instagram-style dots. The pill on the photo carries rank by colour only (Premium gold, boosted blue); the homepage has one "Top properties" section.
+- Router pending state (`PageSkeleton`) shows card placeholders only on listing pages; every other page gets one centred loader. `EmptyState` is the shared empty design.
+- Tour state carries `at` (ms); the newer of local and server wins, and `getTourProgress` is a POST so nothing caches it.
+- Map: `RadiusEditor` (typed km, −/+, presets; 0.5–100 km) is shared by the map and the list view. Hover or tap the area for Adjust / Redraw / Remove; Adjust shows drag handles for the centre and the edge.
+- Team page shows a role table built from `ACTION_GROUPS` + `ROLE_ACTIONS` in `lib/access.ts`.

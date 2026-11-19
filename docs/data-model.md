@@ -97,7 +97,7 @@ The news site's collections (`articles`, `trends`, `sections`, `placements`, `re
 ## Decisions to confirm
 - **Billing**: `payments` records every attempt (boost or Premium package) with its price breakdown; `premiumPackages` holds bought packages and the listings attached to them. Plans: Basic (free, no badge), Boosted (per listing, per day), Premium (agency packages). Prices and limits are editable in admin Settings.
 - **Scraped listings** need an owning agency. Suggested: a "Hodii Imports" agency per source, listings enter as `pending_review`, and real agencies can claim them later.
-- **Hash salt** for emails in `auth.server.ts` still reads `midnight-email:…`. Changing them invalidates existing email lookups, so do it only when the database starts fresh.
+- **Hash salt** for emails in `auth.server.ts` uses the salt of the original database. Changing them invalidates existing email lookups, so do it only when the database starts fresh.
 
 ## Listing flow (Part 3)
 

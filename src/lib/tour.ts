@@ -1,7 +1,7 @@
 /** Onboarding tour state. Pure functions plus a tiny localStorage wrapper. State is per browser and per signed-in person. */
 /** One short tour per kind of page, so the help is about what the person is looking at right now. */
 export type TourId = "home" | "results" | "listing" | "agency-overview" | "agency-listings" | "agency-space" | "agency-premium" | "agency-enquiries" | "agency-settings";
-export type TourState = { status: "new" | "running" | "paused" | "snoozed" | "dismissed" | "done"; step: number; until: number; snoozes: number };
+export type TourState = { status: "new" | "running" | "paused" | "snoozed" | "dismissed" | "done"; step: number; until: number; snoozes: number; /** When this state was last changed on this device (ms); the newer of local and server wins. */ at?: number };
 export type TourStep = { target?: string; title: string; text: string };
 
 export const SNOOZE_DAYS = [1, 1, 3, 7] as const;

@@ -10,7 +10,7 @@ const PAD = 6;
 
 export function TourRunner() {
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const who = user?.id ?? "guest";
   const id = tourForPath(path, !!user);
   const [state, setState] = useState<TourState | null>(null);
@@ -20,8 +20,33 @@ export function TourRunner() {
   const active = forced ?? id;
   const [box, setBox] = useState<Box>(null);
 
-  const update = useCallback((s: TourState) => {
-    if (active) { save(active, who, s); if (user) void saveTourProgress({ data: { tour: active, status: s.status, step: s.step, until: s.until, snoozes: s.snoozes } }).catch(() => {}); }
+  // One choice covers every page's guide: "remind me tomorrow", "don't show again" or finishing a tour quiets the prompt cards everywhere
+  // (the dashboard alone has several guides). The "?" button and Help still start any tour on demand.
+  const ALL = "all" as TourId;
+  const [mute, setMute] = useState<TourState | null>(null);
+  useEffect(() => {
+    setMute(load(ALL, who));
+    if (!user) return;
+    let off = false;
+    void getTourProgress({ data: { tour: ALL } }).then((r) => {
+      if (off || !r) return;
+      const local = load(ALL, who);
+      if ((r.at ?? 0) >= (local.at ?? 0)) { const s = { status: r.status, step: r.step, until: r.until, snoozes: r.snoozes, at: r.at } as TourState; save(ALL, who, s); setMute(s); }
+    }).catch(() => {});
+    return () => { off = true; };
+  }, [who, user]);
+  const quiet = (s: TourState) => {
+    if (s.status !== "snoozed" && s.status !== "dismissed" && s.status !== "done") return;
+    const m: TourState = { status: s.status === "snoozed" ? "snoozed" : "dismissed", step: 0, until: s.until, snoozes: 0, at: Date.now() };
+    save(ALL, who, m); setMute(m);
+    if (user) void saveTourProgress({ data: { tour: ALL, status: m.status, step: 0, until: m.until, snoozes: 0, at: m.at! } }).catch(() => {});
+  };
+  const muted = !!mute && (mute.status === "dismissed" || (mute.status === "snoozed" && Date.now() < mute.until));
+
+  const update = useCallback((raw: TourState) => {
+    const s = { ...raw, at: Date.now() };
+    quiet(s);
+    if (active) { save(active, who, s); if (user) void saveTourProgress({ data: { tour: active, status: s.status, step: s.step, until: s.until, snoozes: s.snoozes, at: s.at } }).catch(() => {}); }
     setState(s);
   }, [active, who, user]);
 
@@ -32,12 +57,15 @@ export function TourRunner() {
     let off = false;
     void getTourProgress({ data: { tour: active } }).then((r) => {
       if (off) return;
-      if (r) { const s = { ...load(active, who), ...r } as TourState; save(active, who, s); setState(s); }
+      const local = load(active, who);
+      // The newer change wins, so a slow or failed save can never bring back a tour that was just snoozed, dismissed or finished.
+      if (r && (r.at ?? 0) >= (local.at ?? 0)) { const s = { status: r.status, step: r.step, until: r.until, snoozes: r.snoozes, at: r.at } as TourState; save(active, who, s); setState(s); }
+      else if (local.status !== "new") void saveTourProgress({ data: { tour: active, status: local.status, step: local.step, until: local.until, snoozes: local.snoozes, at: local.at ?? 0 } }).catch(() => {});
     }).catch(() => {});
     return () => { off = true; };
   }, [active, who, user]);
   useEffect(() => {
-    const on = (e: Event) => { const d = (e as CustomEvent<TourId | "here">).detail; const t = d === "here" ? tourForPath(window.location.pathname, !!user) : d; if (!t) return; setForced(t); const s = start({ ...load(t, who), status: "new", step: 0 }); save(t, who, s); setState(s); };
+    const on = (e: Event) => { const d = (e as CustomEvent<TourId | "here">).detail; const t = d === "here" ? tourForPath(window.location.pathname, !!user) : d; if (!t) return; setForced(t); const s = start({ ...load(t, who), status: "new", step: 0 }); const s2 = { ...s, at: Date.now() }; save(t, who, s2); setState(s2); };
     window.addEventListener(TOUR_EVENT, on);
     return () => window.removeEventListener(TOUR_EVENT, on);
   }, [who, user]);
@@ -68,10 +96,11 @@ export function TourRunner() {
     return () => window.removeEventListener("keydown", k);
   }, [step, state, update]);
 
-  if (!active || !state) return null;
+  // Wait until we know who is signed in: before that, this browser's guest copy says "new" and the prompt would flash up again.
+  if (!active || !state || loading) return null;
   const label = TOUR_TITLES[active];
 
-  if (shouldPrompt(state, Date.now()) && !forced) {
+  if (shouldPrompt(state, Date.now()) && !forced && !muted) {
     return (
       <div role="dialog" aria-label="Take a tour" data-floating className="glass fixed bottom-20 left-4 z-[60] sm:bottom-4 w-[min(22rem,calc(100vw-2rem))] rounded-2xl border p-4 shadow-xl">
         <p className="font-bold">Quick guide: {label}.</p>
@@ -85,7 +114,7 @@ export function TourRunner() {
   }
 
   // After "don't show again" or finishing, a small "?" stays so the guide can always be reopened on this page.
-  if (state.status === "dismissed" || state.status === "done" || (state.status === "snoozed" && !shouldPrompt(state, Date.now()))) {
+  if (state.status === "dismissed" || state.status === "done" || (state.status === "snoozed" && !shouldPrompt(state, Date.now())) || (shouldPrompt(state, Date.now()) && muted && !forced)) {
     return (
       <button type="button" data-floating aria-label={`Show the guide: ${label}`} title={`Guide: ${label}`} onClick={() => update(start({ ...state, status: "new", step: 0 }))}
         className="glass fixed bottom-20 left-4 z-40 grid h-10 w-10 place-items-center rounded-full border text-base font-extrabold shadow-lg sm:bottom-4">?</button>

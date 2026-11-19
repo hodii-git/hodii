@@ -13,7 +13,7 @@ export type PropertyCard = {
   listingType: ListingType; category: PropertyCategory; propertyType: string;
   price: PriceDto | null; county: string | null; areaName: string;
   bedrooms: number | null; bathrooms: number | null; parking: number | null; sizeSqm: number | null;
-  image: ImageDto | null; imageCount: number;
+  image: ImageDto | null; /** Next photos after the cover (up to 4), for the dots on a card. */ more: ImageDto[]; imageCount: number;
   verified: boolean; tier: "none" | "boost" | "premium"; priceDrop: boolean; publishedAt: string | null;
   agency: AgencyBadge | null;
 };

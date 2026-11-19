@@ -22,7 +22,7 @@ function NewAgency() {
     <main className="mx-auto max-w-xl px-4 pt-28 pb-24">
       <h1 className="text-3xl font-extrabold tracking-tight">Create an agency</h1>
       <p className="mt-2 text-muted-foreground">Listings are published under an agency name. You become its owner and can add agents later. You can own up to {MAX_OWNED_AGENCIES} agencies.</p>
-      <form className="glass mt-8 grid gap-5 rounded-3xl p-6" onSubmit={async (e) => {
+      <form className="border border-border bg-card shadow-sm mt-8 grid gap-5 rounded-3xl p-6" onSubmit={async (e) => {
         e.preventDefault(); const f = new FormData(e.currentTarget); setBusy(true); setErr(null);
         try {
           const r = await createMyAgency({ data: { name: String(f.get("name")), kind: String(f.get("kind")) as never, phone: String(f.get("phone")), countyCode: f.get("county") ? Number(f.get("county")) : null } });

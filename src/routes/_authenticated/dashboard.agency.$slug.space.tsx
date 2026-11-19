@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { LayoutGrid } from "lucide-react";
@@ -43,12 +44,12 @@ function Space() {
   });
 
   if (isError) return <p role="alert" className="text-sm text-destructive">Could not load your listing space. Refresh and try again.</p>;
-  if (isPending || !data) return <p className="text-sm text-muted-foreground">Loading…</p>;
+  if (isPending || !data) return <LoaderBlock className="py-10" />;
   const { usage: u, quote: q } = data;
   return (
     <section className="space-y-8">
       <header>
-        <h2 className="flex items-center gap-2 text-2xl font-extrabold"><LayoutGrid className="size-6 text-primary" aria-hidden />Listing space</h2>
+        <h1 className="flex items-center gap-2 text-2xl font-extrabold tracking-tight md:text-3xl"><LayoutGrid className="size-6 text-primary" aria-hidden />Listing space</h1>
         <p className="mt-1 max-w-2xl text-muted-foreground">Every agency can keep {u.freeLimit} free listings live. Boosted and Premium listings never count towards that. Need more free-style listings without boosting each one? Add space below.</p>
       </header>
 

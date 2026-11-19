@@ -1,3 +1,4 @@
+import { LoaderBlock } from "@/components/loader";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Crown } from "lucide-react";
@@ -57,7 +58,7 @@ function Premium() {
   const [pick, setPick] = useState<Record<string, string[]>>({});
   const [confirming, setConfirming] = useState<string | null>(null);
 
-  if (isPending) return <p className="text-sm text-muted-foreground">Loading…</p>;
+  if (isPending) return <LoaderBlock className="py-10" />;
   if (isError) return <p role="alert" className="text-sm text-destructive">{errorText(error)}</p>;
   const c = data.config;
   const n = slots ?? c.slots;
@@ -68,7 +69,7 @@ function Premium() {
   return (
     <section className="space-y-8">
       <header>
-        <h2 className="flex items-center gap-2 text-2xl font-extrabold"><Crown className="size-6 text-amber-500" aria-hidden />Premium packages</h2>
+        <h1 className="flex items-center gap-2 text-2xl font-extrabold tracking-tight md:text-3xl"><Crown className="size-6 text-amber-500" aria-hidden />Premium packages</h1>
         <p className="mt-1 max-w-2xl text-muted-foreground">A package gives a number of your listings Premium placement for {c.days} days: a Premium badge, a lift in search and a place in the Premium strips on the home page. Add and remove listings whenever you like. Buy another package any time; they run side by side.</p>
       </header>
 

@@ -319,10 +319,13 @@ export const neighbourhoodReviewSchema = z.object({
   ...document, areaKey: z.string().max(150), userId: id,
   ratings: z.object({ security: z.number().int().min(1).max(5).optional(), amenities: z.number().int().min(1).max(5).optional(), transport: z.number().int().min(1).max(5).optional(), quiet: z.number().int().min(1).max(5).optional(), utilities: z.number().int().min(1).max(5).optional(), family: z.number().int().min(1).max(5).optional(), value: z.number().int().min(1).max(5).optional() }).strict(),
   relation: z.enum(["live", "lived", "work", "visit"]), textEnc: z.string().max(8000).nullable(), createdAt: date, updatedAt: date,
+  /** People who reported it. Three different reporters hide it until staff decide. */
+  reportedBy: z.array(id).max(50).optional(), hidden: z.boolean().optional(),
 }).strict();
 /** The neighbourhood group chat: threaded, text encrypted at rest, deleted posts keep their place. */
 export const neighbourhoodPostSchema = z.object({
   ...document, areaKey: z.string().max(150), userId: id, parentId: id.nullable(), textEnc: z.string().max(8000).nullable(), createdAt: date, deletedAt: date.nullable(),
+  reportedBy: z.array(id).max(50).optional(), hidden: z.boolean().optional(),
 }).strict();
 
 export const propertyCommentLikeSchema = z.object({ ...document, commentId: id, userId: id, authorId: id, createdAt: date }).strict();

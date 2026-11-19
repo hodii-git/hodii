@@ -1,10 +1,11 @@
+import { LoaderBlock } from "@/components/loader";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import { Sel } from "@/components/ui/sel";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { toast } from "sonner";
-import { Field, btnGhost, btnPrimary, errorText, inputCls } from "@/components/dashboard/ui";
-import { can, canInviteRole } from "@/lib/access";
+import { Field, btnGhost, btnPrimary, errorText, inputCls, PageHeader } from "@/components/dashboard/ui";
+import { ACTION_GROUPS, can, canInviteRole } from "@/lib/access";
 import { addAgencyMember, getAgencyTeam, removeAgencyMember, setMemberRole } from "@/lib/dashboard.functions";
 
 const parent = getRouteApi("/_authenticated/dashboard/agency/$slug");
@@ -23,13 +24,15 @@ function Team() {
   const [err, setErr] = useState<string | null>(null);
 
   return (
+    <div>
+    <PageHeader title="Team" sub="Who can work in this agency, and what each person can do." />
     <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
       <section aria-labelledby="members">
-        <h2 id="members" className="mb-4 text-xl font-extrabold">Team</h2>
-        {isPending ? <p className="text-sm text-muted-foreground">Loading…</p> : isError ? <p role="alert" className="text-sm text-destructive">{errorText(error, "Could not load the team.")}</p> : (
+        <h2 id="members" className="mb-4 text-lg font-extrabold">Members</h2>
+        {isPending ? <LoaderBlock className="py-10" /> : isError ? <p role="alert" className="text-sm text-destructive">{errorText(error, "Could not load the team.")}</p> : (
           <ul className="space-y-3">
             {data.map((m) => (
-              <li key={m.userId} className="glass flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4">
+              <li key={m.userId} className="border border-border bg-card shadow-sm flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4">
                 <div className="min-w-0"><p className="font-bold">{m.username}{m.isMe && <span className="ml-2 text-xs font-normal text-muted-foreground">(you)</span>}{m.pending && <span className="admin-badge ml-2" data-tone="warn">Invitation pending</span>}</p><p className="truncate text-xs text-muted-foreground">{[m.title, m.email].filter(Boolean).join(" · ")}</p></div>
                 <div className="flex items-center gap-2">
                   {can(role, "team.change_role") && !m.isMe && !m.pending ? (
@@ -43,7 +46,7 @@ function Team() {
         )}
       </section>
       {can(role, "team.invite") && (
-        <section aria-labelledby="add" className="glass h-fit rounded-3xl p-5">
+        <section aria-labelledby="add" className="border border-border bg-card shadow-sm h-fit rounded-3xl p-5">
           <h2 id="add" className="text-lg font-extrabold">Add a team member</h2>
           <p className="mt-1 text-sm text-muted-foreground">They need a Hodii account first. Ask them to sign up, then add them by email.</p>
           <form className="mt-4 grid gap-4" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); add.mutate({ email: String(f.get("email")), role: String(f.get("role")) as "admin" | "agent", title: String(f.get("title") ?? "").trim() || null, phone: String(f.get("phone") ?? "").trim() || null }); }}>
@@ -56,6 +59,28 @@ function Team() {
           </form>
         </section>
       )}
+      <section aria-labelledby="roles" className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <h2 id="roles" className="text-lg font-extrabold">What each role can do</h2>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[28rem] text-sm">
+            <thead><tr className="text-left text-xs uppercase tracking-wide text-muted-foreground"><th className="py-2 pr-3 font-bold">&nbsp;</th>{(["agent", "admin", "owner"] as const).map((r) => <th key={r} className="px-3 py-2 text-center font-bold capitalize">{r}</th>)}</tr></thead>
+            <tbody>
+              {ACTION_GROUPS.map((g) => (
+                <Fragment key={g.group}>
+                  <tr><th colSpan={4} className="pt-4 pb-1 text-left text-xs font-bold uppercase tracking-wide text-primary">{g.group}</th></tr>
+                  {g.items.map((it) => (
+                    <tr key={it.action} className="border-t border-border">
+                      <td className="py-2 pr-3">{it.label}</td>
+                      {(["agent", "admin", "owner"] as const).map((r) => <td key={r} className="px-3 py-2 text-center">{can(r, it.action) ? <span aria-label="Yes" className="font-bold text-primary">✓</span> : <span aria-label="No" className="text-muted-foreground/50">–</span>}</td>)}
+                    </tr>
+                  ))}
+                </Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
     </div>
   );
 }

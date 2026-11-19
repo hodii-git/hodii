@@ -30,8 +30,8 @@ export function SaveButton({ propertyId, saved = false, label = false }: { prope
   };
 
   return (
-    <button type="button" data-tour="save" onClick={click} disabled={busy} aria-pressed={on} aria-label={on ? "Remove from saved" : "Save this property"} className={`relative z-10 inline-flex items-center gap-2 rounded-full bg-background/90 p-2 text-sm font-semibold shadow backdrop-blur transition hover:scale-105 ${label ? "px-4" : ""}`}>
-      <Heart className={`h-4 w-4 ${on ? "fill-red-500 text-red-500" : ""}`} aria-hidden />
+    <button type="button" data-tour="save" onClick={click} disabled={busy} aria-pressed={on} aria-label={on ? "Remove from saved" : "Save this property"} className={`relative z-10 inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:scale-110 ${label ? "rounded-full border border-white bg-black/35 px-4 py-2 backdrop-blur-sm" : "p-1 drop-shadow-[0_1px_3px_rgb(0_0_0/55%)]"}`}>
+      <Heart className={`${label ? "h-4 w-4" : "h-6 w-6"} ${on ? "fill-like text-like drop-shadow-none" : ""}`} aria-hidden />
       {label && <span>{on ? "Saved" : "Save"}</span>}
     </button>
   );

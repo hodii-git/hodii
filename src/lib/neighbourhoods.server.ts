@@ -2,7 +2,7 @@ import type { Db, Document } from "mongodb";
 import { z } from "zod";
 import { decrypt, encrypt } from "./community.server";
 import { liveFilter } from "./listing-search";
-import { ASPECT_KEYS, NB_LIMITS, makeKey, passes, rankScore, splitKey, summarise, type AspectKey, type Ratings, type ReviewInput, type Summary } from "./neighbourhood";
+import { ASPECT_KEYS, NB_LIMITS, shouldHide, makeKey, passes, rankScore, splitKey, summarise, type AspectKey, type Ratings, type ReviewInput, type Summary } from "./neighbourhood";
 
 // Server-only. Neighbourhoods are the areas where something is listed; reviews and chat hang off "county-slug/area-slug".
 
@@ -25,7 +25,7 @@ async function areaRows(db: Db) {
 
 async function summaries(db: Db, keys: string[]): Promise<Map<string, Summary>> {
   if (!keys.length) return new Map();
-  const rows = await reviews(db).find({ areaKey: { $in: keys } }, { projection: { areaKey: 1, ratings: 1 } }).limit(50_000).toArray();
+  const rows = await reviews(db).find({ areaKey: { $in: keys }, hidden: { $ne: true } }, { projection: { areaKey: 1, ratings: 1 } }).limit(50_000).toArray();
   const by = new Map<string, Ratings[]>();
   for (const r of rows) by.set(str(r["areaKey"]), [...(by.get(str(r["areaKey"])) ?? []), r["ratings"] as Ratings]);
   return new Map(keys.map((k) => [k, summarise(by.get(k) ?? [])]));
@@ -64,7 +64,7 @@ export async function getNeighbourhood(db: Db, key: string) {
   const area = await oneArea(db, key);
   if (!area) return null;
   const [rv, prices] = await Promise.all([
-    reviews(db).find({ areaKey: key }).sort({ updatedAt: -1 }).limit(50).toArray(),
+    reviews(db).find({ areaKey: key, hidden: { $ne: true } }).sort({ updatedAt: -1 }).limit(100).toArray(),
     db.collection("properties").aggregate([{ $match: { ...liveFilter(new Date()), "location.areaSlug": area.areaSlug, "location.countySlug": area.countySlug, "price.amountKes": { $gt: 0 } } }, { $group: { _id: "$listingType", avg: { $avg: "$price.amountKes" } } }]).toArray(),
   ]);
   const names = new Map((await db.collection("users").find({ _id: { $in: [...new Set(rv.map((r) => str(r["userId"])))] as never } }, { projection: { username: 1 } }).toArray()).map((u) => [String(u["_id"]), str(u["username"])]));
@@ -87,7 +87,7 @@ export async function compareNeighbourhoods(db: Db, keys: string[]) {
 
 export async function myReview(db: Db, userId: string, key: string) {
   const r = await reviews(db).findOne({ areaKey: key, userId });
-  return r ? { ratings: r["ratings"] as Ratings, relation: str(r["relation"]), text: await decrypt(r["textEnc"] as string | null) } : null;
+  return r ? { id: str(r["_id"]), ratings: r["ratings"] as Ratings, relation: str(r["relation"]), text: await decrypt(r["textEnc"] as string | null) } : null;
 }
 
 export async function saveReview(db: Db, userId: string, input: ReviewInput) {
@@ -102,7 +102,7 @@ export async function deleteMyReview(db: Db, userId: string, key: string) { awai
 /* ───────────────────────────── Group chat ───────────────────────────── */
 
 export async function listPosts(db: Db, key: string) {
-  const raw = await posts(db).find({ areaKey: key }).sort({ createdAt: 1 }).limit(1000).toArray();
+  const raw = await posts(db).find({ areaKey: key, hidden: { $ne: true } }).sort({ createdAt: 1 }).limit(1000).toArray();
   const names = new Map((await db.collection("users").find({ _id: { $in: [...new Set(raw.map((r) => str(r["userId"])))] as never } }, { projection: { username: 1 } }).toArray()).map((u) => [String(u["_id"]), str(u["username"])]));
   return Promise.all(raw.map(async (r) => ({
     id: str(r["_id"]), parentId: (r["parentId"] as string | null) ?? null, at: (r["createdAt"] as Date).toISOString(), deleted: !!r["deletedAt"], text: r["deletedAt"] ? "" : await decrypt(r["textEnc"] as string | null),
@@ -134,3 +134,33 @@ export async function removePost(db: Db, userId: string, id: string, asAdmin = f
 }
 export async function myPostIds(db: Db, userId: string, key: string) { return (await posts(db).find({ areaKey: key, userId, deletedAt: null }, { projection: { _id: 1 } }).toArray()).map((p) => String(p["_id"])); }
 export type { AspectKey };
+
+/* ───────────────────────────── Reports and staff ───────────────────────────── */
+
+const target = (db: Db, kind: "review" | "post") => (kind === "review" ? reviews(db) : posts(db));
+
+/** A signed-in person reports a review or message. The same person reporting twice counts once; three different people hide it for staff to decide. */
+export async function reportItem(db: Db, userId: string, kind: "review" | "post", id: string) {
+  const col = target(db, kind);
+  const doc = await col.findOne({ _id: id as never });
+  if (!doc || doc["deletedAt"]) throw new Error("That is no longer available");
+  if (doc["userId"] === userId) throw new Error("You cannot report your own message");
+  const reporters = [...new Set([...((doc["reportedBy"] as string[] | undefined) ?? []), userId])].slice(0, 50);
+  await col.updateOne({ _id: id as never }, { $set: { reportedBy: reporters, hidden: shouldHide(reporters) } });
+  return { ok: true as const };
+}
+
+export async function listFlagged(db: Db) {
+  const q = { $or: [{ hidden: true }, { "reportedBy.0": { $exists: true } }] };
+  const [rv, ps] = await Promise.all([reviews(db).find(q).limit(100).toArray(), posts(db).find({ ...q, deletedAt: null }).limit(100).toArray()]);
+  const ids = [...new Set([...rv, ...ps].map((r) => str(r["userId"])))];
+  const names = new Map((await db.collection("users").find({ _id: { $in: ids as never } }, { projection: { username: 1 } }).toArray()).map((u) => [String(u["_id"]), str(u["username"])]));
+  const row = async (kind: "review" | "post", r: Document) => ({ id: str(r["_id"]), kind, area: str(r["areaKey"]), username: names.get(str(r["userId"])) ?? "former_member", text: await decrypt(r["textEnc"] as string | null), reports: ((r["reportedBy"] as string[] | undefined) ?? []).length, hidden: r["hidden"] === true, at: ((r["updatedAt"] ?? r["createdAt"]) as Date).toISOString() });
+  return (await Promise.all([...rv.map((r) => row("review", r)), ...ps.map((r) => row("post", r))])).sort((a, b) => b.reports - a.reports || b.at.localeCompare(a.at));
+}
+
+export async function moderateItem(db: Db, kind: "review" | "post", id: string, action: "restore" | "remove") {
+  if (action === "restore") { await target(db, kind).updateOne({ _id: id as never }, { $set: { reportedBy: [], hidden: false } }); return { ok: true as const }; }
+  if (kind === "review") await reviews(db).deleteOne({ _id: id as never }); else await posts(db).updateOne({ _id: id as never }, { $set: { deletedAt: new Date(), textEnc: null, hidden: false } });
+  return { ok: true as const };
+}

@@ -1,10 +1,11 @@
+import { LoaderBlock } from "@/components/loader";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { uploadPhoto } from "@/components/dashboard/upload";
-import { Badge, Field, areaCls, btnGhost, btnPrimary, errorText, inputCls } from "@/components/dashboard/ui";
+import { Badge, Field, areaCls, btnGhost, btnPrimary, errorText, inputCls, PageHeader } from "@/components/dashboard/ui";
 import { Pick } from "@/components/ui/pick";
 import { MultiPick } from "@/components/ui/multi-pick";
 import { COUNTY_OPTIONS, toOptions } from "@/lib/pick-options";
@@ -34,15 +35,14 @@ function Developments() {
   return (
     <section>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div><h2 className="text-xl font-extrabold">Developments</h2><p className="text-sm text-muted-foreground">Projects you are selling in units: off-plan, under construction or finished.</p></div>
-        <button className={btnPrimary} onClick={() => setEditing(blank())}><Plus className="size-4" aria-hidden />Add a development</button>
+        <PageHeader title="Developments" sub="Projects you are selling in units: off-plan, under construction or finished." right={<button className={btnPrimary} onClick={() => setEditing(blank())}><Plus className="size-4" aria-hidden />Add a development</button>} />
       </div>
-      {isPending ? <p className="mt-6 text-sm text-muted-foreground">Loading…</p> : isError ? <p role="alert" className="mt-6 text-sm text-destructive">{errorText(error)}</p> : data.length === 0 ? (
+      {isPending ? <LoaderBlock className="py-10" /> : isError ? <p role="alert" className="mt-6 text-sm text-destructive">{errorText(error)}</p> : data.length === 0 ? (
         <p className="mt-6 rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">No developments yet. Add your first project so buyers can find it under New developments.</p>
       ) : (
         <ul className="mt-6 grid gap-3">
           {data.map((d) => (
-            <li key={d.id} className="glass flex flex-wrap items-center gap-3 rounded-2xl p-4">
+            <li key={d.id} className="border border-border bg-card shadow-sm flex flex-wrap items-center gap-3 rounded-2xl p-4">
               <div className="min-w-0 flex-1"><p className="truncate font-extrabold">{d.name}</p><p className="truncate text-sm text-muted-foreground">{d.areaName}{d.county ? `, ${d.county}` : ""} · {d.views} views</p></div>
               <Badge value={d.publishStatus} />
               {d.publishStatus === "published" && <Link to="/development/$slug" params={{ slug: d.slug }} className="text-sm font-bold text-primary hover:underline">View</Link>}
@@ -79,7 +79,7 @@ function DevForm({ slug, start, onDone }: { slug: string; start: DevelopmentInpu
   };
   const setUnit = (i: number, patch: Partial<DevelopmentInput["unitTypes"][number]>) => up("unitTypes", f.unitTypes.map((u, n) => (n === i ? { ...u, ...patch } : u)));
   return (
-    <form className="glass grid gap-5 rounded-3xl p-6 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); setMsg(null); save.mutate(true); }}>
+    <form className="border border-border bg-card shadow-sm grid gap-5 rounded-3xl p-6 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); setMsg(null); save.mutate(true); }}>
       <div className="flex items-center justify-between md:col-span-2"><h2 className="text-xl font-extrabold">{f.id ? "Edit development" : "Add a development"}</h2><button type="button" className={`${btnGhost} h-9 px-3`} onClick={onDone}><X className="size-4" aria-hidden />Close</button></div>
       <Field id="d-name" label="Project name"><input id="d-name" className={inputCls} value={f.name} maxLength={DEVELOPMENT_LIMITS.nameMax} onChange={(e) => up("name", e.target.value)} required /></Field>
       <Field id="d-stage" label="Stage"><Pick label="Stage" value={f.status} onChange={(v) => up("status", v as DevelopmentInput["status"])} options={STAGES.map(([k, l]) => ({ value: k, label: l }))} /></Field>

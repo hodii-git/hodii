@@ -79,7 +79,7 @@ export function Pick({ value, onChange, options, label, clearLabel, searchable, 
   return (
     <div ref={root} className="relative min-w-0">
       <button type="button" id={id} disabled={disabled} aria-haspopup="listbox" aria-expanded={open} aria-controls={`${uid}-list`} aria-label={`${label}: ${chosen?.label ?? clearLabel ?? "none chosen"}`} onClick={() => setOpen((o) => !o)}
-        className={`flex h-11 w-full items-center justify-between gap-2 rounded-xl border border-input bg-background px-3 text-left text-sm outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60 ${className}`}>
+        className={`flex h-9 w-full items-center justify-between gap-1.5 rounded-lg border border-input bg-background px-2.5 text-left text-[0.8125rem] outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60 ${className}`}>
         <span className={`truncate ${chosen ? "" : "text-muted-foreground"}`}>{chosen?.label ?? clearLabel ?? label}</span>
         <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>

@@ -5,6 +5,16 @@ export const areaCls = "w-full rounded-xl border border-input bg-background px-3
 export const btnPrimary = "inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground disabled:opacity-60";
 export const btnGhost = "inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-input bg-background px-5 text-sm font-bold disabled:opacity-60";
 
+/** The title block every dashboard page starts with, so no page is without a heading. */
+export function PageHeader({ title, sub, right }: { title: string; sub?: string; right?: ReactNode }) {
+  return (
+    <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
+      <div className="min-w-0"><h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">{title}</h1>{sub && <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{sub}</p>}</div>
+      {right && <div className="flex shrink-0 flex-wrap gap-2">{right}</div>}
+    </header>
+  );
+}
+
 export function Field({ id, label, hint, error, children }: { id: string; label: string; hint?: string; error?: string | null | undefined; children: ReactNode }) {
   return (
     <div>
@@ -17,7 +27,7 @@ export function Field({ id, label, hint, error, children }: { id: string; label:
 }
 
 export function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
-  return <div className="glass rounded-2xl p-5"><p className="text-sm text-muted-foreground">{label}</p><p className="mt-1 text-3xl font-extrabold tracking-tight">{value}</p>{hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}</div>;
+  return <div className="rounded-2xl border border-border bg-card p-5 shadow-sm"><p className="text-sm text-muted-foreground">{label}</p><p className="mt-1 text-3xl font-extrabold tracking-tight">{value}</p>{hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}</div>;
 }
 
 const TONES: Record<string, string> = {

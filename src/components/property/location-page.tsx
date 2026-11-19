@@ -18,10 +18,10 @@ export function LocationView({ l }: { l: LocationPage }) {
   const base = { county: String(l.countyCode), ...(l.areaSlug ? { area: l.areaSlug } : {}) };
   const ld = { "@context": "https://schema.org", "@type": "CollectionPage", name: `Property in ${l.name}`, description: locationBlurb(l), url: absUrl(l.areaSlug ? `/locations/${l.countySlug}/${l.areaSlug}` : `/locations/${l.countySlug}`) };
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-24">
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-24">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, "\\u003c") }} />
       <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground"><Link to="/locations" className="hover:underline">Locations</Link>{l.areaSlug && <> / <Link to="/locations/$county" params={{ county: l.countySlug }} className="hover:underline">{l.countyName}</Link></>}</nav>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight md:text-5xl">Property in {l.name}{l.areaSlug ? `, ${l.countyName}` : ""}</h1>
+      <h1 className="mt-2 text-2xl font-extrabold tracking-tight md:text-3xl">Property in {l.name}{l.areaSlug ? `, ${l.countyName}` : ""}</h1>
       <p className="mt-3 max-w-2xl text-lg text-muted-foreground">{locationBlurb(l)}</p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link to="/properties" search={{ ...base, for: "sale" }} className="rounded-full bg-primary px-5 py-2.5 font-bold text-primary-foreground">For sale{l.counts.sale ? ` (${l.counts.sale})` : ""}</Link>

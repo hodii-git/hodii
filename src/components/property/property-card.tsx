@@ -1,34 +1,70 @@
 import { Link } from "@tanstack/react-router";
-import { BadgeCheck, Bath, BedDouble, Camera, MapPin, Ruler, TrendingDown } from "lucide-react";
-import { TierBadge } from "./tier-badge";
+import { BadgeCheck, Bath, BedDouble, Camera, ChevronLeft, ChevronRight, MapPin, Ruler, TrendingDown } from "lucide-react";
+import { useRef, useState } from "react";
 import { CompareButton } from "./compare-button";
 import { setHoverPin } from "@/lib/hover-pin";
 import { SaveButton } from "./save-button";
 import { formatArea, formatPrice, listingTypeLabel, propertyTypeLabel, timeAgo } from "@/lib/format";
 import type { PropertyCard as Card } from "@/lib/property-dto";
 
+/** The pill on the photo carries the listing's rank in its colour, with no wording: Premium gold, boosted silver, everything else frosted white. */
+const PILL: Record<Card["tier"], string> = {
+  premium: "bg-gradient-to-r from-amber-400 to-orange-500 text-black",
+  boost: "bg-gradient-to-r from-zinc-100 via-zinc-300 to-zinc-400 text-zinc-900",
+  none: "bg-background/90 backdrop-blur",
+};
+
+/** Photos in a swipe strip with Instagram-style dots: the active dot is wide, the rest shrink toward the right. */
+function CardPhotos({ p, priority }: { p: Card; priority: boolean }) {
+  const photos = [p.image, ...p.more].filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const [i, setI] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  if (!photos.length) return <div className="flex h-full items-center justify-center text-muted-foreground"><Camera className="h-8 w-8" aria-hidden /></div>;
+  const onScroll = () => { const el = ref.current; if (el) setI(Math.round(el.scrollLeft / el.clientWidth)); };
+  return (
+    <>
+      <div ref={ref} onScroll={onScroll} className="flex h-full snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {photos.map((im, n) => (
+          <img key={im.url} src={im.thumbUrl ?? im.url} alt={n === 0 ? im.alt || p.title : im.alt || `${p.title}, photo ${n + 1}`} width={640} height={480} loading={priority && n === 0 ? "eager" : "lazy"} decoding="async" className="h-full w-full shrink-0 snap-center object-cover" />
+        ))}
+      </div>
+      {photos.length > 1 && (["prev", "next"] as const).map((d) => {
+        const go = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); const el = ref.current; if (el) el.scrollTo({ left: (i + (d === "next" ? 1 : -1)) * el.clientWidth, behavior: "smooth" }); };
+        const off = d === "prev" ? i === 0 : i === photos.length - 1;
+        return off ? null : (
+          <button key={d} type="button" onClick={go} aria-label={d === "next" ? "Next photo" : "Previous photo"} className={`absolute top-1/2 z-10 hidden size-8 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-zinc-900 opacity-0 shadow-md transition hover:scale-105 group-hover/ph:opacity-100 focus-visible:opacity-100 [@media(hover:hover)]:grid ${d === "next" ? "right-2" : "left-2"}`}>
+            {d === "next" ? <ChevronRight className="size-4" aria-hidden /> : <ChevronLeft className="size-4" aria-hidden />}
+          </button>
+        );
+      })}
+      {photos.length > 1 && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-2 flex items-center justify-center gap-1" aria-hidden>
+          {photos.map((im, n) => {
+            const size = n === i ? 0 : Math.max(3, 7 - Math.abs(n - i) - (n > i ? 1 : 0));
+            return <span key={im.url} style={n === i ? { width: 14, height: 6 } : { width: size, height: size }} className={`rounded-full transition-all duration-200 ${n === i ? "bg-white" : "bg-white/55"}`} />;
+          })}
+        </div>
+      )}
+    </>
+  );
+}
+
 /** One listing in a grid. The whole card is a link; the save button sits above it. */
 export function PropertyCard({ p, saved, priority = false }: { p: Card; saved?: boolean | undefined; priority?: boolean }) {
   const where = [p.areaName, p.county].filter(Boolean).join(", ");
   return (
     <article onPointerEnter={() => setHoverPin(p.id)} onPointerLeave={() => setHoverPin(null)} onFocusCapture={() => setHoverPin(p.id)} onBlurCapture={() => setHoverPin(null)} className="glass group relative flex min-w-0 flex-col overflow-hidden rounded-2xl">
-      <div className="relative aspect-[4/3] bg-muted">
-        {p.image ? (
-          <img src={p.image.thumbUrl ?? p.image.url} alt={p.image.alt || p.title} width={640} height={480} loading={priority ? "eager" : "lazy"} decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-        ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground"><Camera className="h-8 w-8" aria-hidden /></div>
-        )}
+      <div className="group/ph relative aspect-[4/3] bg-muted">
+        <CardPhotos p={p} priority={priority} />
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-          <span className="rounded-full bg-background/90 px-2.5 py-1 text-xs font-bold backdrop-blur">{listingTypeLabel(p.listingType)}</span>
-          {p.tier !== "none" && <TierBadge tier={p.tier} />}
+          <span className={`rounded-full px-2.5 py-1 text-xs font-bold shadow-sm ${PILL[p.tier]}`}>{listingTypeLabel(p.listingType)}</span>
           {p.priceDrop && <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white"><TrendingDown className="h-3 w-3" aria-hidden />Price drop</span>}
         </div>
-        {p.imageCount > 1 && <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs font-semibold text-white"><Camera className="h-3 w-3" aria-hidden />{p.imageCount}</span>}
-        <div className="absolute right-3 top-3 flex flex-col gap-1.5"><SaveButton propertyId={p.id} saved={saved} /><CompareButton propertyId={p.id} /></div>
+        <div className="absolute right-3 top-3 flex items-center gap-1"><CompareButton propertyId={p.id} /><SaveButton propertyId={p.id} saved={saved} /></div>
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
-        <p className="text-xl font-extrabold tracking-tight">{formatPrice(p.price)}</p>
-        <h3 className="line-clamp-2 text-base font-semibold leading-snug">
+        <p className="text-lg font-bold tracking-tight">{formatPrice(p.price)}</p>
+        <h3 className="line-clamp-2 text-sm font-medium leading-snug">
           <Link to="/property/$slug" params={{ slug: p.slug }} className="after:absolute after:inset-0 after:content-['']">{p.title}</Link>
         </h3>
         <p className="flex items-center gap-1.5 text-sm text-muted-foreground"><MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden /><span className="truncate">{where}</span></p>

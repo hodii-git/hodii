@@ -24,7 +24,7 @@ export function MultiPick({ values, onChange, options, label, allLabel, max, cla
     <div ref={root} className="relative min-w-0">
       <button type="button" aria-haspopup="listbox" aria-expanded={open} aria-controls={`${uid}-list`} aria-label={`${label}: ${chosen.length ? chosen.map((c) => c.label).join(", ") : allLabel ?? "none chosen"}`}
         onClick={() => setOpen((o) => !o)} onKeyDown={(e) => { if (e.key === "Escape") setOpen(false); }}
-        className={`flex h-11 w-full items-center justify-between gap-2 rounded-xl border border-input bg-background px-3 text-left text-sm outline-hidden focus-visible:ring-2 focus-visible:ring-ring ${className}`}>
+        className={`flex h-9 w-full items-center justify-between gap-1.5 rounded-lg border border-input bg-background px-2.5 text-left text-[0.8125rem] outline-hidden focus-visible:ring-2 focus-visible:ring-ring ${className}`}>
         <span className={`truncate ${chosen.length ? "" : "text-muted-foreground"}`}>{text}</span>
         <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>

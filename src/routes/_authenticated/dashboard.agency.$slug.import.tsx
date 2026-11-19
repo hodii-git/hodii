@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, Download, FileUp, XCircle } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { btnGhost, btnPrimary, errorText } from "@/components/dashboard/ui";
+import { btnGhost, btnPrimary, errorText, PageHeader } from "@/components/dashboard/ui";
 import { MAX_IMPORT_ROWS, TEMPLATE_EXAMPLE, TEMPLATE_HEADERS, planImport } from "@/lib/bulk-import";
 import { parseCsvRecords, toCsv } from "@/lib/csv";
 import { commitListingImport } from "@/lib/dashboard.functions";
@@ -43,7 +43,7 @@ function ImportPage() {
   return (
     <section className="mx-auto max-w-4xl space-y-6">
       <header>
-        <h2 className="text-2xl font-extrabold">Import listings from a spreadsheet</h2>
+        <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">Import listings from a spreadsheet</h1>
         <p className="mt-1 text-muted-foreground">Add up to {MAX_IMPORT_ROWS} listings at once. They are saved as <strong>drafts</strong>: photos must be uploaded from your device, so open each draft, add its photos and publish. Importing never publishes anything.</p>
       </header>
 

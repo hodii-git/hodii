@@ -31,8 +31,8 @@ function Developments() {
   const set = (next: Partial<Search>) => navigate({ search: { ...search, ...next, page: next.page } as Search });
   const { data, isPending, isError } = useQuery({ ...developmentsQuery(toParams(search)), placeholderData: keepPreviousData });
   return (
-    <main className="mx-auto max-w-[112rem] px-4 pt-28 pb-24">
-      <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">New developments</h1>
+    <main className="mx-auto max-w-[82rem] px-4 pt-28 pb-24">
+      <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">New developments</h1>
       <p className="mt-2 text-muted-foreground">Projects being planned, sold off-plan, built or just finished.</p>
       <form role="search" aria-label="Search developments" onSubmit={(e) => { e.preventDefault(); set({ q: String(new FormData(e.currentTarget).get("q") ?? "").trim() || undefined }); }} className="mt-6 flex flex-wrap gap-3">
         <input name="q" type="search" defaultValue={search.q ?? ""} key={search.q ?? ""} placeholder="Project or area" aria-label="Project or area" className={`${field} min-w-48 flex-1`} />

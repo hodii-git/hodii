@@ -1,4 +1,5 @@
 import { MapPin as PinIcon, Navigation } from "lucide-react";
+import { ShowMore } from "@/components/property/show-more";
 import { ListingMap } from "@/components/property/listing-map";
 import { ListingSearch } from "@/components/property/listing-search";
 import { StickySide } from "@/components/sticky-side";
@@ -150,6 +151,9 @@ function PropertyPage() {
       </header>
       <div className="grid gap-5 md:gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:px-4">
         <div className="min-w-0 space-y-0 md:space-y-6">
+          <div className="hidden px-6 pb-1 md:block lg:px-0">
+            <h1 className="line-clamp-2 text-[1.75rem] font-bold leading-[1.2] text-white lg:text-[2rem]">{p.title}</h1>
+          </div>
           <div className="px-1.5 md:px-0">
             <Gallery mobileHero activeIndex={photoIdx} onIndexChange={setPhotoIdx} images={p.images} plans={p.floorPlans} title={p.title} actions={<ScrollFade className="flex items-center gap-1">
               <IconHint label="Compare"><CompareButton bare propertyId={p.id} /></IconHint>
@@ -182,7 +186,7 @@ function PropertyPage() {
             <div className="flex flex-wrap items-end justify-between gap-3 rounded-3xl bg-card/85 backdrop-blur-md p-6 shadow-sm">
               <div>
                 <p className="text-sm text-muted-foreground">{p.listingType === "rent" ? "Rent" : p.listingType === "short_stay" ? "Price" : "Asking price"}</p>
-                <p className="text-3xl font-extrabold md:text-4xl">{formatPrice(p.price)}</p>
+                <p className="text-3xl font-extrabold text-[#52e36b] md:text-4xl">{formatPrice(p.price)}</p>
               </div>
               <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
                 {p.price?.negotiable && <span className="rounded-full bg-[var(--ld-price)]/15 px-3 py-1 text-[var(--ld-price)]">Negotiable</span>}
@@ -196,7 +200,7 @@ function PropertyPage() {
             </ul>
           </div>
           {p.highlights.length > 0 && <ul className="grid gap-3 rounded-3xl bg-card/80 p-6 shadow-[var(--lift-shadow)] backdrop-blur-md sm:grid-cols-2">{p.highlights.map((h) => <li key={h} className="flex items-start gap-2 text-sm"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />{h}</li>)}</ul>}
-          <section aria-labelledby="desc" className="scroll-mt-16 rounded-3xl bg-card/85 backdrop-blur-md p-6 shadow-sm"><h2 id="desc" className="mb-4 text-xl font-extrabold">Description</h2><div className="space-y-3 leading-relaxed text-foreground/90">{p.description.split(/\n{2,}/).map((t, i) => <p key={i} className="whitespace-pre-line">{t}</p>)}</div></section>
+          <section aria-labelledby="desc" className="scroll-mt-16 rounded-3xl bg-card/85 backdrop-blur-md p-6 shadow-sm"><h2 id="desc" className="mb-4 text-xl font-extrabold">Description</h2><ShowMore max="17rem"><div className="space-y-3 leading-relaxed text-foreground/90">{p.description.split(/\n{2,}/).map((t, i) => <p key={i} className="whitespace-pre-line">{t}</p>)}</div></ShowMore></section>
           <section aria-labelledby="facts" className="scroll-mt-16 rounded-3xl bg-card/85 backdrop-blur-md p-6 shadow-sm"><h2 id="facts" className="mb-4 text-xl font-extrabold">Property details</h2>
             <dl className="grid gap-x-8 sm:grid-cols-2">{facts.map((f) => <div key={f.k} className="flex justify-between gap-4 border-b border-border py-2 text-sm"><dt className="text-muted-foreground">{f.k}</dt><dd className="text-right font-semibold">{f.v}</dd></div>)}</dl></section>
           {(grouped.length > 0 || p.customFeatures.length > 0) && (

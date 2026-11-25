@@ -1542,7 +1542,6 @@ html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] {
   --foreground: #f4f4f5; --muted-foreground: #a1a1aa; --background: #09090b; --card: #141416; --card-foreground: #f4f4f5;
   --primary: #ffffff; --primary-foreground: #09090b; --border: rgb(255 255 255 / .14); --secondary: #1c1c1f; --muted: #1c1c1f; --accent: #26262a; --accent-foreground: #f4f4f5;
   --glass: #141416; --glass-strong: #141416; --surface: #1c1c1f; --header-circle: #26262a; --header-circle-border: rgb(255 255 255 / .12); --header-hover: #2f2f34;
-  --ink: #f4f4f5;
   color: #f4f4f5; color-scheme: dark;
 }
 html[data-listing-dark="1"] .wb.wb-site header.glass-nav[data-tour="search"],
@@ -1554,7 +1553,9 @@ html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link { c
 html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link:hover,
 html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link.is-current { color: #fff; }
 html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .logo { color: #fff; }
-html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark { background: var(--ld-theme) !important; color: #fff !important; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark { background: var(--ld-theme) !important; color: #fff !important; box-shadow: 0 10px 22px -12px rgb(255 56 92 / .6) !important; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark:hover { box-shadow: 0 14px 28px -12px rgb(255 56 92 / .75) !important; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark::before { background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / .22) 50%, transparent 70%); }
 
 
 /* ---- Footer: four link groups in a 2 x 2 grid on every screen; the List button wears the theme colour (the active Home tab). ---- */
@@ -1566,8 +1567,9 @@ html[data-listing-dark="1"] .footer-group { background: rgb(255 255 255 / .04); 
 /* ---- Listing hero icons: white outline by default; Compare turns black (on a white chip so it reads on any photo) when picked. ---- */
 .ld-heart svg { stroke: #fff !important; fill: transparent; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .55)); }
 .ld-heart [aria-pressed="true"] svg { fill: #ff2d6f !important; stroke: #fff !important; }
-.hero-icon { color: #fff; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .55)); }
-.hero-icon[aria-pressed="true"] { color: #0a0a0a; background: #fff; filter: none; box-shadow: 0 1px 6px rgb(0 0 0 / .35); }
+.hero-icon, .ld-heart { color: #fff; border-radius: 9999px; background: rgb(12 12 14 / .5); border: 1px solid rgb(255 255 255 / .16); -webkit-backdrop-filter: blur(12px) saturate(160%); backdrop-filter: blur(12px) saturate(160%); box-shadow: 0 2px 10px rgb(0 0 0 / .35); }
+.hero-icon[aria-pressed="true"] { color: #0a0a0a; background: rgb(255 255 255 / .95); border-color: transparent; }
+.ld-heart svg { filter: none; }
 
 /* ---- Compare strip follows the action dock: when the dock slides away, it drops down next to the feedback / guide row. ---- */
 @media (max-width: 767px) {
@@ -1578,3 +1580,67 @@ html[data-listing-dark="1"] .footer-group { background: rgb(255 255 255 / .04); 
 .wb.wb-site .site-menu-panel { overflow-y: auto; overscroll-behavior: contain; }
 html[data-listing-dark="1"] .wb.wb-site .site-menu-panel { padding-block: 1.25rem calc(2rem + env(safe-area-inset-bottom)) !important; border-block-width: 0 !important; overflow-y: auto; box-sizing: border-box; }
 html[data-listing-dark="1"] .wb.wb-site .site-menu-panel > :last-child { padding-bottom: .5rem; }
+
+
+/* ---- Search popup on the listing page (and its dropdowns): dark all the way through, matching the quick filters ----
+   Lives in @layer base because the light rules it replaces are !important in that layer. */
+@layer base {
+@media screen {
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) { --foreground: #f4f4f5; --muted-foreground: #a1a1aa; --border: rgb(255 255 255 / .14); --input: rgb(255 255 255 / .16); --primary: #ffffff; --primary-foreground: #09090b; --muted: #26262a; --menu-item-hover: #222226; color: #f4f4f5; color-scheme: dark; }
+  html[data-listing-dark="1"] .popup-frame { background: #141416 !important; background-image: none !important; border: 1px solid rgb(255 255 255 / .14) !important; box-shadow: 0 30px 80px -20px rgb(0 0 0 / .9) !important; backdrop-filter: none !important; }
+  html[data-listing-dark="1"] .popup-frame [data-slot="dialog-close"], html[data-listing-dark="1"] .popup-frame > button:last-child { color: #fff; }
+  html[data-listing-dark="1"] .popup-scrim { background: rgb(0 0 0 / .7) !important; }
+
+  /* the search bar card and its inner pieces */
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet) .home-search { background: #1a1a1d !important; background-image: none !important; border: 1px solid rgb(255 255 255 / .1) !important; box-shadow: none !important; backdrop-filter: none !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet) .home-search .input-glass { background: #26262a !important; box-shadow: none !important; border: 1px solid rgb(255 255 255 / .1) !important; color: #fff; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet) .home-search textarea { color: #fff; background: transparent !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(input, textarea)::placeholder { color: #71717a; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) svg { color: inherit; }
+
+  /* every light surface, border and text colour hard-coded in those components */
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is([class*="bg-white"], [class*="bg-[#f"], [class*="bg-background"], [class*="bg-card"]):not(.cta):not(.cta-ink):not(.close-circle) { background-color: #1c1c1f !important; color: #f4f4f5; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is([class*="border-[#"], [class*="border-black"], [class*="border-input"]) { border-color: rgb(255 255 255 / .14) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is([class*="text-black"], [class*="text-zinc-9"], [class*="text-foreground"]) { color: #f4f4f5 !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) .text-muted-foreground { color: #a1a1aa !important; }
+
+  /* filter cards, fields, dropdown buttons */
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(input:not([type=checkbox]):not([type=radio]), textarea, select) { background-color: #26262a !important; color: #f4f4f5 !important; border-color: rgb(255 255 255 / .14) !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(input, textarea):focus-visible { border-color: rgb(255 255 255 / .4) !important; box-shadow: 0 0 0 3px rgb(255 255 255 / .08) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) button[aria-haspopup], html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) button[aria-expanded][class*="border"] { background-color: #26262a !important; color: #f4f4f5 !important; border-color: rgb(255 255 255 / .14) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) .border-primary { border-color: var(--ld-theme) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(.bg-primary\/10) { background-color: rgb(255 56 92 / .14) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) input[type="checkbox"] { accent-color: var(--ld-theme); }
+
+  /* buttons: primary = theme colour with white text, secondary = dark with a light edge (as in the quick filters) */
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(.cta, .cta-ink, .cta:hover, .cta-ink:hover) { background: var(--ld-theme) !important; background-image: none !important; color: #fff !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) button[data-tour="clear-all"] { background: #1c1c1f !important; color: #f4f4f5 !important; border: 1px solid rgb(255 255 255 / .16) !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) button[data-tour="clear-all"]:hover { background: #26262a !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) .close-circle { background: #26262a !important; color: #fff !important; border: 1px solid rgb(255 255 255 / .12) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) [role="tablist"] { background: #1c1c1f !important; border-color: rgb(255 255 255 / .14) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) [role="tablist"] :is(button, a):not(.cta) { color: #a1a1aa !important; background: transparent !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) [role="tablist"] :is(button, a):not(.cta):hover { color: #fff !important; }
+
+  /* icons keep the quick-filter look: soft dark tile, white glyph */
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) .tone-icon { background: #2a2a30 !important; color: #fff !important; box-shadow: none !important; border: 1px solid rgb(255 255 255 / .1); }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) .popup-note { background: #1c1c1f !important; border: 1px solid rgb(255 255 255 / .12) !important; color: #a1a1aa !important; }
+
+  /* dropdown lists (drawn on the page, outside the card) */
+  html[data-listing-dark="1"] [data-floating-panel] { --foreground: #f4f4f5; --muted-foreground: #a1a1aa; --border: rgb(255 255 255 / .14); --input: rgb(255 255 255 / .16); --primary: #ffffff; --muted: #222226; --background: #1c1c1f; background: #141416 !important; background-image: none !important; backdrop-filter: none !important; border: 1px solid rgb(255 255 255 / .14) !important; box-shadow: 0 18px 48px -12px rgb(0 0 0 / .9) !important; color: #f4f4f5 !important; color-scheme: dark; }
+  html[data-listing-dark="1"] [data-floating-panel] :is(button, li, p, span, label) { color: inherit; }
+  html[data-listing-dark="1"] [data-floating-panel] [role="option"]:hover, html[data-listing-dark="1"] [data-floating-panel] [role="option"]:focus-visible, html[data-listing-dark="1"] [data-floating-panel] button:hover { background-color: #222226 !important; }
+  html[data-listing-dark="1"] [data-floating-panel] [role="option"][aria-selected="true"] { color: #fff; font-weight: 700; }
+  html[data-listing-dark="1"] [data-floating-panel] .text-muted-foreground { color: #a1a1aa !important; }
+  html[data-listing-dark="1"] [data-floating-panel] :is(input:not([type=checkbox])) { background-color: #26262a !important; color: #f4f4f5 !important; border: 1px solid rgb(255 255 255 / .14) !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] [data-floating-panel] :is(.cta, button[type="submit"]) { background: var(--ld-theme) !important; color: #fff !important; }
+  html[data-listing-dark="1"] [data-floating-panel] .bg-primary { background-color: var(--ld-theme) !important; border-color: var(--ld-theme) !important; color: #fff !important; }
+  html[data-listing-dark="1"] [data-floating-panel] :is([class*="bg-primary\/10"]) { background-color: rgb(255 56 92 / .14) !important; color: #ff7a93 !important; }
+  html[data-listing-dark="1"] [data-floating-panel] .border-input { border-color: rgb(255 255 255 / .25) !important; }
+  html[data-listing-dark="1"] [data-floating-panel] .tone-icon { background: #2a2a30 !important; color: #fff !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] [data-floating-panel] .text-primary { color: #fff; }
+  html[data-listing-dark="1"] .place-suggest, html[data-listing-dark="1"] :is(.ls-card, .m-sheet) [role="listbox"]:not([data-floating-panel] *) { background: #1c1c1f; color: #f4f4f5; }
+  html[data-listing-dark="1"] .ai-chat { background: #141416 !important; box-shadow: 0 0 0 1px rgb(255 255 255 / .12) !important; color: #f4f4f5; }
+  html[data-listing-dark="1"] .ai-chat .bg-primary { background-color: var(--ld-theme) !important; color: #fff !important; }
+  html[data-listing-dark="1"] .ai-chat .text-primary { color: var(--ld-theme); }
+}
+}

@@ -101,7 +101,7 @@ export function Gallery({
   return (
     <section aria-label="Photos">
       {/* Wide screens: one large photo and up to four more, like a magazine spread. Tapping any opens the full-screen viewer. */}
-      <div className={`relative hidden h-[26rem] gap-2 overflow-hidden rounded-3xl ${mobileHero ? "md:grid" : "sm:grid"} lg:h-[30rem] ${tiles.length === 1 ? "" : tiles.length < 3 ? "grid-cols-2" : "grid-cols-4 grid-rows-2"}`}>
+      <div className={`relative hidden h-[26rem] gap-2 overflow-hidden rounded-3xl ${mobileHero ? "" : "sm:grid"} lg:h-[30rem] ${tiles.length === 1 ? "" : tiles.length < 3 ? "grid-cols-2" : "grid-cols-4 grid-rows-2"}`}>
         {tiles.map((im, k) => (
           <button key={im.url} type="button" onClick={() => open(k)} aria-label={k >= photos.length ? "View floor plan full screen" : `View photo ${k + 1} full screen`}
             className={`group relative overflow-hidden bg-muted ${k === 0 ? (tiles.length >= 3 ? "col-span-2 row-span-2" : "") : ""}`}>
@@ -114,8 +114,8 @@ export function Gallery({
         {n > 1 && <button type="button" onClick={() => open(0)} className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-background px-4 py-2 text-sm font-bold shadow-lg"><Camera className="size-4" aria-hidden />Show all {n}</button>}
       </div>
       {mobileHero ? (
-        <div className="md:hidden">
-          <div className="relative overflow-hidden rounded-t-[1.6rem] bg-black">
+        <div>
+          <div className="hero-strip group/hero relative overflow-hidden rounded-t-[1.6rem] bg-black md:rounded-t-[2rem]">
             {actions && <div className="absolute left-3 top-3 z-10 flex items-center gap-1.5">{actions}</div>}
             <span className="pointer-events-none absolute right-3 top-3 z-10 ld-font rounded-full bg-black/75 px-4 py-1 text-[12px] font-medium tabular-nums text-[#f3ead7] backdrop-blur-md">{i + 1} / {n}</span>
             <div ref={hero} onScroll={onHeroScroll} className="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -130,6 +130,10 @@ export function Gallery({
             <div className={`pointer-events-none absolute inset-x-0 bottom-0 z-[1] ${isPlan(i) ? "h-[22%]" : "h-[58%]"}`} style={{ background: "linear-gradient(to bottom, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.18) 28%, rgb(0 0 0 / 0.62) 62%, rgb(0 0 0 / 0.92) 88%, #000 100%)" }} aria-hidden />
             {isPlan(i) && <span className="absolute bottom-[3.6rem] left-3 z-10 rounded-full bg-black/75 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">Floor plan</span>}
             {!isPlan(i) && cur.caption && <p className="absolute bottom-[3.6rem] left-3 z-10 max-w-[70%] truncate rounded-full bg-black/70 px-3 py-1 text-xs text-white backdrop-blur-sm">{cur.caption}</p>}
+            {n > 1 && <>
+              <button type="button" onClick={() => go(-1)} aria-label="Previous photo" className="absolute left-4 top-[40%] z-10 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-[#121214]/85 text-white backdrop-blur-sm transition hover:bg-[#26262a] active:scale-95 md:grid"><ChevronLeft className="size-6" aria-hidden /></button>
+              <button type="button" onClick={() => go(1)} aria-label="Next photo" className="absolute right-4 top-[40%] z-10 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-[#121214]/85 text-white backdrop-blur-sm transition hover:bg-[#26262a] active:scale-95 md:grid"><ChevronRight className="size-6" aria-hidden /></button>
+            </>}
             <button type="button" onClick={() => setFull(true)} aria-label="Open full screen gallery" className="absolute bottom-[3.6rem] right-3 z-10 grid size-11 place-items-center rounded-full bg-[#121214]/85 text-white backdrop-blur-sm transition active:scale-95">
               <svg viewBox="0 0 24 24" className="size-[18px]" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4" />

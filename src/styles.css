@@ -1238,7 +1238,7 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
   .card-grid img { background: #f4f4f5; }
 }
 
-/* Mobile dark listing page (< 768px on /property/$slug only). Desktop and all other routes remain untouched. */
+/* Dark premium listing page (every width, /property/$slug only). Other routes remain untouched. */
 .ld-font { font-family: "Figtree", var(--font-sans); }
 .ld-pill { display: inline-flex; align-items: center; height: 2.55rem; padding: 0 1.05rem; border-radius: 9999px; border: 1px solid rgb(255 255 255 / 0.15); background: var(--ld-surface); color: #d4d4d8; font-size: 1.05rem; font-weight: 500; transition: transform .15s; }
 .ld-pill:active { transform: scale(.95); }
@@ -1258,7 +1258,7 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
 .ld-action-sm { width: 3.3rem; height: 3.3rem; }
 .ld-action-lg { width: 4.2rem; height: 4.2rem; }
 
-@media (max-width: 767px) {
+@media screen {
   html[data-listing-dark="1"] {
     --background: var(--ld-bg);
     --foreground: #f4f4f5;
@@ -1423,7 +1423,7 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
 
 /* Listing page menu: the base layer forces a white panel with !important, and layered !important beats unlayered, so the dark panel has to live in the same layer. */
 @layer base {
-  @media (max-width: 767px) {
+  @media screen {
     html[data-listing-dark="1"] .wb.wb-site .menu-panel.glass-menu,
     html[data-listing-dark="1"] .wb.wb-site .site-menu-panel {
       background-color: #141416 !important;
@@ -1437,7 +1437,7 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
 }
 
 /* Listing page menu on phones: a right-hand sidebar over a dark overlay. The transparent border is outside the scrolling area, so the top and bottom padding stays put while the list scrolls. */
-@media (max-width: 767px) {
+@media screen {
   html[data-listing-dark="1"] .wb.wb-site .menu-scrim { position: fixed; inset: 0; z-index: -1; background: rgb(0 0 0 / 0.7); opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility 0s linear .3s; }
   html[data-listing-dark="1"] .wb.wb-site .menu-scrim[data-open="true"] { opacity: 1; visibility: visible; transition: opacity .3s ease, visibility 0s; }
   html[data-listing-dark="1"] .wb.wb-site .site-menu-panel {
@@ -1454,7 +1454,7 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
 }
 /* Readable text and icons in the dark sidebar (same layer as the panel colours so they are not overridden). */
 @layer base {
-  @media (max-width: 767px) {
+  @media screen {
     html[data-listing-dark="1"] .wb.wb-site .site-menu-panel .menu-title { color: #a1a1aa !important; opacity: 1 !important; }
     html[data-listing-dark="1"] .wb.wb-site .site-menu-panel .menu-link { color: #f4f4f5 !important; }
     html[data-listing-dark="1"] .wb.wb-site .site-menu-panel .menu-link svg { opacity: 1 !important; }
@@ -1465,7 +1465,13 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
 }
 
 /* "Take me there" wears the theme colour of the active tab in the bottom bar. */
-@media (max-width: 767px) {
+@media screen {
   html[data-listing-dark="1"] .bg-primary.take-btn { background-color: var(--ld-theme) !important; background-image: none !important; color: #ffffff !important; }
   html[data-listing-dark="1"] .bg-primary.take-btn:hover:not(:disabled) { background-color: #ff4d6d !important; }
+}
+
+/* Wider screens: the sidebar menu is a little wider, the hero photo taller, and the action dock sits in the page instead of floating. */
+@media (min-width: 768px) {
+  html[data-listing-dark="1"] .wb.wb-site .site-menu-panel { width: min(24rem, 90vw); }
+  .listing-page .hero-strip img { height: min(66svh, 640px); max-height: none; min-height: 420px; }
 }

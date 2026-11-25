@@ -72,8 +72,6 @@ function PropertyPage() {
   const [isSaved, setIsSaved] = useState(saved.has(p.id));
   const [photoIdx, setPhotoIdx] = useState(0);
   const [isLg, setIsLg] = useState(false);
-  const [isPhone, setIsPhone] = useState(false);
-  useEffect(() => { const m = window.matchMedia("(max-width: 767px)"); const f = () => setIsPhone(m.matches); f(); m.addEventListener("change", f); return () => m.removeEventListener("change", f); }, []);
   useEffect(() => { const m = window.matchMedia("(min-width: 1024px)"); const f = () => setIsLg(m.matches); f(); m.addEventListener("change", f); return () => m.removeEventListener("change", f); }, []);
   const [shownContact, setShownContact] = useState<{ phone: string; whatsapp: string } | null>(null);
   const [busyContact, setBusyContact] = useState<"phone" | "whatsapp" | null>(null);
@@ -140,16 +138,16 @@ function PropertyPage() {
   ];
 
   return (
-    <main className="listing-page mx-auto max-w-[82rem] px-0 pt-0 pb-48 md:px-4 md:pt-28 md:pb-24">
+    <main className="listing-page mx-auto max-w-[82rem] px-0 pt-0 pb-48 md:pb-24">
       <MobileListingTopBar p={p} />
-      <header className="mb-6 hidden md:block">
+      <header className="hidden">
         <h1 className="text-xl font-extrabold leading-tight md:text-3xl">{p.title}</h1>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
           <p className="flex items-center gap-1.5 text-muted-foreground"><MapPin className="h-4 w-4" aria-hidden />{[p.location.address, p.areaName, p.county].filter(Boolean).join(", ")}{p.location.approximate && <span className="text-xs">(exact location shared on request)</span>}</p>
         </div>
       </header>
-      <div className="grid gap-5 md:gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className="min-w-0 space-y-0 md:space-y-8">
+      <div className="grid gap-5 md:gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:px-4">
+        <div className="min-w-0 space-y-0 md:space-y-6">
           <div className="px-1.5 md:px-0">
             <Gallery mobileHero activeIndex={photoIdx} onIndexChange={setPhotoIdx} images={p.images} plans={p.floorPlans} title={p.title} actions={<ScrollFade className="flex items-center gap-1">
               <IconHint label="Compare"><CompareButton bare propertyId={p.id} /></IconHint>
@@ -158,9 +156,9 @@ function PropertyPage() {
             </ScrollFade>} />
           </div>
           <MobileListingHeroBody p={p} isSaved={isSaved} onSavedChange={setIsSaved} shown={shownContact} busy={busyContact} onReveal={revealContact} shortcuts={mobileShortcuts} />
-          <div className="space-y-4 px-3 pt-2 md:space-y-8 md:px-0 md:pt-0">
+          <div className="space-y-4 px-3 pt-2 md:space-y-6 md:px-6 md:pt-4 lg:px-0">
           {allMedia.length > 1 && (
-            <section aria-label="Photo thumbnails" className="rounded-2xl bg-card/85 p-3.5 md:hidden">
+            <section aria-label="Photo thumbnails" className="rounded-2xl bg-card/85 p-3.5">
               <ul className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {allMedia.map((im, k) => (
                   <li key={im.url} className="shrink-0">
@@ -173,7 +171,7 @@ function PropertyPage() {
             </section>
           )}
           {(p.location.address || p.location.approximate) && (
-            <div className="flex items-start gap-2 rounded-2xl bg-card/85 px-4 py-3 text-sm text-muted-foreground md:hidden">
+            <div className="flex items-start gap-2 rounded-2xl bg-card/85 px-4 py-3 text-sm text-muted-foreground">
               <MapPin className="mt-0.5 size-4 shrink-0 text-white" aria-hidden />
               <p>{[p.location.address, p.areaName, p.county].filter(Boolean).join(", ")}{p.location.approximate && <span className="ml-1.5 text-xs opacity-80">(exact location shared on request)</span>}</p>
             </div>
@@ -220,17 +218,17 @@ function PropertyPage() {
           )}
 
           {(p.videoUrl || p.virtualTourUrl) && <section className="flex flex-wrap gap-3">{p.videoUrl && <a href={p.videoUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-input px-5 py-2.5 text-sm font-bold">Watch video</a>}{p.virtualTourUrl && <a href={p.virtualTourUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-input px-5 py-2.5 text-sm font-bold">Virtual tour</a>}</section>}
-          {mapUrl && <section aria-labelledby="map" className="scroll-mt-16 rounded-3xl bg-card/85 backdrop-blur-md p-6 shadow-sm"><h2 id="map" className="mb-4 text-xl font-extrabold max-md:text-center">Location</h2>
-            {isPhone ? <ListingMap lat={p.location.point!.lat} lng={p.location.point!.lng} label={p.areaName || p.title} /> : <iframe title={`Map of ${p.areaName}`} src={mapUrl} loading="lazy" className="h-72 w-full rounded-2xl border border-border" />}
-            <div className="mt-3 flex flex-wrap items-center gap-3 max-md:flex-col max-md:items-center max-md:text-center"><a href={directionsUrl(p.location.point!.lat, p.location.point!.lng)} target="_blank" rel="noopener noreferrer" className="take-btn inline-flex h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground"><Navigation className="h-4 w-4" aria-hidden />Take me there</a><a href={osmDirectionsUrl(p.location.point!.lat, p.location.point!.lng)} target="_blank" rel="noopener noreferrer" className="text-sm font-bold underline">Open in OpenStreetMap</a>{p.location.approximate && <span className="flex items-start gap-1.5 text-xs text-muted-foreground max-md:justify-center"><PinIcon className="mt-px size-3.5 shrink-0 text-zinc-500 md:hidden" aria-hidden /><span>Exact location is shared by the agent. Directions lead to the area.</span></span>}</div>{p.location.landmark && <p className="mt-2 text-sm text-muted-foreground max-md:text-center">Near {p.location.landmark}</p>}</section>}
+          {mapUrl && <section aria-labelledby="map" className="scroll-mt-16 rounded-3xl bg-card/85 backdrop-blur-md p-6 shadow-sm"><h2 id="map" className="mb-4 text-xl font-extrabold text-center">Location</h2>
+            <ListingMap lat={p.location.point!.lat} lng={p.location.point!.lng} label={p.areaName || p.title} />
+            <div className="mt-3 flex flex-wrap items-center gap-3 flex-col items-center text-center"><a href={directionsUrl(p.location.point!.lat, p.location.point!.lng)} target="_blank" rel="noopener noreferrer" className="take-btn inline-flex h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground"><Navigation className="h-4 w-4" aria-hidden />Take me there</a><a href={osmDirectionsUrl(p.location.point!.lat, p.location.point!.lng)} target="_blank" rel="noopener noreferrer" className="text-sm font-bold underline">Open in OpenStreetMap</a>{p.location.approximate && <span className="flex items-start gap-1.5 text-xs text-muted-foreground justify-center"><PinIcon className="mt-px size-3.5 shrink-0 text-zinc-500" aria-hidden /><span>Exact location is shared by the agent. Directions lead to the area.</span></span>}</div>{p.location.landmark && <p className="mt-2 text-sm text-center text-muted-foreground">Near {p.location.landmark}</p>}</section>}
           {isLg && <ListingComments propertyId={p.id} slug={p.slug} />}
           </div>
         </div>
-        <div className="px-3 md:px-0"><StickySide><ContactPanel p={p} shown={shownContact} busy={busyContact} onReveal={revealContact} /></StickySide></div>
-        {!isLg && <div className="px-1.5"><ListingComments propertyId={p.id} slug={p.slug} /></div>}
+        <div className="px-3 md:px-6 lg:px-0"><StickySide offset={88}><ContactPanel p={p} shown={shownContact} busy={busyContact} onReveal={revealContact} /></StickySide></div>
+        {!isLg && <div className="px-1.5 md:px-6"><ListingComments propertyId={p.id} slug={p.slug} /></div>}
       </div>
-      {similar.length > 0 && <section className="plain-sec mt-10 px-3 md:mt-14 md:px-0" aria-labelledby="sim"><h2 id="sim" className="text-lg font-bold md:text-2xl md:font-extrabold">You might also like</h2><p className="mb-5 mt-1 text-sm text-muted-foreground">Properties like this one, starting with the closest in kind, place and price.</p><PropertyGrid items={similar} saved={saved} /></section>}
-      {moreFromAgency.length > 0 && <section className="plain-sec mt-10 px-3 md:mt-14 md:px-0" aria-labelledby="more"><h2 id="more" className="mb-5 text-lg font-bold md:text-2xl md:font-extrabold">More from {p.agencyProfile?.name ?? "this agency"}</h2><PropertyGrid items={moreFromAgency} saved={saved} /></section>}
+      {similar.length > 0 && <section className="plain-sec mt-10 px-3 md:mt-14 md:px-6 lg:px-4" aria-labelledby="sim"><h2 id="sim" className="text-lg font-bold md:text-2xl md:font-extrabold">You might also like</h2><p className="mb-5 mt-1 text-sm text-muted-foreground">Properties like this one, starting with the closest in kind, place and price.</p><PropertyGrid items={similar} saved={saved} /></section>}
+      {moreFromAgency.length > 0 && <section className="plain-sec mt-10 px-3 md:mt-14 md:px-6 lg:px-4" aria-labelledby="more"><h2 id="more" className="mb-5 text-lg font-bold md:text-2xl md:font-extrabold">More from {p.agencyProfile?.name ?? "this agency"}</h2><PropertyGrid items={moreFromAgency} saved={saved} /></section>}
     </main>
   );
 }

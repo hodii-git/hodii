@@ -1,0 +1,42 @@
+/* Hodii additions to the Webbora layer: three distinct headers and a few shared blocks. All scoped under .wb. */
+.wb { isolation: isolate; }
+.wb .hk-chip { align-items: center; padding: .3rem .75rem; border-radius: 999px; font-size: .75rem; font-weight: 500; color: color-mix(in oklab, var(--ink) 70%, transparent); background: color-mix(in oklab, var(--ink) 6%, transparent); white-space: nowrap; }
+.wb .hk-tabs { gap: .25rem; padding: .25rem; border-radius: 999px; background: color-mix(in oklab, var(--ink) 6%, transparent); }
+.wb .hk-tab { padding: .5rem 1rem; border-radius: 999px; font-size: .85rem; font-weight: 500; color: color-mix(in oklab, var(--ink) 75%, transparent); transition: background .3s, color .3s; }
+.wb .hk-tab:hover { background: color-mix(in oklab, var(--paper) 70%, transparent); }
+.wb .hk-tab.is-current { background: var(--ink); color: var(--cream); }
+.wb .hk-quiet { align-items: center; padding: 0 .9rem; font-size: .85rem; font-weight: 500; color: color-mix(in oklab, var(--ink) 75%, transparent); }
+.wb .hk-ribbon { align-items: center; justify-content: center; gap: .6rem; width: fit-content; max-width: 100%; padding: .35rem 1rem; border-radius: 999px; font-size: .78rem; font-weight: 500; color: var(--cream); background: var(--ink); transition: opacity .3s, transform .3s; }
+.wb .hk-ribbon.is-hidden { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+.wb .hk-co { border-radius: 1rem; }
+.wb .nav-link.is-current { color: var(--ink); text-decoration: underline; text-underline-offset: .4rem; text-decoration-thickness: 2px; }
+.wb .hk-search { align-items: center; gap: .6rem; padding: 0 1rem; height: 2.6rem; border-radius: 999px; background: color-mix(in oklab, var(--ink) 6%, transparent); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ink) 6%, transparent); }
+.wb .hk-search input { flex: 1; min-width: 0; background: transparent; outline: none; font-size: .88rem; }
+.wb.wb-footer { background: transparent; }
+.wb .guide-toc a { display: flex; gap: .75rem; padding: .55rem .8rem; border-radius: .8rem; font-size: .92rem; color: color-mix(in oklab, var(--ink) 70%, transparent); transition: background .25s, color .25s; }
+.wb .guide-toc a:hover { background: color-mix(in oklab, var(--ink) 6%, transparent); color: var(--ink); }
+.wb .step-no { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: .7rem; font-weight: 600; font-size: .9rem; color: var(--cream); background: var(--ink); flex-shrink: 0; }
+.wb .info-card { border-radius: 1.5rem; padding: clamp(1.4rem, 3vw, 2.2rem); background: color-mix(in oklab, var(--paper) 78%, transparent); backdrop-filter: blur(16px) saturate(130%); box-shadow: 0 0 0 1px color-mix(in oklab, var(--ink) 5%, transparent), 0 1.2rem 2.5rem -1.8rem color-mix(in oklab, var(--ink) 35%, transparent); }
+.wb .stat-chip { padding: 1.1rem 1.3rem; border-radius: 1.2rem; background: color-mix(in oklab, var(--cream) 14%, transparent); backdrop-filter: blur(14px) saturate(130%); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--cream) 24%, transparent); }
+.wb .cta-band { position: relative; overflow: hidden; border-radius: 2rem; padding: clamp(2rem, 5vw, 4rem); text-align: center; color: var(--ink); background: var(--ph-peaks); }
+.wb .cta-band::before { content: ""; position: absolute; inset: 0; background: color-mix(in oklab, var(--paper) 55%, transparent); }
+.wb .cta-band > * { position: relative; }
+
+.wb .price-card { box-shadow: 0 0 0 1px rgb(24 24 27 / 0.06), 0 22px 40px -28px rgb(24 24 27 / 0.35); transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; }
+.wb .price-card:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgb(24 24 27 / 0.08), 0 30px 50px -26px rgb(24 24 27 / 0.45); }
+.wb .guide-card { border-radius: 1.4rem; padding: 1.3rem; background: color-mix(in oklab, var(--paper) 86%, transparent); box-shadow: 0 0 0 1px rgb(24 24 27 / 0.06), 0 16px 30px -24px rgb(24 24 27 / 0.4); transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; display: block; }
+.wb .guide-card:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px rgb(24 24 27 / 0.1), 0 24px 40px -24px rgb(24 24 27 / 0.45); }
+
+/* ---- Public header: the hamburger and menu stay on every screen size ---- */
+@media (min-width: 1024px) { .wb.wb-site .menu-btn { display: inline-grid; } .wb.wb-site .menu-panel { display: block; } }
+.wb.wb-site .menu-panel { max-height: min(80dvh, 40rem); overflow-y: auto; overscroll-behavior: contain; background: #fff; box-shadow: 0 0 0 1px rgb(24 24 27 / .07), 0 30px 60px -28px rgb(24 24 27 / .45); }
+.wb .menu-title { padding: .75rem 1rem .25rem; font-size: .72rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase; opacity: .5; }
+/* Bell and account buttons match the hamburger */
+.wb.wb-site .hdr-circle, .wb.wb-site .header-circle { background: color-mix(in oklab, var(--foreground) 5%, transparent) !important; box-shadow: none !important; border: 0 !important; width: 2.75rem; height: 2.75rem; border-radius: 999px !important; }
+.wb.wb-site .hdr-circle:hover, .wb.wb-site .header-circle:hover { background: color-mix(in oklab, var(--foreground) 10%, transparent) !important; }
+
+.wb.wb-site { position: relative; z-index: 45; }
+
+/* The header runs the full width of the screen (with an even edge gap), not the narrower content column */
+.wb.wb-site { --site-w: calc(100vw - 2rem); }
+@media (min-width: 640px) { .wb.wb-site { --site-w: calc(100vw - 3rem); } }

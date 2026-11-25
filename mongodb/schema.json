@@ -1,0 +1,7087 @@
+{
+  "schemaVersion": 2,
+  "collections": {
+    "users": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "emailHash": {
+              "bsonType": "string",
+              "minLength": 1
+            },
+            "emailEnc": {
+              "bsonType": "string",
+              "minLength": 1
+            },
+            "username": {
+              "bsonType": "string",
+              "minLength": 3,
+              "maxLength": 30
+            },
+            "passwordHash": {
+              "bsonType": "string",
+              "minLength": 1
+            },
+            "blocked": {
+              "bsonType": "bool"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "lastSignInAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "accountType": {
+              "bsonType": "string",
+              "enum": [
+                "user",
+                "agency"
+              ]
+            },
+            "phoneEnc": {
+              "bsonType": [
+                "string",
+                "null"
+              ]
+            },
+            "termsAcceptedAt": {
+              "bsonType": "date"
+            },
+            "termsVersion": {
+              "bsonType": "string",
+              "maxLength": 20
+            },
+            "recoveryHashes": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string"
+              },
+              "maxItems": 20
+            },
+            "recoveryIssuedAt": {
+              "bsonType": "date"
+            },
+            "avatar": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "url": {
+                      "bsonType": "string",
+                      "maxLength": 500
+                    },
+                    "publicId": {
+                      "anyOf": [
+                        {
+                          "bsonType": "string",
+                          "maxLength": 200
+                        },
+                        {
+                          "bsonType": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "publicId"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "emailHash",
+            "emailEnc",
+            "username",
+            "passwordHash",
+            "blocked",
+            "createdAt",
+            "lastSignInAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "moderate",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "email_unique",
+          "key": {
+            "emailHash": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "username_unique",
+          "key": {
+            "username": 1
+          },
+          "unique": true,
+          "collation": {
+            "locale": "en",
+            "strength": 2
+          }
+        },
+        {
+          "name": "account_type",
+          "key": {
+            "accountType": 1,
+            "createdAt": -1
+          }
+        }
+      ]
+    },
+    "agencies": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "slug": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "name": {
+              "bsonType": "string",
+              "minLength": 2,
+              "maxLength": 80
+            },
+            "kind": {
+              "bsonType": "string",
+              "enum": [
+                "estate_agency",
+                "developer",
+                "property_manager",
+                "owner"
+              ]
+            },
+            "legalName": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 80
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "description": {
+              "bsonType": "string",
+              "maxLength": 2000
+            },
+            "logo": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "url": {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    "width": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1
+                    },
+                    "height": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "width",
+                    "height"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "cover": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "url": {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    "width": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1
+                    },
+                    "height": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "width",
+                    "height"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "contact": {
+              "bsonType": "object",
+              "properties": {
+                "phone": {
+                  "bsonType": "string",
+                  "pattern": "^\\+254(?:[17]\\d{8}|(?:20|4\\d|5\\d|6\\d)\\d{6,7})$"
+                },
+                "whatsapp": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "pattern": "^\\+254(?:[17]\\d{8}|(?:20|4\\d|5\\d|6\\d)\\d{6,7})$"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "email": {
+                  "bsonType": "string",
+                  "maxLength": 254,
+                  "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$"
+                },
+                "website": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "phone",
+                "whatsapp",
+                "email",
+                "website"
+              ],
+              "additionalProperties": false
+            },
+            "address": {
+              "bsonType": "object",
+              "properties": {
+                "countyCode": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 47
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "area": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 80
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "street": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "countyCode",
+                "area",
+                "street"
+              ],
+              "additionalProperties": false
+            },
+            "serviceAreas": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": [
+                  "int",
+                  "long",
+                  "double"
+                ],
+                "multipleOf": 1,
+                "minimum": 1,
+                "maximum": 47
+              },
+              "maxItems": 47
+            },
+            "tagline": {
+              "bsonType": "string",
+              "maxLength": 120
+            },
+            "story": {
+              "bsonType": "string",
+              "maxLength": 6000
+            },
+            "services": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "maxItems": 12
+            },
+            "hours": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "foundedYear": {
+              "anyOf": [
+                {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1900,
+                  "maximum": 2100
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "socials": {
+              "bsonType": "object",
+              "properties": {
+                "facebook": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "instagram": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "x": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "tiktok": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "linkedin": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "youtube": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "rating": {
+              "bsonType": "object",
+              "properties": {
+                "count": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "avg": {
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long",
+                    "decimal"
+                  ],
+                  "minimum": 0,
+                  "maximum": 5
+                }
+              },
+              "required": [
+                "count",
+                "avg"
+              ],
+              "additionalProperties": false
+            },
+            "registration": {
+              "bsonType": "object",
+              "properties": {
+                "earbNumber": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "businessRegNumber": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "earbNumber",
+                "businessRegNumber"
+              ],
+              "additionalProperties": false
+            },
+            "verification": {
+              "bsonType": "object",
+              "properties": {
+                "status": {
+                  "bsonType": "string",
+                  "enum": [
+                    "unverified",
+                    "pending",
+                    "verified",
+                    "rejected"
+                  ]
+                },
+                "submittedAt": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "reviewedAt": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "reviewedBy": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "rejectionReason": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "documents": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "object",
+                    "properties": {
+                      "id": {
+                        "bsonType": "string",
+                        "minLength": 1,
+                        "maxLength": 64
+                      },
+                      "kind": {
+                        "bsonType": "string",
+                        "enum": [
+                          "earb_certificate",
+                          "business_registration",
+                          "national_id",
+                          "authorisation_letter",
+                          "other"
+                        ]
+                      },
+                      "url": {
+                        "bsonType": "string",
+                        "maxLength": 500,
+                        "pattern": "^https:\\/\\/"
+                      },
+                      "uploadedAt": {
+                        "bsonType": "date"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "kind",
+                      "url",
+                      "uploadedAt"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "maxItems": 10
+                }
+              },
+              "required": [
+                "status",
+                "submittedAt",
+                "reviewedAt",
+                "reviewedBy",
+                "rejectionReason",
+                "documents"
+              ],
+              "additionalProperties": false
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "active",
+                "suspended"
+              ]
+            },
+            "suspendedReason": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdBy": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "slug",
+            "name",
+            "kind",
+            "legalName",
+            "description",
+            "logo",
+            "cover",
+            "contact",
+            "address",
+            "serviceAreas",
+            "registration",
+            "verification",
+            "status",
+            "suspendedReason",
+            "createdBy",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "agency_slug",
+          "key": {
+            "slug": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "agency_directory",
+          "key": {
+            "status": 1,
+            "verification.status": 1,
+            "kind": 1,
+            "name": 1
+          }
+        },
+        {
+          "name": "agency_by_creator",
+          "key": {
+            "createdBy": 1
+          }
+        },
+        {
+          "name": "agency_verification_queue",
+          "key": {
+            "verification.status": 1,
+            "verification.submittedAt": 1
+          }
+        }
+      ]
+    },
+    "agencyMembers": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "userId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "role": {
+              "bsonType": "string",
+              "enum": [
+                "owner",
+                "admin",
+                "agent"
+              ]
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "active",
+                "invited",
+                "removed"
+              ]
+            },
+            "permissions": {
+              "anyOf": [
+                {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "string",
+                    "maxLength": 40
+                  },
+                  "maxItems": 40
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "invite": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "emailHash": {
+                      "bsonType": "string",
+                      "minLength": 1
+                    },
+                    "emailEnc": {
+                      "bsonType": "string",
+                      "minLength": 1
+                    },
+                    "tokenHash": {
+                      "bsonType": "string",
+                      "minLength": 1
+                    },
+                    "expiresAt": {
+                      "bsonType": "date"
+                    },
+                    "invitedBy": {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    }
+                  },
+                  "required": [
+                    "emailHash",
+                    "tokenHash",
+                    "expiresAt",
+                    "invitedBy"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "title": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 60
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "phone": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "pattern": "^\\+254(?:[17]\\d{8}|(?:20|4\\d|5\\d|6\\d)\\d{6,7})$"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "whatsapp": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "pattern": "^\\+254(?:[17]\\d{8}|(?:20|4\\d|5\\d|6\\d)\\d{6,7})$"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "photoUrl": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500,
+                  "pattern": "^https:\\/\\/"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "bio": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "joinedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "agencyId",
+            "userId",
+            "role",
+            "status",
+            "invite",
+            "title",
+            "phone",
+            "whatsapp",
+            "photoUrl",
+            "bio",
+            "joinedAt",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "one_membership",
+          "key": {
+            "agencyId": 1,
+            "userId": 1
+          },
+          "unique": true,
+          "partialFilterExpression": {
+            "userId": {
+              "$type": "string"
+            }
+          }
+        },
+        {
+          "name": "invite_token",
+          "key": {
+            "invite.tokenHash": 1
+          },
+          "unique": true,
+          "partialFilterExpression": {
+            "invite.tokenHash": {
+              "$type": "string"
+            }
+          }
+        },
+        {
+          "name": "memberships_of_user",
+          "key": {
+            "userId": 1,
+            "status": 1
+          }
+        },
+        {
+          "name": "team",
+          "key": {
+            "agencyId": 1,
+            "status": 1,
+            "role": 1
+          }
+        }
+      ]
+    },
+    "properties": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "slug": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "referenceCode": {
+              "bsonType": "string",
+              "pattern": "^HD-[2-9A-HJKMNP-Z]{6}$"
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "createdBy": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "agentId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "externalRef": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 40
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "source": {
+              "bsonType": "object",
+              "properties": {
+                "kind": {
+                  "bsonType": "string",
+                  "enum": [
+                    "manual",
+                    "import",
+                    "scraper"
+                  ]
+                },
+                "url": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500,
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "externalId": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 120
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "importedAt": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "kind",
+                "url",
+                "externalId",
+                "importedAt"
+              ],
+              "additionalProperties": false
+            },
+            "listingType": {
+              "bsonType": "string",
+              "enum": [
+                "sale",
+                "rent",
+                "short_stay"
+              ]
+            },
+            "category": {
+              "bsonType": "string",
+              "enum": [
+                "residential",
+                "commercial",
+                "land"
+              ]
+            },
+            "propertyType": {
+              "bsonType": "string",
+              "enum": [
+                "apartment",
+                "house",
+                "maisonette",
+                "bungalow",
+                "townhouse",
+                "villa",
+                "mansion",
+                "penthouse",
+                "cottage",
+                "bedsitter",
+                "studio",
+                "serviced_apartment",
+                "student_hostel",
+                "apartment_block",
+                "office",
+                "shop",
+                "warehouse",
+                "commercial_building",
+                "industrial",
+                "hotel_lodge",
+                "other_commercial",
+                "residential_plot",
+                "commercial_plot",
+                "agricultural_land",
+                "farm_ranch",
+                "industrial_land",
+                "other_land"
+              ]
+            },
+            "title": {
+              "bsonType": "string",
+              "maxLength": 100
+            },
+            "description": {
+              "bsonType": "string",
+              "maxLength": 5000
+            },
+            "highlights": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "maxItems": 6
+            },
+            "price": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "amount": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 100000000000
+                    },
+                    "amountKes": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 100000000000000
+                    },
+                    "currency": {
+                      "bsonType": "string",
+                      "enum": [
+                        "KES",
+                        "USD"
+                      ]
+                    },
+                    "period": {
+                      "bsonType": "string",
+                      "enum": [
+                        "total",
+                        "month",
+                        "year",
+                        "week",
+                        "night"
+                      ]
+                    },
+                    "negotiable": {
+                      "bsonType": "bool"
+                    }
+                  },
+                  "required": [
+                    "amount",
+                    "amountKes",
+                    "currency",
+                    "period",
+                    "negotiable"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "priceHistory": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "amount": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1
+                  },
+                  "changedAt": {
+                    "bsonType": "date"
+                  }
+                },
+                "required": [
+                  "amount",
+                  "changedAt"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 20
+            },
+            "location": {
+              "bsonType": "object",
+              "properties": {
+                "countyCode": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 47
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "county": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "countySlug": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 120,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "subCounty": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 60
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "areaName": {
+                  "bsonType": "string",
+                  "maxLength": 80
+                },
+                "areaSlug": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 120,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "address": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "landmark": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 120
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "point": {
+                  "bsonType": "object",
+                  "properties": {
+                    "type": {
+                      "bsonType": "string",
+                      "enum": [
+                        "Point"
+                      ]
+                    },
+                    "coordinates": {
+                      "bsonType": "array",
+                      "items": {
+                        "bsonType": [
+                          "double",
+                          "int",
+                          "long",
+                          "decimal"
+                        ]
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "additionalProperties": false
+                },
+                "hideExactLocation": {
+                  "bsonType": "bool"
+                }
+              },
+              "required": [
+                "countyCode",
+                "county",
+                "countySlug",
+                "subCounty",
+                "areaName",
+                "areaSlug",
+                "address",
+                "landmark",
+                "hideExactLocation"
+              ],
+              "additionalProperties": false
+            },
+            "details": {
+              "bsonType": "object",
+              "properties": {
+                "bedrooms": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 0,
+                      "maximum": 30
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "bathrooms": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 0,
+                      "maximum": 30
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "ensuiteBedrooms": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 0,
+                      "maximum": 30
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "servantQuarters": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "parkingSpaces": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "floorAreaSqm": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "double",
+                        "int",
+                        "long",
+                        "decimal"
+                      ],
+                      "minimum": 1,
+                      "maximum": 10000000
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "plotAreaValue": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "double",
+                        "int",
+                        "long",
+                        "decimal"
+                      ],
+                      "minimum": 0
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "plotAreaUnit": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "enum": [
+                        "sqm",
+                        "sqft",
+                        "acre",
+                        "hectare"
+                      ]
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "plotAreaSqm": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "double",
+                        "int",
+                        "long",
+                        "decimal"
+                      ],
+                      "minimum": 1,
+                      "maximum": 1000000000
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "floorLevel": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 0,
+                      "maximum": 200
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "totalFloors": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 200
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "yearBuilt": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1850
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "condition": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "enum": [
+                        "new",
+                        "good",
+                        "needs_renovation",
+                        "under_construction",
+                        "off_plan"
+                      ]
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "furnishing": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "enum": [
+                        "unfurnished",
+                        "semi_furnished",
+                        "furnished"
+                      ]
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "zoning": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "enum": [
+                        "residential",
+                        "commercial",
+                        "agricultural",
+                        "industrial",
+                        "mixed_use"
+                      ]
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "bedrooms",
+                "bathrooms",
+                "ensuiteBedrooms",
+                "servantQuarters",
+                "parkingSpaces",
+                "floorAreaSqm",
+                "plotAreaValue",
+                "plotAreaUnit",
+                "plotAreaSqm",
+                "floorLevel",
+                "totalFloors",
+                "yearBuilt",
+                "condition",
+                "furnishing",
+                "zoning"
+              ],
+              "additionalProperties": false
+            },
+            "legal": {
+              "bsonType": "object",
+              "properties": {
+                "titleType": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "enum": [
+                        "freehold",
+                        "leasehold",
+                        "sectional_title",
+                        "other"
+                      ]
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "leaseYearsRemaining": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 999
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "titleDeedReady": {
+                  "bsonType": [
+                    "bool",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "titleType",
+                "leaseYearsRemaining",
+                "titleDeedReady"
+              ],
+              "additionalProperties": false
+            },
+            "rental": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "depositMonths": {
+                      "anyOf": [
+                        {
+                          "bsonType": [
+                            "int",
+                            "long",
+                            "double"
+                          ],
+                          "multipleOf": 1,
+                          "minimum": 0,
+                          "maximum": 12
+                        },
+                        {
+                          "bsonType": "null"
+                        }
+                      ]
+                    },
+                    "minLeaseMonths": {
+                      "anyOf": [
+                        {
+                          "bsonType": [
+                            "int",
+                            "long",
+                            "double"
+                          ],
+                          "multipleOf": 1,
+                          "minimum": 1,
+                          "maximum": 120
+                        },
+                        {
+                          "bsonType": "null"
+                        }
+                      ]
+                    },
+                    "serviceChargeKes": {
+                      "anyOf": [
+                        {
+                          "bsonType": [
+                            "int",
+                            "long",
+                            "double"
+                          ],
+                          "multipleOf": 1,
+                          "minimum": 0,
+                          "maximum": 100000000
+                        },
+                        {
+                          "bsonType": "null"
+                        }
+                      ]
+                    },
+                    "utilitiesIncluded": {
+                      "bsonType": "array",
+                      "items": {
+                        "bsonType": "string",
+                        "enum": [
+                          "water",
+                          "electricity",
+                          "internet",
+                          "garbage",
+                          "security"
+                        ]
+                      },
+                      "maxItems": 5
+                    },
+                    "availableFrom": {
+                      "anyOf": [
+                        {
+                          "bsonType": "date"
+                        },
+                        {
+                          "bsonType": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "depositMonths",
+                    "minLeaseMonths",
+                    "serviceChargeKes",
+                    "utilitiesIncluded",
+                    "availableFrom"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "shortStay": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "maxGuests": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 50
+                    },
+                    "minNights": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 365
+                    },
+                    "checkInTime": {
+                      "anyOf": [
+                        {
+                          "bsonType": "string",
+                          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                        },
+                        {
+                          "bsonType": "null"
+                        }
+                      ]
+                    },
+                    "checkOutTime": {
+                      "anyOf": [
+                        {
+                          "bsonType": "string",
+                          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                        },
+                        {
+                          "bsonType": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "maxGuests",
+                    "minNights",
+                    "checkInTime",
+                    "checkOutTime"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "sale": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "paymentPlans": {
+                      "bsonType": "array",
+                      "items": {
+                        "bsonType": "string",
+                        "enum": [
+                          "cash",
+                          "mortgage",
+                          "installments"
+                        ]
+                      },
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "paymentPlans"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "features": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "enum": [
+                  "gated_community",
+                  "security_24h",
+                  "cctv",
+                  "electric_fence",
+                  "alarm_system",
+                  "perimeter_wall",
+                  "intercom",
+                  "borehole",
+                  "piped_water",
+                  "water_tank",
+                  "backup_generator",
+                  "solar_power",
+                  "solar_water_heating",
+                  "fibre_internet",
+                  "prepaid_electricity",
+                  "sewer_connection",
+                  "fitted_kitchen",
+                  "built_in_wardrobes",
+                  "en_suite",
+                  "dsq",
+                  "study_room",
+                  "walk_in_closet",
+                  "balcony",
+                  "fireplace",
+                  "air_conditioning",
+                  "laundry_room",
+                  "pantry",
+                  "wooden_floors",
+                  "garden",
+                  "swimming_pool",
+                  "terrace",
+                  "bbq_area",
+                  "children_play_area",
+                  "parking",
+                  "visitor_parking",
+                  "lift",
+                  "tarmac_road",
+                  "wheelchair_accessible",
+                  "pet_friendly",
+                  "gym",
+                  "clubhouse",
+                  "sauna_steam",
+                  "sports_courts",
+                  "loading_bay",
+                  "three_phase_power",
+                  "reception_area",
+                  "conference_room",
+                  "fire_safety",
+                  "road_frontage",
+                  "fenced",
+                  "electricity_nearby",
+                  "water_on_site",
+                  "serviced_plot",
+                  "flat_terrain",
+                  "ready_for_development"
+                ]
+              },
+              "maxItems": 40
+            },
+            "customFeatures": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "maxItems": 10
+            },
+            "nearby": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "category": {
+                    "bsonType": "string",
+                    "enum": [
+                      "school",
+                      "hospital",
+                      "shopping",
+                      "transport",
+                      "food",
+                      "worship",
+                      "recreation",
+                      "other"
+                    ]
+                  },
+                  "name": {
+                    "bsonType": "string",
+                    "minLength": 2,
+                    "maxLength": 80
+                  },
+                  "distanceM": {
+                    "anyOf": [
+                      {
+                        "bsonType": [
+                          "int",
+                          "long",
+                          "double"
+                        ],
+                        "multipleOf": 1,
+                        "minimum": 10,
+                        "maximum": 50000
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "category",
+                  "name",
+                  "distanceM"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 24
+            },
+            "images": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "id": {
+                    "bsonType": "string",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 500,
+                    "pattern": "^https:\\/\\/"
+                  },
+                  "thumbUrl": {
+                    "anyOf": [
+                      {
+                        "bsonType": "string",
+                        "maxLength": 500,
+                        "pattern": "^https:\\/\\/"
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  },
+                  "width": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1
+                  },
+                  "height": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1
+                  },
+                  "bytes": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1,
+                    "maximum": 10485760
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 150
+                  },
+                  "caption": {
+                    "anyOf": [
+                      {
+                        "bsonType": "string",
+                        "maxLength": 150
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  },
+                  "order": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "id",
+                  "url",
+                  "thumbUrl",
+                  "width",
+                  "height",
+                  "bytes",
+                  "alt",
+                  "caption",
+                  "order"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 30
+            },
+            "floorPlans": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "id": {
+                    "bsonType": "string",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 500,
+                    "pattern": "^https:\\/\\/"
+                  },
+                  "thumbUrl": {
+                    "anyOf": [
+                      {
+                        "bsonType": "string",
+                        "maxLength": 500,
+                        "pattern": "^https:\\/\\/"
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  },
+                  "width": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1
+                  },
+                  "height": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1
+                  },
+                  "bytes": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1,
+                    "maximum": 10485760
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 150
+                  },
+                  "caption": {
+                    "anyOf": [
+                      {
+                        "bsonType": "string",
+                        "maxLength": 150
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  },
+                  "order": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "id",
+                  "url",
+                  "thumbUrl",
+                  "width",
+                  "height",
+                  "bytes",
+                  "alt",
+                  "caption",
+                  "order"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 5
+            },
+            "videoUrl": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500,
+                  "pattern": "^https:\\/\\/"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "virtualTourUrl": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500,
+                  "pattern": "^https:\\/\\/"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "contactPhone": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "pattern": "^\\+254(?:[17]\\d{8}|(?:20|4\\d|5\\d|6\\d)\\d{6,7})$"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "draft",
+                "pending_review",
+                "published",
+                "paused",
+                "frozen",
+                "expired",
+                "rejected",
+                "closed"
+              ]
+            },
+            "closedReason": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "enum": [
+                    "sold",
+                    "let",
+                    "withdrawn"
+                  ]
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "frozen": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "reason": {
+                      "bsonType": "string",
+                      "enum": [
+                        "owner",
+                        "over_limit"
+                      ]
+                    },
+                    "at": {
+                      "bsonType": "date"
+                    }
+                  },
+                  "required": [
+                    "reason",
+                    "at"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "moderation": {
+              "bsonType": "object",
+              "properties": {
+                "reviewedBy": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "reviewedAt": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "rejectionReason": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "reviewedBy",
+                "reviewedAt",
+                "rejectionReason"
+              ],
+              "additionalProperties": false
+            },
+            "verified": {
+              "bsonType": "object",
+              "properties": {
+                "isVerified": {
+                  "bsonType": "bool"
+                },
+                "verifiedAt": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "isVerified",
+                "verifiedAt"
+              ],
+              "additionalProperties": false
+            },
+            "promotion": {
+              "bsonType": "object",
+              "properties": {
+                "tier": {
+                  "bsonType": "string",
+                  "enum": [
+                    "none",
+                    "boost",
+                    "premium"
+                  ]
+                },
+                "until": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "boostUntil": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "boostPaymentId": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "premiumUntil": {
+                  "anyOf": [
+                    {
+                      "bsonType": "date"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "packageId": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "packagePaymentId": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "tier",
+                "until"
+              ],
+              "additionalProperties": false
+            },
+            "stats": {
+              "bsonType": "object",
+              "properties": {
+                "views": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "saves": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "enquiries": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "phoneReveals": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "whatsappClicks": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "shares": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "views",
+                "saves",
+                "enquiries",
+                "phoneReveals",
+                "whatsappClicks",
+                "shares"
+              ],
+              "additionalProperties": false
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "publishedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "expiresAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "lastConfirmedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "slug",
+            "referenceCode",
+            "agencyId",
+            "createdBy",
+            "agentId",
+            "externalRef",
+            "source",
+            "listingType",
+            "category",
+            "propertyType",
+            "title",
+            "description",
+            "highlights",
+            "price",
+            "priceHistory",
+            "location",
+            "details",
+            "legal",
+            "rental",
+            "shortStay",
+            "sale",
+            "features",
+            "customFeatures",
+            "images",
+            "floorPlans",
+            "videoUrl",
+            "virtualTourUrl",
+            "contactPhone",
+            "status",
+            "closedReason",
+            "moderation",
+            "verified",
+            "promotion",
+            "stats",
+            "createdAt",
+            "updatedAt",
+            "publishedAt",
+            "expiresAt",
+            "lastConfirmedAt"
+          ],
+          "additionalProperties": false
+        },
+        "$or": [
+          {
+            "status": "draft"
+          },
+          {
+            "images.0": {
+              "$exists": true
+            },
+            "price.amount": {
+              "$gt": 0
+            },
+            "location.countyCode": {
+              "$type": "number"
+            }
+          }
+        ]
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "property_slug",
+          "key": {
+            "slug": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "property_reference",
+          "key": {
+            "referenceCode": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "source_dedupe",
+          "key": {
+            "source.kind": 1,
+            "source.externalId": 1
+          },
+          "unique": true,
+          "partialFilterExpression": {
+            "source.externalId": {
+              "$type": "string"
+            }
+          }
+        },
+        {
+          "name": "agency_listings",
+          "key": {
+            "agencyId": 1,
+            "status": 1,
+            "updatedAt": -1
+          }
+        },
+        {
+          "name": "agent_listings",
+          "key": {
+            "agentId": 1,
+            "status": 1,
+            "updatedAt": -1
+          }
+        },
+        {
+          "name": "search_county",
+          "key": {
+            "status": 1,
+            "listingType": 1,
+            "category": 1,
+            "location.countyCode": 1,
+            "price.amountKes": 1
+          }
+        },
+        {
+          "name": "search_type",
+          "key": {
+            "status": 1,
+            "listingType": 1,
+            "propertyType": 1,
+            "location.countyCode": 1,
+            "publishedAt": -1
+          }
+        },
+        {
+          "name": "search_area",
+          "key": {
+            "status": 1,
+            "location.countySlug": 1,
+            "location.areaSlug": 1,
+            "listingType": 1,
+            "publishedAt": -1
+          }
+        },
+        {
+          "name": "newest",
+          "key": {
+            "status": 1,
+            "publishedAt": -1
+          }
+        },
+        {
+          "name": "promoted",
+          "key": {
+            "status": 1,
+            "promotion.tier": 1,
+            "promotion.until": 1,
+            "publishedAt": -1
+          }
+        },
+        {
+          "name": "promo_ends",
+          "key": {
+            "promotion.until": 1
+          },
+          "partialFilterExpression": {
+            "promotion.until": {
+              "$type": "date"
+            }
+          }
+        },
+        {
+          "name": "geo",
+          "key": {
+            "location.point": "2dsphere"
+          }
+        },
+        {
+          "name": "recently_changed",
+          "key": {
+            "status": 1,
+            "updatedAt": -1
+          }
+        },
+        {
+          "name": "listing_text",
+          "key": {
+            "title": "text",
+            "location.areaName": "text",
+            "description": "text"
+          },
+          "weights": {
+            "title": 10,
+            "location.areaName": 5,
+            "description": 1
+          },
+          "default_language": "none"
+        },
+        {
+          "name": "expiry_sweep",
+          "key": {
+            "status": 1,
+            "expiresAt": 1
+          }
+        },
+        {
+          "name": "moderation_queue",
+          "key": {
+            "status": 1,
+            "updatedAt": 1
+          }
+        }
+      ]
+    },
+    "developments": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "slug": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "createdBy": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "name": {
+              "bsonType": "string",
+              "minLength": 3,
+              "maxLength": 100
+            },
+            "description": {
+              "bsonType": "string",
+              "maxLength": 5000
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "planning",
+                "off_plan",
+                "under_construction",
+                "completed"
+              ]
+            },
+            "publishStatus": {
+              "bsonType": "string",
+              "enum": [
+                "draft",
+                "published",
+                "paused"
+              ]
+            },
+            "location": {
+              "bsonType": "object",
+              "properties": {
+                "countyCode": {
+                  "anyOf": [
+                    {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 1,
+                      "maximum": 47
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "county": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "countySlug": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 120,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "subCounty": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 60
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "areaName": {
+                  "bsonType": "string",
+                  "maxLength": 80
+                },
+                "areaSlug": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 120,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "address": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "landmark": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 120
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "point": {
+                  "bsonType": "object",
+                  "properties": {
+                    "type": {
+                      "bsonType": "string",
+                      "enum": [
+                        "Point"
+                      ]
+                    },
+                    "coordinates": {
+                      "bsonType": "array",
+                      "items": {
+                        "bsonType": [
+                          "double",
+                          "int",
+                          "long",
+                          "decimal"
+                        ]
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "additionalProperties": false
+                },
+                "hideExactLocation": {
+                  "bsonType": "bool"
+                }
+              },
+              "required": [
+                "countyCode",
+                "county",
+                "countySlug",
+                "subCounty",
+                "areaName",
+                "areaSlug",
+                "address",
+                "landmark",
+                "hideExactLocation"
+              ],
+              "additionalProperties": false
+            },
+            "completionDate": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "priceFrom": {
+              "anyOf": [
+                {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "priceTo": {
+              "anyOf": [
+                {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "currency": {
+              "bsonType": "string",
+              "enum": [
+                "KES",
+                "USD"
+              ]
+            },
+            "unitTypes": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "label": {
+                    "bsonType": "string",
+                    "minLength": 1,
+                    "maxLength": 60
+                  },
+                  "propertyType": {
+                    "bsonType": "string",
+                    "enum": [
+                      "apartment",
+                      "house",
+                      "maisonette",
+                      "bungalow",
+                      "townhouse",
+                      "villa",
+                      "mansion",
+                      "penthouse",
+                      "cottage",
+                      "bedsitter",
+                      "studio",
+                      "serviced_apartment",
+                      "student_hostel",
+                      "apartment_block",
+                      "office",
+                      "shop",
+                      "warehouse",
+                      "commercial_building",
+                      "industrial",
+                      "hotel_lodge",
+                      "other_commercial",
+                      "residential_plot",
+                      "commercial_plot",
+                      "agricultural_land",
+                      "farm_ranch",
+                      "industrial_land",
+                      "other_land"
+                    ]
+                  },
+                  "bedrooms": {
+                    "anyOf": [
+                      {
+                        "bsonType": [
+                          "int",
+                          "long",
+                          "double"
+                        ],
+                        "multipleOf": 1,
+                        "minimum": 0,
+                        "maximum": 30
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  },
+                  "priceFrom": {
+                    "anyOf": [
+                      {
+                        "bsonType": [
+                          "int",
+                          "long",
+                          "double"
+                        ],
+                        "multipleOf": 1,
+                        "minimum": 1
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  },
+                  "unitsAvailable": {
+                    "anyOf": [
+                      {
+                        "bsonType": [
+                          "int",
+                          "long",
+                          "double"
+                        ],
+                        "multipleOf": 1,
+                        "minimum": 0
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "label",
+                  "propertyType",
+                  "bedrooms",
+                  "priceFrom",
+                  "unitsAvailable"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 20
+            },
+            "features": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "enum": [
+                  "gated_community",
+                  "security_24h",
+                  "cctv",
+                  "electric_fence",
+                  "alarm_system",
+                  "perimeter_wall",
+                  "intercom",
+                  "borehole",
+                  "piped_water",
+                  "water_tank",
+                  "backup_generator",
+                  "solar_power",
+                  "solar_water_heating",
+                  "fibre_internet",
+                  "prepaid_electricity",
+                  "sewer_connection",
+                  "fitted_kitchen",
+                  "built_in_wardrobes",
+                  "en_suite",
+                  "dsq",
+                  "study_room",
+                  "walk_in_closet",
+                  "balcony",
+                  "fireplace",
+                  "air_conditioning",
+                  "laundry_room",
+                  "pantry",
+                  "wooden_floors",
+                  "garden",
+                  "swimming_pool",
+                  "terrace",
+                  "bbq_area",
+                  "children_play_area",
+                  "parking",
+                  "visitor_parking",
+                  "lift",
+                  "tarmac_road",
+                  "wheelchair_accessible",
+                  "pet_friendly",
+                  "gym",
+                  "clubhouse",
+                  "sauna_steam",
+                  "sports_courts",
+                  "loading_bay",
+                  "three_phase_power",
+                  "reception_area",
+                  "conference_room",
+                  "fire_safety",
+                  "road_frontage",
+                  "fenced",
+                  "electricity_nearby",
+                  "water_on_site",
+                  "serviced_plot",
+                  "flat_terrain",
+                  "ready_for_development"
+                ]
+              },
+              "maxItems": 40
+            },
+            "images": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "id": {
+                    "bsonType": "string",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 500,
+                    "pattern": "^https:\\/\\/"
+                  },
+                  "thumbUrl": {
+                    "anyOf": [
+                      {
+                        "bsonType": "string",
+                        "maxLength": 500,
+                        "pattern": "^https:\\/\\/"
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  },
+                  "width": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1
+                  },
+                  "height": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1
+                  },
+                  "bytes": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1,
+                    "maximum": 10485760
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 150
+                  },
+                  "caption": {
+                    "anyOf": [
+                      {
+                        "bsonType": "string",
+                        "maxLength": 150
+                      },
+                      {
+                        "bsonType": "null"
+                      }
+                    ]
+                  },
+                  "order": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "id",
+                  "url",
+                  "thumbUrl",
+                  "width",
+                  "height",
+                  "bytes",
+                  "alt",
+                  "caption",
+                  "order"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 20
+            },
+            "brochureUrl": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500,
+                  "pattern": "^https:\\/\\/"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "videoUrl": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500,
+                  "pattern": "^https:\\/\\/"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "stats": {
+              "bsonType": "object",
+              "properties": {
+                "views": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "enquiries": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "views",
+                "enquiries"
+              ],
+              "additionalProperties": false
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "publishedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "slug",
+            "agencyId",
+            "createdBy",
+            "name",
+            "description",
+            "status",
+            "publishStatus",
+            "location",
+            "completionDate",
+            "priceFrom",
+            "priceTo",
+            "currency",
+            "unitTypes",
+            "features",
+            "images",
+            "brochureUrl",
+            "videoUrl",
+            "stats",
+            "createdAt",
+            "updatedAt",
+            "publishedAt"
+          ],
+          "additionalProperties": false
+        },
+        "$or": [
+          {
+            "publishStatus": {
+              "$ne": "published"
+            }
+          },
+          {
+            "images.0": {
+              "$exists": true
+            }
+          }
+        ]
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "development_slug",
+          "key": {
+            "slug": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "agency_developments",
+          "key": {
+            "agencyId": 1,
+            "publishStatus": 1,
+            "updatedAt": -1
+          }
+        },
+        {
+          "name": "public_developments",
+          "key": {
+            "publishStatus": 1,
+            "location.countyCode": 1,
+            "publishedAt": -1
+          }
+        },
+        {
+          "name": "development_geo",
+          "key": {
+            "location.point": "2dsphere"
+          }
+        }
+      ]
+    },
+    "areas": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "countyCode": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1,
+              "maximum": 47
+            },
+            "countySlug": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "name": {
+              "bsonType": "string",
+              "minLength": 2,
+              "maxLength": 80
+            },
+            "slug": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "point": {
+              "bsonType": "object",
+              "properties": {
+                "type": {
+                  "bsonType": "string",
+                  "enum": [
+                    "Point"
+                  ]
+                },
+                "coordinates": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": [
+                      "double",
+                      "int",
+                      "long",
+                      "decimal"
+                    ]
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              "required": [
+                "type",
+                "coordinates"
+              ],
+              "additionalProperties": false
+            },
+            "createdAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "countyCode",
+            "countySlug",
+            "name",
+            "slug",
+            "createdAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "area_in_county",
+          "key": {
+            "countyCode": 1,
+            "slug": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "area_slug",
+          "key": {
+            "slug": 1
+          }
+        }
+      ]
+    },
+    "enquiries": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "propertyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "propertyRef": {
+              "bsonType": "string",
+              "pattern": "^HD-[2-9A-HJKMNP-Z]{6}$"
+            },
+            "propertyTitle": {
+              "bsonType": "string",
+              "maxLength": 100
+            },
+            "agentId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "userId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "name": {
+              "bsonType": "string",
+              "minLength": 2,
+              "maxLength": 80
+            },
+            "emailEnc": {
+              "bsonType": "string",
+              "minLength": 1
+            },
+            "phoneEnc": {
+              "bsonType": [
+                "string",
+                "null"
+              ]
+            },
+            "message": {
+              "bsonType": "string",
+              "minLength": 10,
+              "maxLength": 1000
+            },
+            "channel": {
+              "bsonType": "string",
+              "enum": [
+                "form",
+                "phone",
+                "whatsapp"
+              ]
+            },
+            "preferredViewingAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "consent": {
+              "bsonType": "bool",
+              "enum": [
+                true
+              ]
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "new",
+                "contacted",
+                "viewing_scheduled",
+                "won",
+                "lost",
+                "spam"
+              ]
+            },
+            "assignedTo": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "notes": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "id": {
+                    "bsonType": "string",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "authorId": {
+                    "bsonType": "string",
+                    "minLength": 1,
+                    "maxLength": 64
+                  },
+                  "text": {
+                    "bsonType": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  },
+                  "createdAt": {
+                    "bsonType": "date"
+                  }
+                },
+                "required": [
+                  "id",
+                  "authorId",
+                  "text",
+                  "createdAt"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 20
+            },
+            "firstResponseAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "ipHash": {
+              "bsonType": [
+                "string",
+                "null"
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "propertyId",
+            "agencyId",
+            "propertyRef",
+            "propertyTitle",
+            "agentId",
+            "userId",
+            "name",
+            "emailEnc",
+            "phoneEnc",
+            "message",
+            "channel",
+            "preferredViewingAt",
+            "consent",
+            "status",
+            "assignedTo",
+            "notes",
+            "firstResponseAt",
+            "ipHash",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "agency_leads",
+          "key": {
+            "agencyId": 1,
+            "status": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "property_leads",
+          "key": {
+            "propertyId": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "agent_leads",
+          "key": {
+            "agentId": 1,
+            "status": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "my_enquiries",
+          "key": {
+            "userId": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "enquiry_rate_limit",
+          "key": {
+            "ipHash": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "enquiry_retention",
+          "key": {
+            "createdAt": 1
+          },
+          "expireAfterSeconds": 63072000
+        }
+      ]
+    },
+    "enquiryMessages": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "enquiryId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "senderRole": {
+              "bsonType": "string",
+              "enum": [
+                "agent",
+                "enquirer"
+              ]
+            },
+            "senderUserId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "body": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 1500
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "readAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "enquiryId",
+            "agencyId",
+            "senderRole",
+            "senderUserId",
+            "body",
+            "createdAt",
+            "readAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "thread",
+          "key": {
+            "enquiryId": 1,
+            "createdAt": 1
+          }
+        },
+        {
+          "name": "sender_rate",
+          "key": {
+            "senderUserId": 1,
+            "createdAt": -1
+          }
+        }
+      ]
+    },
+    "errorEvents": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "fingerprint": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 20
+            },
+            "source": {
+              "bsonType": "string",
+              "enum": [
+                "server",
+                "browser"
+              ]
+            },
+            "message": {
+              "bsonType": "string",
+              "maxLength": 300
+            },
+            "stack": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 2000
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "count": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1
+            },
+            "firstSeen": {
+              "bsonType": "date"
+            },
+            "lastSeen": {
+              "bsonType": "date"
+            },
+            "lastPath": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "lastAlertAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "resolved": {
+              "bsonType": "bool"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "fingerprint",
+            "source",
+            "message",
+            "stack",
+            "count",
+            "firstSeen",
+            "lastSeen",
+            "lastAlertAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "by_fingerprint",
+          "key": {
+            "fingerprint": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "recent",
+          "key": {
+            "lastSeen": -1
+          }
+        },
+        {
+          "name": "error_retention",
+          "key": {
+            "lastSeen": 1
+          },
+          "expireAfterSeconds": 5184000
+        }
+      ]
+    },
+    "feedback": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "kind": {
+              "bsonType": "string",
+              "enum": [
+                "like",
+                "idea",
+                "confusing",
+                "bug",
+                "down",
+                "other"
+              ]
+            },
+            "rating": {
+              "anyOf": [
+                {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "message": {
+              "bsonType": "string",
+              "minLength": 3,
+              "maxLength": 2000
+            },
+            "page": {
+              "bsonType": "string",
+              "maxLength": 300
+            },
+            "device": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "viewport": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 20
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "userId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "name": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 80
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "email": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "contactOk": {
+              "bsonType": "bool"
+            },
+            "ipHash": {
+              "bsonType": "string",
+              "maxLength": 80
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "new",
+                "seen",
+                "resolved"
+              ]
+            },
+            "adminNote": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 1000
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "kind",
+            "rating",
+            "message",
+            "page",
+            "device",
+            "viewport",
+            "userId",
+            "name",
+            "email",
+            "contactOk",
+            "ipHash",
+            "status",
+            "adminNote",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "by_status_time",
+          "key": {
+            "status": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "by_kind_time",
+          "key": {
+            "kind": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "by_ip_time",
+          "key": {
+            "ipHash": 1,
+            "createdAt": -1
+          }
+        }
+      ]
+    },
+    "tourProgress": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "tour": {
+              "bsonType": "string",
+              "pattern": "^[a-z-]{2,30}$"
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "new",
+                "running",
+                "paused",
+                "snoozed",
+                "dismissed",
+                "done"
+              ]
+            },
+            "step": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0,
+              "maximum": 50
+            },
+            "until": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "snoozes": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0,
+              "maximum": 10
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "userId",
+            "tour",
+            "status",
+            "step",
+            "until",
+            "snoozes",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "person_tour",
+          "key": {
+            "userId": 1,
+            "tour": 1
+          },
+          "unique": true
+        }
+      ]
+    },
+    "searchTerms": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "day": {
+              "bsonType": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "term": {
+              "bsonType": "string",
+              "minLength": 2,
+              "maxLength": 60
+            },
+            "searches": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "zero": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "closeMatch": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "day",
+            "term",
+            "searches",
+            "zero",
+            "closeMatch",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "by_day",
+          "key": {
+            "day": -1,
+            "searches": -1
+          }
+        },
+        {
+          "name": "by_day_zero",
+          "key": {
+            "day": -1,
+            "zero": -1
+          }
+        },
+        {
+          "name": "term_retention",
+          "key": {
+            "updatedAt": 1
+          },
+          "expireAfterSeconds": 10368000
+        }
+      ]
+    },
+    "aiUsage": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "tier": {
+              "bsonType": "string",
+              "enum": [
+                "guest",
+                "user",
+                "agency",
+                "premium"
+              ]
+            },
+            "windowStart": {
+              "bsonType": "date"
+            },
+            "count": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "expiresAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "tier",
+            "windowStart",
+            "count",
+            "expiresAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "usage_retention",
+          "key": {
+            "expiresAt": 1
+          },
+          "expireAfterSeconds": 0
+        }
+      ]
+    },
+    "savedProperties": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "propertyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "priceAtSave": {
+              "anyOf": [
+                {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "userId",
+            "propertyId",
+            "priceAtSave",
+            "createdAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "one_save",
+          "key": {
+            "userId": 1,
+            "propertyId": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "my_saved",
+          "key": {
+            "userId": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "saves_of_property",
+          "key": {
+            "propertyId": 1
+          }
+        }
+      ]
+    },
+    "savedSearches": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "name": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 60
+            },
+            "criteria": {
+              "bsonType": "object",
+              "properties": {
+                "q": {
+                  "bsonType": "string",
+                  "maxLength": 100
+                },
+                "listingType": {
+                  "bsonType": "string",
+                  "enum": [
+                    "sale",
+                    "rent",
+                    "short_stay"
+                  ]
+                },
+                "category": {
+                  "bsonType": "string",
+                  "enum": [
+                    "residential",
+                    "commercial",
+                    "land"
+                  ]
+                },
+                "propertyTypes": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "string",
+                    "enum": [
+                      "apartment",
+                      "house",
+                      "maisonette",
+                      "bungalow",
+                      "townhouse",
+                      "villa",
+                      "mansion",
+                      "penthouse",
+                      "cottage",
+                      "bedsitter",
+                      "studio",
+                      "serviced_apartment",
+                      "student_hostel",
+                      "apartment_block",
+                      "office",
+                      "shop",
+                      "warehouse",
+                      "commercial_building",
+                      "industrial",
+                      "hotel_lodge",
+                      "other_commercial",
+                      "residential_plot",
+                      "commercial_plot",
+                      "agricultural_land",
+                      "farm_ranch",
+                      "industrial_land",
+                      "other_land"
+                    ]
+                  },
+                  "maxItems": 10
+                },
+                "countyCodes": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double"
+                    ],
+                    "multipleOf": 1,
+                    "minimum": 1,
+                    "maximum": 47
+                  },
+                  "maxItems": 10
+                },
+                "areaSlugs": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  },
+                  "maxItems": 10
+                },
+                "priceMin": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "priceMax": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0
+                },
+                "bedroomsMin": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0,
+                  "maximum": 30
+                },
+                "bathroomsMin": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 0,
+                  "maximum": 30
+                },
+                "areaSqmMin": {
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long",
+                    "decimal"
+                  ],
+                  "minimum": 0
+                },
+                "areaSqmMax": {
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long",
+                    "decimal"
+                  ],
+                  "minimum": 0
+                },
+                "features": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "string",
+                    "enum": [
+                      "gated_community",
+                      "security_24h",
+                      "cctv",
+                      "electric_fence",
+                      "alarm_system",
+                      "perimeter_wall",
+                      "intercom",
+                      "borehole",
+                      "piped_water",
+                      "water_tank",
+                      "backup_generator",
+                      "solar_power",
+                      "solar_water_heating",
+                      "fibre_internet",
+                      "prepaid_electricity",
+                      "sewer_connection",
+                      "fitted_kitchen",
+                      "built_in_wardrobes",
+                      "en_suite",
+                      "dsq",
+                      "study_room",
+                      "walk_in_closet",
+                      "balcony",
+                      "fireplace",
+                      "air_conditioning",
+                      "laundry_room",
+                      "pantry",
+                      "wooden_floors",
+                      "garden",
+                      "swimming_pool",
+                      "terrace",
+                      "bbq_area",
+                      "children_play_area",
+                      "parking",
+                      "visitor_parking",
+                      "lift",
+                      "tarmac_road",
+                      "wheelchair_accessible",
+                      "pet_friendly",
+                      "gym",
+                      "clubhouse",
+                      "sauna_steam",
+                      "sports_courts",
+                      "loading_bay",
+                      "three_phase_power",
+                      "reception_area",
+                      "conference_room",
+                      "fire_safety",
+                      "road_frontage",
+                      "fenced",
+                      "electricity_nearby",
+                      "water_on_site",
+                      "serviced_plot",
+                      "flat_terrain",
+                      "ready_for_development"
+                    ]
+                  },
+                  "maxItems": 10
+                },
+                "furnishing": {
+                  "bsonType": "string",
+                  "enum": [
+                    "unfurnished",
+                    "semi_furnished",
+                    "furnished"
+                  ]
+                },
+                "verifiedOnly": {
+                  "bsonType": "bool"
+                },
+                "conditions": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "string",
+                    "enum": [
+                      "new",
+                      "good",
+                      "needs_renovation",
+                      "under_construction",
+                      "off_plan"
+                    ]
+                  },
+                  "maxItems": 5
+                },
+                "circle": {
+                  "bsonType": "object",
+                  "properties": {
+                    "lat": {
+                      "bsonType": [
+                        "double",
+                        "int",
+                        "long",
+                        "decimal"
+                      ],
+                      "minimum": -5,
+                      "maximum": 5.5
+                    },
+                    "lng": {
+                      "bsonType": [
+                        "double",
+                        "int",
+                        "long",
+                        "decimal"
+                      ],
+                      "minimum": 33.5,
+                      "maximum": 42
+                    },
+                    "radiusM": {
+                      "bsonType": [
+                        "int",
+                        "long",
+                        "double"
+                      ],
+                      "multipleOf": 1,
+                      "minimum": 500,
+                      "maximum": 100000
+                    }
+                  },
+                  "required": [
+                    "lat",
+                    "lng",
+                    "radiusM"
+                  ],
+                  "additionalProperties": false
+                },
+                "polygon": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "array",
+                    "items": {
+                      "bsonType": [
+                        "double",
+                        "int",
+                        "long",
+                        "decimal"
+                      ]
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "minItems": 3,
+                  "maxItems": 80
+                }
+              },
+              "additionalProperties": false
+            },
+            "frequency": {
+              "bsonType": "string",
+              "enum": [
+                "instant",
+                "daily",
+                "weekly",
+                "off"
+              ]
+            },
+            "lastNotifiedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "userId",
+            "name",
+            "criteria",
+            "frequency",
+            "lastNotifiedAt",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "my_searches",
+          "key": {
+            "userId": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "alert_queue",
+          "key": {
+            "frequency": 1,
+            "lastNotifiedAt": 1
+          }
+        }
+      ]
+    },
+    "notifications": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "kind": {
+              "bsonType": "string",
+              "enum": [
+                "invitation",
+                "enquiry",
+                "listing_decision",
+                "agency_decision",
+                "saved_search",
+                "price_drop",
+                "comment_reply",
+                "comment_on_listing",
+                "comment_like",
+                "listing_expiry",
+                "agency_review",
+                "promotion"
+              ]
+            },
+            "title": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "body": {
+              "bsonType": "string",
+              "maxLength": 300
+            },
+            "link": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 300
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "inviteId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "dedupeKey": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "readAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "userId",
+            "kind",
+            "title",
+            "body",
+            "link",
+            "inviteId",
+            "dedupeKey",
+            "readAt",
+            "createdAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "my_notifications",
+          "key": {
+            "userId": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "my_unread",
+          "key": {
+            "userId": 1,
+            "readAt": 1
+          }
+        },
+        {
+          "name": "no_repeats",
+          "key": {
+            "userId": 1,
+            "dedupeKey": 1
+          },
+          "unique": true,
+          "partialFilterExpression": {
+            "dedupeKey": {
+              "$type": "string"
+            }
+          }
+        },
+        {
+          "name": "notification_retention",
+          "key": {
+            "createdAt": 1
+          },
+          "expireAfterSeconds": 7776000
+        }
+      ]
+    },
+    "payments": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "kind": {
+              "bsonType": "string",
+              "enum": [
+                "boost",
+                "premium_package",
+                "space_pack"
+              ]
+            },
+            "propertyId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "tier": {
+              "bsonType": "string",
+              "enum": [
+                "boost",
+                "premium"
+              ]
+            },
+            "days": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1,
+              "maximum": 365
+            },
+            "amountKes": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1
+            },
+            "slots": {
+              "anyOf": [
+                {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 2000
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "packageId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "attachListingIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "maxItems": 2000
+            },
+            "renewedFrom": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "quote": {
+              "bsonType": "object",
+              "properties": {
+                "perDayKes": {
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long",
+                    "decimal"
+                  ]
+                },
+                "discountPct": {
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long",
+                    "decimal"
+                  ]
+                },
+                "fullKes": {
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long",
+                    "decimal"
+                  ]
+                },
+                "extraSlots": {
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long",
+                    "decimal"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "callbackSummary": {
+              "bsonType": "object",
+              "properties": {
+                "amount": {
+                  "bsonType": [
+                    "double",
+                    "int",
+                    "long",
+                    "decimal",
+                    "null"
+                  ]
+                },
+                "receipt": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                },
+                "transactionDate": {
+                  "anyOf": [
+                    {
+                      "bsonType": "string",
+                      "maxLength": 20
+                    },
+                    {
+                      "bsonType": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "amount",
+                "receipt",
+                "transactionDate"
+              ],
+              "additionalProperties": false
+            },
+            "provider": {
+              "bsonType": "string",
+              "enum": [
+                "mpesa",
+                "manual"
+              ]
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "pending",
+                "paid",
+                "failed",
+                "cancelled",
+                "expired",
+                "refunded"
+              ]
+            },
+            "phoneHint": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 12
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "checkoutRequestId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 100
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "merchantRequestId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 100
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "receipt": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 40
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "resultDesc": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 300
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "paidAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "refundedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "refundNote": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 300
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "refundedBy": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 80
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "propertyId",
+            "agencyId",
+            "userId",
+            "days",
+            "amountKes",
+            "provider",
+            "status",
+            "phoneHint",
+            "checkoutRequestId",
+            "merchantRequestId",
+            "receipt",
+            "resultDesc",
+            "createdAt",
+            "updatedAt",
+            "paidAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "by_checkout",
+          "key": {
+            "checkoutRequestId": 1
+          },
+          "unique": true,
+          "partialFilterExpression": {
+            "checkoutRequestId": {
+              "$type": "string"
+            }
+          }
+        },
+        {
+          "name": "by_agency",
+          "key": {
+            "agencyId": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "by_property",
+          "key": {
+            "propertyId": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "by_receipt",
+          "key": {
+            "receipt": 1
+          },
+          "unique": true,
+          "partialFilterExpression": {
+            "receipt": {
+              "$type": "string"
+            }
+          }
+        },
+        {
+          "name": "by_kind",
+          "key": {
+            "kind": 1,
+            "status": 1,
+            "createdAt": -1
+          }
+        }
+      ]
+    },
+    "premiumPackages": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "purchasedBy": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "paymentId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "slots": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1,
+              "maximum": 2000
+            },
+            "days": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1,
+              "maximum": 365
+            },
+            "priceKes": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "startsAt": {
+              "bsonType": "date"
+            },
+            "endsAt": {
+              "bsonType": "date"
+            },
+            "listingIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "maxItems": 2000
+            },
+            "renewedFrom": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "noticeSoonAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "noticeEndedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "agencyId",
+            "purchasedBy",
+            "paymentId",
+            "slots",
+            "days",
+            "priceKes",
+            "startsAt",
+            "endsAt",
+            "listingIds",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "by_agency",
+          "key": {
+            "agencyId": 1,
+            "endsAt": -1
+          }
+        },
+        {
+          "name": "ending",
+          "key": {
+            "endsAt": 1
+          }
+        },
+        {
+          "name": "by_listing",
+          "key": {
+            "listingIds": 1
+          }
+        }
+      ]
+    },
+    "spacePacks": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "purchasedBy": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "paymentId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "slots": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "days": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1,
+              "maximum": 365
+            },
+            "priceKes": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "startsAt": {
+              "bsonType": "date"
+            },
+            "endsAt": {
+              "bsonType": "date"
+            },
+            "noticeSoonAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "noticeEndedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "agencyId",
+            "purchasedBy",
+            "paymentId",
+            "slots",
+            "days",
+            "priceKes",
+            "startsAt",
+            "endsAt",
+            "createdAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "by_agency_end",
+          "key": {
+            "agencyId": 1,
+            "endsAt": -1
+          }
+        }
+      ]
+    },
+    "agencyReviews": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "username": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "rating": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 1,
+              "maximum": 5
+            },
+            "body": {
+              "bsonType": "string",
+              "minLength": 10,
+              "maxLength": 1500
+            },
+            "verifiedEnquirer": {
+              "bsonType": "bool"
+            },
+            "reply": {
+              "anyOf": [
+                {
+                  "bsonType": "object",
+                  "properties": {
+                    "body": {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 1500
+                    },
+                    "by": {
+                      "bsonType": "string",
+                      "minLength": 1,
+                      "maxLength": 64
+                    },
+                    "at": {
+                      "bsonType": "date"
+                    }
+                  },
+                  "required": [
+                    "body",
+                    "by",
+                    "at"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "reportedBy": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "maxItems": 50
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "visible",
+                "hidden"
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "agencyId",
+            "userId",
+            "username",
+            "rating",
+            "body",
+            "verifiedEnquirer",
+            "reply",
+            "reportedBy",
+            "status",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "one_per_user",
+          "key": {
+            "agencyId": 1,
+            "userId": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "by_agency",
+          "key": {
+            "agencyId": 1,
+            "status": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "reported",
+          "key": {
+            "status": 1,
+            "updatedAt": -1
+          },
+          "partialFilterExpression": {
+            "reportedBy.0": {
+              "$exists": true
+            }
+          }
+        }
+      ]
+    },
+    "propertyComments": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "propertyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "parentId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "textEnc": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 8000
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "editedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "deletedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "propertyId",
+            "userId",
+            "parentId",
+            "textEnc",
+            "createdAt",
+            "editedAt",
+            "deletedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "thread",
+          "key": {
+            "propertyId": 1,
+            "createdAt": 1
+          }
+        },
+        {
+          "name": "my_comments",
+          "key": {
+            "userId": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "latest",
+          "key": {
+            "createdAt": -1
+          }
+        }
+      ]
+    },
+    "propertyCommentLikes": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "commentId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "authorId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "createdAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "commentId",
+            "userId",
+            "authorId",
+            "createdAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "one_like",
+          "key": {
+            "userId": 1,
+            "commentId": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "likes_of_comment",
+          "key": {
+            "commentId": 1
+          }
+        },
+        {
+          "name": "likes_received",
+          "key": {
+            "authorId": 1
+          }
+        }
+      ]
+    },
+    "neighbourhoodReviews": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "areaKey": {
+              "bsonType": "string",
+              "maxLength": 150
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "ratings": {
+              "bsonType": "object",
+              "properties": {
+                "security": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "amenities": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "transport": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "quiet": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "utilities": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "family": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "value": {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 5
+                }
+              },
+              "additionalProperties": false
+            },
+            "relation": {
+              "bsonType": "string",
+              "enum": [
+                "live",
+                "lived",
+                "work",
+                "visit"
+              ]
+            },
+            "textEnc": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 8000
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "reportedBy": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "maxItems": 50
+            },
+            "hidden": {
+              "bsonType": "bool"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "areaKey",
+            "userId",
+            "ratings",
+            "relation",
+            "textEnc",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "one_per_person_per_area",
+          "key": {
+            "areaKey": 1,
+            "userId": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "by_user",
+          "key": {
+            "userId": 1,
+            "updatedAt": -1
+          }
+        }
+      ]
+    },
+    "neighbourhoodPosts": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "areaKey": {
+              "bsonType": "string",
+              "maxLength": 150
+            },
+            "userId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "parentId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "textEnc": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 8000
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "deletedAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "reportedBy": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "maxItems": 50
+            },
+            "hidden": {
+              "bsonType": "bool"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "areaKey",
+            "userId",
+            "parentId",
+            "textEnc",
+            "createdAt",
+            "deletedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "by_area_time",
+          "key": {
+            "areaKey": 1,
+            "createdAt": 1
+          }
+        },
+        {
+          "name": "by_user_time",
+          "key": {
+            "userId": 1,
+            "createdAt": -1
+          }
+        }
+      ]
+    },
+    "listingReports": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "propertyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "reporterUserId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "reporterIpHash": {
+              "bsonType": [
+                "string",
+                "null"
+              ]
+            },
+            "reason": {
+              "bsonType": "string",
+              "enum": [
+                "scam",
+                "not_available",
+                "wrong_price",
+                "wrong_details",
+                "misleading_photos",
+                "duplicate",
+                "offensive",
+                "other"
+              ]
+            },
+            "details": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "open",
+                "reviewing",
+                "actioned",
+                "dismissed"
+              ]
+            },
+            "handledBy": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "handledAt": {
+              "anyOf": [
+                {
+                  "bsonType": "date"
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "resolution": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "createdAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "propertyId",
+            "agencyId",
+            "reporterUserId",
+            "reporterIpHash",
+            "reason",
+            "details",
+            "status",
+            "handledBy",
+            "handledAt",
+            "resolution",
+            "createdAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "report_queue",
+          "key": {
+            "status": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "report_rate_limit",
+          "key": {
+            "reporterIpHash": 1,
+            "createdAt": -1
+          }
+        },
+        {
+          "name": "reports_of_property",
+          "key": {
+            "propertyId": 1,
+            "createdAt": -1
+          }
+        }
+      ]
+    },
+    "propertyEvents": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "propertyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "kind": {
+              "bsonType": "string",
+              "enum": [
+                "impression",
+                "view",
+                "save",
+                "unsave",
+                "enquiry",
+                "phone_reveal",
+                "whatsapp_click",
+                "share"
+              ]
+            },
+            "userId": {
+              "anyOf": [
+                {
+                  "bsonType": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "visitorHash": {
+              "bsonType": "string",
+              "minLength": 1
+            },
+            "ipHash": {
+              "bsonType": "string",
+              "minLength": 1
+            },
+            "listingType": {
+              "bsonType": "string",
+              "enum": [
+                "sale",
+                "rent",
+                "short_stay"
+              ]
+            },
+            "category": {
+              "bsonType": "string",
+              "enum": [
+                "residential",
+                "commercial",
+                "land"
+              ]
+            },
+            "countyCode": {
+              "anyOf": [
+                {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 47
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "source": {
+              "bsonType": "string",
+              "enum": [
+                "search",
+                "category",
+                "home",
+                "agency",
+                "direct",
+                "external",
+                "alert",
+                "other"
+              ]
+            },
+            "device": {
+              "bsonType": "string",
+              "enum": [
+                "mobile",
+                "tablet",
+                "desktop",
+                "unknown"
+              ]
+            },
+            "occurredAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "propertyId",
+            "agencyId",
+            "kind",
+            "userId",
+            "visitorHash",
+            "listingType",
+            "category",
+            "countyCode",
+            "source",
+            "device",
+            "occurredAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "events_of_property",
+          "key": {
+            "propertyId": 1,
+            "kind": 1,
+            "occurredAt": -1
+          }
+        },
+        {
+          "name": "events_of_agency",
+          "key": {
+            "agencyId": 1,
+            "occurredAt": -1
+          }
+        },
+        {
+          "name": "reveals_by_visitor",
+          "key": {
+            "visitorHash": 1,
+            "kind": 1,
+            "occurredAt": -1
+          }
+        },
+        {
+          "name": "reveals_by_network",
+          "key": {
+            "ipHash": 1,
+            "occurredAt": -1
+          },
+          "partialFilterExpression": {
+            "ipHash": {
+              "$type": "string"
+            }
+          }
+        },
+        {
+          "name": "event_retention",
+          "key": {
+            "occurredAt": 1
+          },
+          "expireAfterSeconds": 63072000
+        }
+      ]
+    },
+    "propertyDailyStats": {
+      "group": "property",
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": [
+                "objectId",
+                "string"
+              ]
+            },
+            "schemaVersion": {
+              "bsonType": [
+                "double",
+                "int",
+                "long",
+                "decimal"
+              ],
+              "enum": [
+                1
+              ]
+            },
+            "propertyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "agencyId": {
+              "bsonType": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "date": {
+              "bsonType": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "listingType": {
+              "bsonType": "string",
+              "enum": [
+                "sale",
+                "rent",
+                "short_stay"
+              ]
+            },
+            "category": {
+              "bsonType": "string",
+              "enum": [
+                "residential",
+                "commercial",
+                "land"
+              ]
+            },
+            "countyCode": {
+              "anyOf": [
+                {
+                  "bsonType": [
+                    "int",
+                    "long",
+                    "double"
+                  ],
+                  "multipleOf": 1,
+                  "minimum": 1,
+                  "maximum": 47
+                },
+                {
+                  "bsonType": "null"
+                }
+              ]
+            },
+            "impressions": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "views": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "uniqueViews": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "saves": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "enquiries": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "phoneReveals": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "whatsappClicks": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "shares": {
+              "bsonType": [
+                "int",
+                "long",
+                "double"
+              ],
+              "multipleOf": 1,
+              "minimum": 0
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "_id",
+            "schemaVersion",
+            "propertyId",
+            "agencyId",
+            "date",
+            "listingType",
+            "category",
+            "countyCode",
+            "impressions",
+            "views",
+            "uniqueViews",
+            "saves",
+            "enquiries",
+            "phoneReveals",
+            "whatsappClicks",
+            "shares",
+            "updatedAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "validationLevel": "strict",
+      "validationAction": "error",
+      "indexes": [
+        {
+          "name": "one_day_per_property",
+          "key": {
+            "propertyId": 1,
+            "date": 1
+          },
+          "unique": true
+        },
+        {
+          "name": "agency_by_day",
+          "key": {
+            "agencyId": 1,
+            "date": -1
+          }
+        },
+        {
+          "name": "market_by_day",
+          "key": {
+            "date": -1,
+            "countyCode": 1,
+            "listingType": 1
+          }
+        }
+      ]
+    }
+  }
+}

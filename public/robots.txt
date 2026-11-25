@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /search
+Disallow: /admin
+Disallow: /auth
+Disallow: /profile
+Disallow: /dashboard
+Disallow: /_serverFn
+Disallow: /api
+Disallow: /compare
+
+Sitemap: https://hodii.co.ke/sitemap.xml

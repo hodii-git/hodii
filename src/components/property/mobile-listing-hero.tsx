@@ -69,6 +69,10 @@ function useScrollFade() {
     window.addEventListener("scroll", on, { passive: true });
     return () => window.removeEventListener("scroll", on);
   }, []);
+  useEffect(() => {
+    document.documentElement.dataset["dock"] = shown ? "shown" : "hidden";
+    return () => { delete document.documentElement.dataset["dock"]; };
+  }, [shown]);
   return shown;
 }
 

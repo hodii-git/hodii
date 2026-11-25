@@ -154,7 +154,7 @@ function PropertyPage() {
             <Gallery mobileHero activeIndex={photoIdx} onIndexChange={setPhotoIdx} images={p.images} plans={p.floorPlans} title={p.title} actions={<ScrollFade className="flex items-center gap-1">
               <IconHint label="Compare"><CompareButton bare propertyId={p.id} /></IconHint>
               <IconHint label={isSaved ? "Saved" : "Save"}><span className="ld-heart grid size-8 place-items-center"><SaveButton propertyId={p.id} saved={isSaved} onChange={setIsSaved} /></span></IconHint>
-              <IconHint label="Share"><button type="button" data-tour="share" onClick={share} aria-label="Share" className="inline-flex size-8 items-center justify-center text-zinc-950 transition hover:scale-105"><Share2 className="h-[17px] w-5" preserveAspectRatio="none" strokeWidth={2.2} aria-hidden /></button></IconHint>
+              <IconHint label="Share"><button type="button" data-tour="share" onClick={share} aria-label="Share" className="hero-icon inline-flex size-8 items-center justify-center transition hover:scale-105"><Share2 className="h-[17px] w-5" preserveAspectRatio="none" strokeWidth={2.2} aria-hidden /></button></IconHint>
             </ScrollFade>} />
           </div>
           <MobileListingHeroBody p={p} isSaved={isSaved} onSavedChange={setIsSaved} shown={shownContact} busy={busyContact} onReveal={revealContact} shortcuts={mobileShortcuts} />

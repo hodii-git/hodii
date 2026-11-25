@@ -1539,9 +1539,42 @@ html[data-listing-dark="1"] { --page-wash: none !important; }
 html[data-listing-dark="1"] .app-shell,
 html[data-listing-dark="1"] .aurora { background-image: none !important; background: var(--ld-bg) !important; }
 html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] {
-  --foreground: #18181b; --muted-foreground: #52525b; --background: #f4f4f5; --card: #ffffff; --card-foreground: #18181b;
-  --primary: #18181b; --primary-foreground: #ffffff; --border: #e4e4e7; --secondary: #f7f7f7; --muted: #f7f7f7; --accent: #18181b; --accent-foreground: #ffffff;
-  --glass: #ffffff; --glass-strong: #ffffff; --surface: #f4f4f5; --header-circle: #f4f4f5;
-  color: #18181b; color-scheme: light;
+  --foreground: #f4f4f5; --muted-foreground: #a1a1aa; --background: #09090b; --card: #141416; --card-foreground: #f4f4f5;
+  --primary: #ffffff; --primary-foreground: #09090b; --border: rgb(255 255 255 / .14); --secondary: #1c1c1f; --muted: #1c1c1f; --accent: #26262a; --accent-foreground: #f4f4f5;
+  --glass: #141416; --glass-strong: #141416; --surface: #1c1c1f; --header-circle: #26262a; --header-circle-border: rgb(255 255 255 / .12); --header-hover: #2f2f34;
+  --ink: #f4f4f5;
+  color: #f4f4f5; color-scheme: dark;
 }
-html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .bg-primary { background-color: #18181b !important; background-image: none !important; color: #fff !important; }
+html[data-listing-dark="1"] .wb.wb-site header.glass-nav[data-tour="search"],
+html[data-listing-dark="1"] .wb.wb-site header.glass-nav[data-tour="search"].is-scrolled {
+  background: #141416 !important; backdrop-filter: none !important;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / .12), 0 14px 32px -16px rgb(0 0 0 / .85) !important;
+}
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link { color: #d4d4d8; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link:hover,
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link.is-current { color: #fff; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .logo { color: #fff; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark { background: var(--ld-theme) !important; color: #fff !important; }
+
+
+/* ---- Footer: four link groups in a 2 x 2 grid on every screen; the List button wears the theme colour (the active Home tab). ---- */
+.footer-group { background: color-mix(in oklab, var(--foreground) 4%, transparent); }
+.footer-list-btn { background: var(--ld-theme, #ff385c) !important; background-image: none !important; color: #fff !important; }
+.footer-list-btn:hover { background: #ff4d6d !important; }
+html[data-listing-dark="1"] .footer-group { background: rgb(255 255 255 / .04); }
+
+/* ---- Listing hero icons: white outline by default; Compare turns black (on a white chip so it reads on any photo) when picked. ---- */
+.ld-heart svg { stroke: #fff !important; fill: transparent; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .55)); }
+.ld-heart [aria-pressed="true"] svg { fill: #ff2d6f !important; stroke: #fff !important; }
+.hero-icon { color: #fff; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .55)); }
+.hero-icon[aria-pressed="true"] { color: #0a0a0a; background: #fff; filter: none; box-shadow: 0 1px 6px rgb(0 0 0 / .35); }
+
+/* ---- Compare strip follows the action dock: when the dock slides away, it drops down next to the feedback / guide row. ---- */
+@media (max-width: 767px) {
+  html[data-listing-dark="1"][data-dock="hidden"] .compare-tray { bottom: calc(var(--tab-h) + 0.6rem) !important; }
+}
+
+/* ---- Sidebar menu: breathing room at the top and bottom of the scrolling list itself. ---- */
+.wb.wb-site .site-menu-panel { overflow-y: auto; overscroll-behavior: contain; }
+html[data-listing-dark="1"] .wb.wb-site .site-menu-panel { padding-block: 1.25rem calc(2rem + env(safe-area-inset-bottom)) !important; border-block-width: 0 !important; overflow-y: auto; box-sizing: border-box; }
+html[data-listing-dark="1"] .wb.wb-site .site-menu-panel > :last-child { padding-bottom: .5rem; }

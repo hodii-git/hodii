@@ -23,7 +23,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto w-full border-t border-border bg-muted/60">
       <div className="w-full px-4 py-10 md:px-6 md:py-12 xl:px-8">
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[1.2fr_2.4fr]">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-14">
           <div>
             <Link to="/" className="flex items-center gap-2 text-2xl font-extrabold text-primary">
               <HodiiLogo size="h-8 w-8" />
@@ -36,15 +36,15 @@ export function SiteFooter() {
               <p className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {BRAND.address}</p>
               <a href={`mailto:${BRAND.emails.general}`} className="flex items-center gap-2 hover:text-foreground"><Mail className="h-4 w-4" /> {BRAND.emails.general}</a>
             </div>
-            <Button asChild variant="outline" className="mt-6 rounded-lg">
+            <Button asChild className="footer-list-btn mt-6 h-11 rounded-full border-0 px-6 text-base font-bold text-white shadow-none hover:opacity-90">
               <Link to="/list-property">List a property</Link>
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {footerSections.map((col) => (
-              <div key={col.heading}>
+              <div key={col.heading} className="footer-group rounded-2xl p-4 sm:p-5 lg:p-6">
                 <h2 className="text-sm font-bold">{col.heading}</h2>
-                <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
+                <ul className="mt-3 space-y-2.5 text-sm text-muted-foreground">
                   {col.links.map((link) => (
                     <li key={link}><FooterLink label={link} kind={col.kind} /></li>
                   ))}

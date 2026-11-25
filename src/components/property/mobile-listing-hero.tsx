@@ -7,7 +7,7 @@ import { Loader } from "@/components/loader";
 import { HodiiLogo } from "@/components/brand-logo";
 import { BRAND } from "@/lib/brand";
 import { IconHint } from "@/components/property/icon-hint";
-import { ListingFilterSheet } from "@/components/property/listing-filter-sheet";
+import { OPEN_LISTING_SEARCH } from "@/components/property/listing-search";
 import { BLUE_GRADIENT_H, PhoneGlyph, SendGlyph, WhatsAppGlyph } from "@/components/property/dock-icons";
 import { useAuth } from "@/hooks/use-auth";
 import { useCompare } from "@/lib/compare";
@@ -21,7 +21,6 @@ type Shortcut = { id: string; label: string };
 
 export function MobileListingTopBar({ p }: { p: PropertyDetail }) {
   const compareCount = useCompare().length;
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const dealLabel = listingTypeLabel(p.listingType);
   const typeLabel = propertyTypeLabel(p.propertyType);
   const thirdLabel = p.areaName || p.county || (p.category ? p.category[0]!.toUpperCase() + p.category.slice(1) : "Kenya");
@@ -31,9 +30,9 @@ export function MobileListingTopBar({ p }: { p: PropertyDetail }) {
 
   const pill = "ld-pill shrink-0 whitespace-nowrap";
   return (
-    <div className="ld-font sticky top-0 z-40 bg-black"><div className="mx-auto flex w-full max-w-[82rem] items-center px-1.5 py-3 md:px-4 md:py-3.5">
+    <div className="ld-font sticky top-0 z-40 bg-black lg:hidden"><div className="mx-auto flex w-full max-w-[82rem] items-center px-1.5 py-3 md:px-4 md:py-3.5">
       <Link to="/" aria-label={`${BRAND.name} home`} className="mr-3 hidden shrink-0 items-center gap-2.5 text-white md:flex"><HodiiLogo /><span className="font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span></Link>
-      <button type="button" aria-label="Filters" aria-haspopup="dialog" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(true)} style={{ color: "#ffffff" }} className="grid size-10 shrink-0 place-items-center active:scale-95">
+      <button type="button" aria-label="Filters" aria-haspopup="dialog" onClick={() => window.dispatchEvent(new Event(OPEN_LISTING_SEARCH))} style={{ color: "#ffffff" }} className="grid size-10 shrink-0 place-items-center active:scale-95">
         <svg viewBox="0 0 28 28" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden>
           <path d="M3 8h11M22 8h3M3 20h3M14 20h11" />
           <circle cx="18" cy="8" r="3.4" />
@@ -52,7 +51,6 @@ export function MobileListingTopBar({ p }: { p: PropertyDetail }) {
         <svg viewBox="0 0 24 24" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>
         {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-[var(--ld-pink)]" aria-hidden />}
       </button>
-      <ListingFilterSheet p={p} open={filtersOpen} onClose={() => setFiltersOpen(false)} />
     </div></div>
   );
 }
@@ -159,8 +157,8 @@ export function MobileListingHeroBody({
   return (
     <div className="ld-font">
       {/* Pulled up over the photo by exactly two title lines (2 x 1.42rem x 1.2), so the photo's fade ends where line 2 ends. */}
-      <div className="relative z-[2] -mt-[2.45rem] px-4 pb-3 md:-mt-[4.2rem] md:px-8 lg:max-w-[52rem]">
-        <div className="pointer-events-none flex min-h-[3.408rem] items-end md:min-h-[4.2rem]">
+      <div className="relative z-[2] -mt-[2.45rem] px-4 pb-3 md:-mt-[4.2rem] md:px-8 lg:mt-8 lg:max-w-[52rem]">
+        <div className="pointer-events-none flex min-h-[3.408rem] items-end md:min-h-[4.2rem] lg:min-h-0">
           <h1 className="line-clamp-2 text-[1.42rem] font-bold leading-[1.2] text-white md:text-[1.75rem] md:leading-[1.2]">{p.title}</h1>
         </div>
         {desc && <p className="mt-2 line-clamp-3 text-[1.03rem] md:mt-3 md:line-clamp-4 md:text-[1.1rem] font-normal leading-[1.38] text-[#c9c9cc]">{desc}</p>}
@@ -188,7 +186,7 @@ export function MobileListingHeroBody({
         )}
       </div>
 
-      <div className={`pointer-events-none fixed inset-x-0 z-[44] px-3.5 pb-3 pt-10 transition-[opacity,transform] duration-700 ease-in-out md:pointer-events-auto md:static md:z-auto md:px-8 md:pb-2 md:pt-4 md:!translate-y-0 md:!bg-none md:!opacity-100 ${dockShown ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`} style={{ bottom: "var(--tab-h, 58px)", background: "linear-gradient(to bottom, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.55) 38%, rgb(0 0 0 / 0.92) 72%, #000 100%)" }}>
+      <div className={`listing-dock pointer-events-none fixed inset-x-0 z-[44] px-3.5 pb-3 pt-10 transition-[opacity,transform] duration-700 ease-in-out md:pointer-events-auto md:static md:z-auto md:px-8 md:pb-2 md:pt-4 md:!translate-y-0 md:!bg-none md:!opacity-100 ${dockShown ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`} style={{ bottom: "var(--tab-h, 58px)", background: "linear-gradient(to bottom, rgb(0 0 0 / 0) 0%, rgb(0 0 0 / 0.55) 38%, rgb(0 0 0 / 0.92) 72%, #000 100%)" }}>
         <div className={`flex items-center justify-between md:pointer-events-auto md:max-w-[30rem] md:justify-start md:gap-7 ${dockShown ? "pointer-events-auto" : "pointer-events-none"}`}>
           <IconHint label="View location" side="top">
             <button type="button" onClick={handleLocation} aria-label="View location" className="ld-action-btn ld-action-sm">

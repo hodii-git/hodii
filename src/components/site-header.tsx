@@ -99,7 +99,7 @@ export function SiteHeader() {
 
   return (
     <div className="wb wb-site">
-      {!solid && <div aria-hidden="true" className={`nav-blur-zone ${isPropertyPage ? "hidden" : ""} ${on ? "is-scrolled" : ""}`} />}
+      {!solid && <div aria-hidden="true" className={`nav-blur-zone ${isPropertyPage ? "max-lg:hidden" : ""} ${on ? "is-scrolled" : ""}`} />}
       <div ref={ref} className={solid ? "solid-head glass-nav pointer-events-auto fixed inset-x-0 top-0 z-50" : `pointer-events-none fixed inset-x-0 z-50 mx-auto w-[var(--site-w)] ${isPropertyPage ? "top-12 md:top-4 lg:top-5" : "top-3 sm:top-4 lg:top-5"}`} data-floating>
         {explore && (
           <div className={solid ? "flex items-center gap-2 px-3 py-2 md:hidden" : "pointer-events-auto glass-nav hk-co flex items-center gap-2 !px-2 !py-2 md:hidden"}>
@@ -113,7 +113,7 @@ export function SiteHeader() {
             </button>
           </div>
         )}
-        <header data-tour="search" className={`${solid ? "" : "pointer-events-auto glass-nav hk-co"} ${isPropertyPage ? "hidden" : explore ? "max-md:hidden" : ""} grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-2.5 ${solid ? "px-4" : "pl-5 pr-2.5"} lg:grid-cols-[auto_1fr_auto] lg:px-6 ${!solid && on ? "is-scrolled" : ""}`}>
+        <header data-tour="search" className={`${solid ? "" : "pointer-events-auto glass-nav hk-co"} ${isPropertyPage ? "max-lg:hidden" : explore ? "max-md:hidden" : ""} grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-2.5 ${solid ? "px-4" : "pl-5 pr-2.5"} lg:grid-cols-[auto_1fr_auto] lg:px-6 ${!solid && on ? "is-scrolled" : ""}`}>
           <Link to="/" className="logo flex min-w-0 items-center gap-2.5 text-foreground" aria-label={`${BRAND.name} home`}>
             <HodiiLogo />
             <span className="truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
@@ -142,19 +142,13 @@ export function SiteHeader() {
         {isPropertyPage && <div className="menu-scrim pointer-events-auto" data-open={open} onClick={close} aria-hidden="true" />}
         <div id="site-menu" data-open={open} className="menu-panel site-menu-panel glass-menu pointer-events-auto mt-3 rounded-[1.75rem] px-3 pad-fixed lg:ml-auto lg:w-[34rem]">
           {isPropertyPage && (
-            <div className="menu-side-head">
-              <span className="font-display text-[1.15rem] font-semibold">{BRAND.name}</span>
-              <button type="button" onClick={close} aria-label="Close menu" className="grid size-9 place-items-center rounded-full"><X className="size-5" aria-hidden /></button>
-            </div>
-          )}
-          {(pwa.standalone || pwa.canInstall) && <button type="button" className={`${row} w-full text-left`} onClick={() => { close(); void (pwa.standalone ? updateApp() : installApp()); }}>{Tile(pwa.standalone ? RefreshCw : Download)}<span className="mr-auto">{pwa.standalone ? "Update app" : "Install app"}</span>{Chev}</button>}
-          {isPropertyPage && (
             <div>
-              <p className="menu-title">Account</p>
+              <div className="menu-title menu-title-row"><span>Account</span><button type="button" onClick={close} aria-label="Close menu" className="menu-close"><X className="size-5" aria-hidden /></button></div>
               <Link to={signedIn ? "/profile" : "/auth"} className={row} onClick={close}>{Tile(UserRound)}<span className="mr-auto">{signedIn ? "Your profile" : "Sign in or register"}</span>{Chev}</Link>
               {signedIn && <Link to="/notifications" className={row} onClick={close}>{Tile(Bell)}<span className="mr-auto">Notifications</span>{Chev}</Link>}
             </div>
           )}
+          {(pwa.standalone || pwa.canInstall) && <button type="button" className={`${row} w-full text-left`} onClick={() => { close(); void (pwa.standalone ? updateApp() : installApp()); }}>{Tile(pwa.standalone ? RefreshCw : Download)}<span className="mr-auto">{pwa.standalone ? "Update app" : "Install app"}</span>{Chev}</button>}
           <div className={isPropertyPage ? "" : "lg:hidden"}>
             <p className="menu-title">Go to</p>
             {NAV.map((n) => n.to !== "/properties"

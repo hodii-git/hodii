@@ -1449,8 +1449,6 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
     transition: transform .35s cubic-bezier(.2,.8,.2,1), visibility 0s linear .35s;
   }
   html[data-listing-dark="1"] .wb.wb-site .site-menu-panel[data-open="true"] { transform: none; transition: transform .35s cubic-bezier(.2,.8,.2,1), visibility 0s; }
-  html[data-listing-dark="1"] .wb.wb-site .menu-side-head { display: flex; align-items: center; justify-content: space-between; padding: .25rem .6rem .5rem; color: #fff; }
-  html[data-listing-dark="1"] .wb.wb-site .menu-side-head button { background: #26262a; color: #fff; }
 }
 /* Readable text and icons in the dark sidebar (same layer as the panel colours so they are not overridden). */
 @layer base {
@@ -1475,3 +1473,75 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
   html[data-listing-dark="1"] .wb.wb-site .site-menu-panel { width: min(24rem, 90vw); }
   .listing-page .hero-strip img { height: min(66svh, 640px); max-height: none; min-height: 420px; }
 }
+
+/* Sidebar menu on the listing page sits above everything, including the bottom bar (which is z-45, same as the site wrapper by default). */
+html[data-listing-dark="1"] .wb.wb-site { z-index: 90; }
+html[data-listing-dark="1"] .wb.wb-site .menu-title-row { display: flex; align-items: center; justify-content: space-between; margin-top: .2rem; }
+html[data-listing-dark="1"] .wb.wb-site .menu-title-row .menu-close { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 9999px; background: #26262a; color: #fff; border: 1px solid rgb(255 255 255 / .12); }
+html[data-sheet] .listing-dock { display: none; }
+
+/* Search opened from the Filters button on a listing: the explore page's search bar, dressed in the dark listing look. */
+.ls-wrap { display: contents; }
+.ls-head { display: none; }
+@media (min-width: 768px) {
+  .ls-wrap { display: none; }
+  .ls-wrap[data-open="true"] { display: flex; position: fixed; inset: 0; z-index: 95; align-items: flex-start; justify-content: center; padding: 6rem 1rem 1rem; background: rgb(0 0 0 / .72); overflow-y: auto; }
+  .ls-card { position: relative; width: min(46rem, 100%); border-radius: 1.6rem; border: 1px solid rgb(255 255 255 / .12); background: #141416; color: #f4f4f5; padding: 1rem 1.1rem 1.2rem; box-shadow: 0 30px 80px -20px rgb(0 0 0 / .9); }
+  .ls-head { display: flex; align-items: center; justify-content: space-between; padding: .25rem .25rem .75rem; }
+  .ls-card .home-search { margin-top: 0 !important; }
+}
+@layer base {
+  html[data-listing-dark="1"] .m-sheet[data-open],
+  html[data-listing-dark="1"] .m-sheet[data-open] .m-sheet-bar,
+  html[data-listing-dark="1"] .m-sheet[data-open] .m-grab { background: #141416 !important; color: #f4f4f5; }
+  html[data-listing-dark="1"] .m-sheet[data-open] { box-shadow: 0 -18px 50px -20px rgb(0 0 0 / .9) !important; border-top: 1px solid rgb(255 255 255 / .1); }
+  html[data-listing-dark="1"] .m-sheet .m-grab::after { background: rgb(255 255 255 / .25) !important; }
+  html[data-listing-dark="1"] .m-sheet-scrim { background: rgb(0 0 0 / .7) !important; }
+  html[data-listing-dark="1"] .m-sheet .close-circle { background: #26262a !important; color: #fff !important; border-color: rgb(255 255 255 / .12) !important; }
+  html[data-listing-dark="1"] .m-sheet .home-search.glass-solid,
+  html[data-listing-dark="1"] .ls-card .home-search.glass-solid { background: transparent !important; border: 0 !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] .m-sheet .home-search .input-glass,
+  html[data-listing-dark="1"] .ls-card .home-search .input-glass { background: #1c1c1f !important; border: 1px solid rgb(255 255 255 / .12) !important; color: #f4f4f5; }
+  html[data-listing-dark="1"] .m-sheet .home-search textarea,
+  html[data-listing-dark="1"] .ls-card .home-search textarea { color: #f4f4f5 !important; }
+  html[data-listing-dark="1"] .m-sheet .home-search textarea::placeholder,
+  html[data-listing-dark="1"] .ls-card .home-search textarea::placeholder { color: #8b8b93; }
+  html[data-listing-dark="1"] .m-sheet .home-search .text-foreground,
+  html[data-listing-dark="1"] .ls-card .home-search .text-foreground { color: #f4f4f5 !important; }
+  html[data-listing-dark="1"] .m-sheet .home-search .text-muted-foreground,
+  html[data-listing-dark="1"] .ls-card .home-search .text-muted-foreground { color: #a1a1aa !important; }
+  html[data-listing-dark="1"] .m-sheet .home-search .cta-ink,
+  html[data-listing-dark="1"] .ls-card .home-search .cta-ink,
+  html[data-listing-dark="1"] .m-sheet .filters-plain .cta-ink { background: #ffffff !important; color: #09090b !important; }
+  /* More filters (inline on phones) */
+  html[data-listing-dark="1"] .m-sheet .filters-plain { color: #f4f4f5; }
+  html[data-listing-dark="1"] .m-sheet .filters-plain [class*="bg-[#f4f4f5]"],
+  html[data-listing-dark="1"] .m-sheet .filters-plain [class*="bg-white"] { background: #1c1c1f !important; border-color: rgb(255 255 255 / .12) !important; color: #f4f4f5 !important; }
+  html[data-listing-dark="1"] .m-sheet .filters-plain input { background-color: #1c1c1f !important; color: #f4f4f5 !important; box-shadow: 0 0 0 1px rgb(255 255 255 / .14) !important; }
+  html[data-listing-dark="1"] .m-sheet .filters-plain .tone-icon { background: #2a2a30 !important; color: #fff !important; }
+  html[data-listing-dark="1"] .m-sheet .filters-plain button { color: #f4f4f5; }
+}
+
+/* Compare pill: the dark listing look, theme-coloured action, and clear of the action dock on phones. */
+@layer base {
+  html[data-listing-dark="1"] .compare-tray { background: #141416 !important; background-image: none !important; border: 1px solid rgb(255 255 255 / .14) !important; color: #fff !important; box-shadow: 0 14px 40px -14px rgb(0 0 0 / .9) !important; backdrop-filter: none !important; z-index: 46; }
+  html[data-listing-dark="1"] .compare-tray p { color: #fff; }
+  html[data-listing-dark="1"] .compare-tray .text-muted-foreground { color: #a1a1aa !important; }
+  html[data-listing-dark="1"] .compare-tray .cta-ink { background: var(--ld-theme) !important; color: #fff !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] .compare-tray .close-circle { background: #26262a !important; color: #fff !important; border: 1px solid rgb(255 255 255 / .12) !important; }
+}
+@media (max-width: 767px) {
+  html[data-listing-dark="1"] .compare-tray { bottom: calc(var(--tab-h) + 6.6rem) !important; }
+}
+
+/* Large screens: the page behind is plain dark (no cover-photo wash), and the original floating header keeps its light look. */
+html[data-listing-dark="1"] { --page-wash: none !important; }
+html[data-listing-dark="1"] .app-shell,
+html[data-listing-dark="1"] .aurora { background-image: none !important; background: var(--ld-bg) !important; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] {
+  --foreground: #18181b; --muted-foreground: #52525b; --background: #f4f4f5; --card: #ffffff; --card-foreground: #18181b;
+  --primary: #18181b; --primary-foreground: #ffffff; --border: #e4e4e7; --secondary: #f7f7f7; --muted: #f7f7f7; --accent: #18181b; --accent-foreground: #ffffff;
+  --glass: #ffffff; --glass-strong: #ffffff; --surface: #f4f4f5; --header-circle: #f4f4f5;
+  color: #18181b; color-scheme: light;
+}
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .bg-primary { background-color: #18181b !important; background-image: none !important; color: #fff !important; }

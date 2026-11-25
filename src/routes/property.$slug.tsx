@@ -1,5 +1,6 @@
 import { MapPin as PinIcon, Navigation } from "lucide-react";
 import { ListingMap } from "@/components/property/listing-map";
+import { ListingSearch } from "@/components/property/listing-search";
 import { StickySide } from "@/components/sticky-side";
 import { directionsUrl, osmDirectionsUrl } from "@/lib/geo";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
@@ -138,8 +139,9 @@ function PropertyPage() {
   ];
 
   return (
-    <main className="listing-page mx-auto max-w-[82rem] px-0 pt-0 pb-48 md:pb-24">
+    <main className="listing-page mx-auto max-w-[82rem] px-0 pt-0 pb-48 md:pb-24 lg:pt-28">
       <MobileListingTopBar p={p} />
+      <ListingSearch />
       <header className="hidden">
         <h1 className="text-xl font-extrabold leading-tight md:text-3xl">{p.title}</h1>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
@@ -158,7 +160,7 @@ function PropertyPage() {
           <MobileListingHeroBody p={p} isSaved={isSaved} onSavedChange={setIsSaved} shown={shownContact} busy={busyContact} onReveal={revealContact} shortcuts={mobileShortcuts} />
           <div className="space-y-4 px-3 pt-2 md:space-y-6 md:px-6 md:pt-4 lg:px-0">
           {allMedia.length > 1 && (
-            <section aria-label="Photo thumbnails" className="rounded-2xl bg-card/85 p-3.5">
+            <section aria-label="Photo thumbnails" className="rounded-2xl bg-card/85 p-3.5 lg:hidden">
               <ul className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {allMedia.map((im, k) => (
                   <li key={im.url} className="shrink-0">
@@ -220,11 +222,11 @@ function PropertyPage() {
           {(p.videoUrl || p.virtualTourUrl) && <section className="flex flex-wrap gap-3">{p.videoUrl && <a href={p.videoUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-input px-5 py-2.5 text-sm font-bold">Watch video</a>}{p.virtualTourUrl && <a href={p.virtualTourUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-input px-5 py-2.5 text-sm font-bold">Virtual tour</a>}</section>}
           {mapUrl && <section aria-labelledby="map" className="scroll-mt-16 rounded-3xl bg-card/85 backdrop-blur-md p-6 shadow-sm"><h2 id="map" className="mb-4 text-xl font-extrabold text-center">Location</h2>
             <ListingMap lat={p.location.point!.lat} lng={p.location.point!.lng} label={p.areaName || p.title} />
-            <div className="mt-3 flex flex-wrap items-center gap-3 flex-col items-center text-center"><a href={directionsUrl(p.location.point!.lat, p.location.point!.lng)} target="_blank" rel="noopener noreferrer" className="take-btn inline-flex h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground"><Navigation className="h-4 w-4" aria-hidden />Take me there</a><a href={osmDirectionsUrl(p.location.point!.lat, p.location.point!.lng)} target="_blank" rel="noopener noreferrer" className="text-sm font-bold underline">Open in OpenStreetMap</a>{p.location.approximate && <span className="flex items-start gap-1.5 text-xs text-muted-foreground justify-center"><PinIcon className="mt-px size-3.5 shrink-0 text-zinc-500" aria-hidden /><span>Exact location is shared by the agent. Directions lead to the area.</span></span>}</div>{p.location.landmark && <p className="mt-2 text-sm text-center text-muted-foreground">Near {p.location.landmark}</p>}</section>}
+            <div className="mt-3 flex flex-wrap items-center gap-3 flex-col items-center text-center"><a href={directionsUrl(p.location.point!.lat, p.location.point!.lng)} target="_blank" rel="noopener noreferrer" className="take-btn inline-flex h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground"><Navigation className="h-4 w-4" aria-hidden />Take me there</a><a href={osmDirectionsUrl(p.location.point!.lat, p.location.point!.lng)} target="_blank" rel="noopener noreferrer" className="text-sm font-bold underline">Open in OpenStreetMap</a>{p.location.approximate && <span className="text-xs text-muted-foreground">Exact location is shared by the agent. Directions lead to the area.</span>}</div>{p.location.landmark && <p className="mt-3 flex items-center justify-center gap-1.5 text-sm text-muted-foreground"><PinIcon className="size-4 shrink-0 text-zinc-500" aria-hidden />Near {p.location.landmark}</p>}</section>}
           {isLg && <ListingComments propertyId={p.id} slug={p.slug} />}
           </div>
         </div>
-        <div className="px-3 md:px-6 lg:px-0"><StickySide offset={88}><ContactPanel p={p} shown={shownContact} busy={busyContact} onReveal={revealContact} /></StickySide></div>
+        <div className="px-3 md:px-6 lg:px-0"><StickySide offset={96}><ContactPanel p={p} shown={shownContact} busy={busyContact} onReveal={revealContact} /></StickySide></div>
         {!isLg && <div className="px-1.5 md:px-6"><ListingComments propertyId={p.id} slug={p.slug} /></div>}
       </div>
       {similar.length > 0 && <section className="plain-sec mt-10 px-3 md:mt-14 md:px-6 lg:px-4" aria-labelledby="sim"><h2 id="sim" className="text-lg font-bold md:text-2xl md:font-extrabold">You might also like</h2><p className="mb-5 mt-1 text-sm text-muted-foreground">Properties like this one, starting with the closest in kind, place and price.</p><PropertyGrid items={similar} saved={saved} /></section>}

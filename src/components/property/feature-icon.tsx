@@ -20,7 +20,7 @@ export const GROUP_TONE: Record<string, string> = {
   interior: "bg-violet-500/12 text-violet-600 dark:text-violet-400",
   outdoor: "bg-green-500/12 text-green-600 dark:text-green-400",
   building: "bg-sky-500/12 text-sky-600 dark:text-sky-400",
-  lifestyle: "bg-rose-500/12 text-rose-600 dark:text-rose-400",
+  lifestyle: "bg-white/10 text-foreground",
   commercial: "bg-indigo-500/12 text-indigo-600 dark:text-indigo-400",
   land: "bg-lime-500/12 text-lime-700 dark:text-lime-400",
   other: "bg-blue-500/12 text-blue-600 dark:text-blue-400",

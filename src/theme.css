@@ -109,7 +109,7 @@
 
 :root { --menu-item-hover: #1c1c1f; }
 
-:root { --tone-a: #60a5fa; --tone-b: #2563eb; --note-bg: oklch(0.77 0.16 70 / 10%); --note-border: oklch(0.77 0.16 70 / 40%); --strip: oklch(0.16 0 0); --strip-fg: #1c1c1f; --strip-hover: rgb(255 255 255 / 0.037); --menu-item-hover: color-mix(in oklab, var(--muted) 70%, transparent); }
+:root { --tone-a: #a1a1aa; --tone-b: #52525b; --note-bg: oklch(0.77 0.16 70 / 10%); --note-border: oklch(0.77 0.16 70 / 40%); --strip: oklch(0.16 0 0); --strip-fg: #1c1c1f; --strip-hover: rgb(255 255 255 / 0.037); --menu-item-hover: color-mix(in oklab, var(--muted) 70%, transparent); }
 
 :root {  }
 
@@ -136,6 +136,7 @@
 :root .wb {
   --ink: #f4f4f5; --cream: #09090b;
   --surface: #000000; --surface-deep: #0b0b0c; --mist: #0b0b0c; --mist-deep: #141416; --paper: #141416; --lilac-soft: #1c1c1f;
+  --lilac: #26262a; --peach: #1c1c1f; --mint: #1c1c1f; --mint-ink: #f4f4f5;
   --foreground: #f4f4f5;
 }
 

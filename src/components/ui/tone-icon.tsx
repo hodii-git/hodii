@@ -11,7 +11,7 @@ export function ToneIcon({ icon: Icon, tone, size = "md" }: { icon: LucideIcon; 
 }
 
 /** Button looks from the feedback popup. */
-export const POP_BTN = "rounded-xl bg-primary px-3.5 font-bold text-primary-foreground hover:brightness-110";
+export const POP_BTN = "tour-cta rounded-xl bg-primary px-3.5 font-bold text-primary-foreground hover:brightness-110";
 export const POP_BTN_OUTLINE = "rounded-xl border border-input bg-background/70 px-3.5 font-semibold hover:bg-muted hover:text-foreground";
 export const POP_BTN_GHOST = "rounded-xl px-3.5 font-semibold text-muted-foreground hover:bg-muted hover:text-foreground";
 

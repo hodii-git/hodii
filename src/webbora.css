@@ -190,7 +190,7 @@
   transform: translate(var(--tx), var(--ty));
   transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s, padding .4s cubic-bezier(.2,.8,.2,1);
 }
-.wb .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 0.75rem 1.875rem -12px rgb(253 38 122 / 55%); }
+.wb .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 0.75rem 1.875rem -12px rgb(0 0 0 / 60%); }
 .wb .btn-light { background: var(--cream); color: var(--ink); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.100), 0 0.75rem 2rem -12px color-mix(in oklab, var(--ink) 60%, transparent); }
 .wb .btn-dark::before, .wb .btn-light::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(110deg, transparent 30%, color-mix(in oklab, var(--cream) 30%, transparent) 50%, transparent 70%); transform: translateX(-120%); transition: transform .8s cubic-bezier(.2,.8,.2,1); }
 .wb .btn-light::before { background: linear-gradient(110deg, transparent 30%, #141416 50%, transparent 70%); }
@@ -556,7 +556,7 @@
 .wb .sec-night::before { content: ""; position: absolute; inset: 0 0 auto; height: 4px; background: var(--iris); background-size: 200% 100%; animation: wb-irisShift 12s linear infinite; }
 .wb .sec-night::after { content: ""; position: absolute; inset: 0; z-index: -1; background-image: var(--grain); background-size: 160px; opacity: .08; mix-blend-mode: overlay; }
 .wb .night-muted { color: color-mix(in oklab, var(--cream) 62%, transparent); }
-.wb .text-iris-glow { background: linear-gradient(90deg, var(--lilac), var(--peach)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.wb .text-iris-glow { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .wb .night-card { position: relative; overflow: hidden; isolation: isolate; display: flex; flex-direction: column; min-height: 22rem; padding: 1.75rem; border-radius: 1.75rem;
   background: linear-gradient(160deg, color-mix(in oklab, var(--cream) 9%, transparent), color-mix(in oklab, var(--cream) 2%, transparent));
   box-shadow: inset 0 1px 0 color-mix(in oklab, var(--cream) 14%, transparent), inset 0 0 0 1px var(--night-line);
@@ -705,7 +705,7 @@
   box-shadow: 0 0 0 1px color-mix(in oklab, var(--ink) 5%, transparent), 0 2rem 4rem -3rem color-mix(in oklab, var(--violet) 18%, transparent); }
 .wb .sec-night::after { display: none; }
 .wb .night-muted { color: color-mix(in oklab, var(--ink) 55%, transparent); }
-.wb .text-iris-glow { background: linear-gradient(90deg, var(--violet), var(--iris-3)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.wb .text-iris-glow { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .wb .night-card { color: var(--ink); background: linear-gradient(160deg, var(--paper), color-mix(in oklab, var(--lilac) 18%, var(--paper)));
   box-shadow: inset 0 1px 0 var(--paper), 0 0 0 1px color-mix(in oklab, var(--ink) 6%, transparent), 0 1.5rem 3rem -2rem color-mix(in oklab, var(--violet) 30%, transparent); }
 .wb .night-card:hover { box-shadow: inset 0 1px 0 var(--paper), 0 0 0 1px color-mix(in oklab, var(--violet) 22%, transparent), 0 2rem 4rem -2rem color-mix(in oklab, var(--violet) 38%, transparent); }

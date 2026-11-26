@@ -71,12 +71,12 @@ function Premium() {
     <section className="space-y-8">
       <SpaceTabs slug={slug} active="premium" />
       <header className="premium-hero rounded-[2rem] p-6 sm:p-8">
-        <span className="inline-flex items-center gap-2 rounded-full bg-card/70 px-3 py-1.5 text-xs font-bold text-amber-800 shadow-sm backdrop-blur"><Crown className="size-4" aria-hidden />Premium</span>
+        <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-foreground ring-1 ring-white/15"><Crown className="size-4" aria-hidden />Premium</span>
         <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">Put your best listings first</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">One package gives a number of your listings Premium placement for {c.days} days. Add and remove listings whenever you like.</p>
         <ul className="mt-6 grid gap-3 sm:grid-cols-3">
           {([[Crown, "Premium badge", "Stands out on every card"], [TrendingUp, "Higher in search", "Lifted above Basic listings"], [Home, "Home page strips", "Shown where buyers start"]] as const).map(([I, t, d]) => (
-            <li key={t} className="flex items-center gap-3 rounded-2xl bg-card/60 p-3.5 shadow-sm backdrop-blur"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-card text-amber-600 shadow-sm"><I className="size-5" aria-hidden /></span><span className="min-w-0"><span className="block text-sm font-bold">{t}</span><span className="block text-xs text-muted-foreground">{d}</span></span></li>
+            <li key={t} className="flex items-center gap-3 rounded-2xl bg-white/5 p-3.5 ring-1 ring-white/10"><span className="grid size-10 shrink-0 place-items-center ph-tile rounded-xl"><I className="size-5" aria-hidden /></span><span className="min-w-0"><span className="block text-sm font-bold">{t}</span><span className="block text-xs text-muted-foreground">{d}</span></span></li>
           ))}
         </ul>
       </header>

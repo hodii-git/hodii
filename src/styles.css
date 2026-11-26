@@ -795,7 +795,7 @@ h3, h4, legend { font-weight: 700; }
 .tone-confusing { --tone-a: #71717a; --tone-b: #0f0f10; }
 .tone-bug { --tone-a: #a1a1aa; --tone-b: #52525b; }
 .tone-down { --tone-a: #a1a1aa; --tone-b: #52525b; }
-.tone-other { --tone-a: #60a5fa; --tone-b: #2563eb; }
+.tone-other { --tone-a: #a1a1aa; --tone-b: #52525b; }
 /* The ink tile must stay visible on a dark menu, so it lifts to charcoal. */
 .tone-icon { display: inline-grid; place-items: center; flex-shrink: 0; border-radius: 0.6rem; background: linear-gradient(135deg, var(--tone-a), var(--tone-b)); color: oklch(1 0 0); box-shadow: 0 4px 10px -4px color-mix(in oklab, var(--tone-b) 60%, transparent); }
 .tone-icon svg { width: 58%; height: 58%; }
@@ -1137,7 +1137,8 @@ html[data-hide~="fb"] .fb-fab, html[data-hide~="view"] .view-pill, html[data-hid
 .wb.wb-site .menu-panel .menu-tile { background: var(--surface); color: var(--foreground); }
 /* Map view on large screens: map and search stay fixed on the right; the footer sits under the listings only. */
 @media (min-width: 1024px) { html[data-mapside] .wb-footer { padding-right: 36rem; } .map-aside { scrollbar-width: none; } .map-aside::-webkit-scrollbar { display: none; } }
-.premium-hero { background: radial-gradient(120% 140% at 100% 0%, #fde9b8 0%, rgb(253 233 184 / 0) 55%), rgb(255 255 255 / 0.079); box-shadow: 0 1px 2px rgb(24 24 27 / .05), 0 24px 56px -30px rgb(180 120 20 / .4); backdrop-filter: blur(20px); }
+.premium-hero { position: relative; overflow: hidden; background: radial-gradient(120% 140% at 100% 0%, rgb(253 38 122 / .22) 0%, rgb(255 96 54 / .08) 40%, transparent 70%), var(--card); box-shadow: 0 0 0 1px var(--border), 0 24px 56px -30px rgb(0 0 0 / .8); }
+.premium-hero .ph-tile { background: var(--brand-gradient); color: #fff; }
 @media (min-width: 1024px) { html[data-mapside] .fb-fab { right: 36rem !important; } }
 input.bg-transparent, textarea.bg-transparent, input[class*="!bg-transparent"] { background: transparent !important; box-shadow: none !important; }
 input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !important; }
@@ -1566,7 +1567,6 @@ html:root[data-listing-dark="1"] .solid-head * { --foreground: #f4f4f5; }
 html:root[data-listing-dark="1"] :is(.tour-prompt, .popup-clean.keep-tones, .view-pill, .view-pill.glass-menu) { background: var(--ld-surface) !important; color: #f4f4f5; }
 html:root[data-listing-dark="1"] .tour-prompt :is(h2, h3, p, span, button) { color: inherit; }
 html:root[data-listing-dark="1"] .view-pill button { color: #f4f4f5; }
-html:root[data-listing-dark="1"] .view-pill button[aria-pressed="true"], html:root[data-listing-dark="1"] .view-pill [data-active="true"] { background: var(--brand-gradient) !important; color: #fff; }
 
 /* Info / marketing pages (Webbora) follow the dark theme too. */
 html[data-listing-dark="1"] .wb {
@@ -1635,3 +1635,13 @@ body { min-height: 100dvh; }
 :focus-visible { outline-color: rgb(255 255 255 / .7); }
 input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: #f4f4f5; }
 ::selection { background: rgb(255 255 255 / .22); color: inherit; }
+
+/* One List / Map segmented pill, used on every page. Neutral: dark surface, white selected segment, no gradient. */
+.seg-pill { display: flex; gap: .25rem; padding: .25rem; border-radius: 9999px; background: var(--card) !important; background-image: none !important; box-shadow: 0 0 0 1px var(--border), 0 10px 24px -10px rgb(0 0 0 / .7) !important; backdrop-filter: none !important; }
+.seg-pill .seg { display: inline-flex; align-items: center; gap: .5rem; height: 2.5rem; padding: 0 1.1rem; border-radius: 9999px; font-size: .875rem; font-weight: 700; color: var(--foreground); background: transparent !important; background-image: none !important; }
+.seg-pill .seg[aria-pressed="true"], .seg-pill .seg[aria-current="page"], .seg-pill .seg.is-on { background: #f4f4f5 !important; color: #09090b !important; }
+@media (min-width: 640px) { .seg-pill .seg { height: 2.75rem; padding: 0 1.25rem; } }
+
+/* Primary popup / tour buttons (Next, Finish, Start tour, Resume) always keep the brand gradient with white text. */
+.tour-cta, html:root[data-listing-dark="1"] .tour-prompt button.tour-cta { background-color: transparent !important; background-image: var(--brand-gradient) !important; color: #fff !important; border-color: transparent !important; }
+.tour-cta:hover:not(:disabled) { filter: brightness(1.08); }

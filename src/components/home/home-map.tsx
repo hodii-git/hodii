@@ -54,9 +54,9 @@ export function HomeMap() {
   return (
     <div className="home-map surface relative h-full min-h-[22rem] overflow-hidden rounded-[1.5rem]">
       <div ref={box} className="!absolute inset-0" aria-label="Map of listings" role="region" />
-      <div className="surface absolute right-3 top-3 z-[500] flex rounded-full p-1 text-[0.95rem] font-semibold">
-        <Link to="/properties" className="rounded-full px-4 py-1.5 text-foreground">List</Link>
-        <Link to="/properties" search={{ view: "map" }} className="rounded-full bg-foreground px-4 py-1.5 font-semibold text-background">Map</Link>
+      <div className="seg-pill absolute right-3 top-3 z-[500]">
+        <Link to="/properties" className="seg">List</Link>
+        <Link to="/properties" search={{ view: "map" }} className="seg is-on">Map</Link>
       </div>
     </div>
   );

@@ -84,7 +84,7 @@ function Directory() {
       <p className="mt-2 text-muted-foreground">Find who you are dealing with before you get in touch.</p>
       <AgencySearch q={search.q ?? ""} onQ={(q) => set({ q: q || undefined })} active={[search.county, search.kind, search.verified, search.sort && search.sort !== "rating"].filter(Boolean).length} onClear={() => navigate({ search: {} as never })} more={<>
         <Pick label="Sort by" value={search.sort ?? "rating"} onChange={(v) => set({ sort: v as Search["sort"] })} options={SORTS.map(([k, l]) => ({ value: k, label: l }))} />
-        <button type="button" aria-pressed={!!search.verified} onClick={() => set({ verified: search.verified ? undefined : true })} className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-xl px-4 text-sm font-bold ${search.verified ? "bg-foreground text-background" : "bg-white shadow-[var(--btn-shadow)]"}`}><BadgeCheck className="size-4" aria-hidden />Verified only</button>
+        <button type="button" aria-pressed={!!search.verified} onClick={() => set({ verified: search.verified ? undefined : true })} className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-xl px-4 text-sm font-bold ${search.verified ? "bg-foreground text-background" : "bg-card shadow-[var(--btn-shadow)]"}`}><BadgeCheck className="size-4" aria-hidden />Verified only</button>
       </>}>
         <Pick label="County" clearLabel="All counties" value={search.county ? String(search.county) : ""} onChange={(v) => set({ county: v ? Number(v) : undefined })} options={COUNTY_OPTIONS} searchable />
         <Pick label="Type" clearLabel="All types" value={search.kind ?? ""} onChange={(v) => set({ kind: v || undefined })} options={toOptions(AGENCY_KINDS)} />

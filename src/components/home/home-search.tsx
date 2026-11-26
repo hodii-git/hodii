@@ -22,13 +22,13 @@ import { SearchSheet } from "@/components/search-sheet";
 import { setSheet, useSheetOpen } from "@/lib/search-sheet";
 
 const seg = "!h-14 !rounded-none !border-0 !bg-transparent !px-0 !text-[1.05rem] !text-foreground";
-const field = "h-10 w-full rounded-xl border border-[#aab3c4] bg-white px-3 text-sm outline-hidden focus-visible:ring-2 focus-visible:ring-ring";
+const field = "h-10 w-full rounded-xl border border-border bg-card px-3 text-sm outline-hidden focus-visible:ring-2 focus-visible:ring-ring";
 const HINTS: Record<string, string> = { Location: "A county, or your spot on the map", "Max price": "The most you want to pay", Category: "Homes, land or commercial", "Property type": "Pick one or several", "Min price": "Skip anything cheaper", Bedrooms: "At least this many", Bathrooms: "At least this many", Furnishing: "Furnished or not", Condition: "New, good, needs work", "Size (m²)": "Floor or plot area", "Must have (up to 10)": "Features it has to have" };
 /** One filter, in its own card like the feedback options. */
 const L = ({ icon, tone, children }: { icon: LucideIcon; tone: Tone; children: ReactNode }) => (
   <span className="mb-3 flex items-start gap-3"><ToneIcon icon={icon} tone={tone} /><span className="min-w-0"><span className="block text-sm font-bold text-foreground">{children}</span><span className="block text-xs text-muted-foreground">{HINTS[String(children)] ?? ""}</span></span></span>
 );
-const fcard = "min-w-0 rounded-2xl border border-[#d4d4d8] bg-[#f4f4f5] p-3 transition focus-within:border-black/40";
+const fcard = "min-w-0 rounded-2xl border border-border bg-muted p-3 transition focus-within:border-border";
 const kes = (n: number) => `KES ${n.toLocaleString("en-KE")}`;
 const RENT = [10_000, 20_000, 30_000, 50_000, 80_000, 120_000, 200_000, 400_000];
 const SALE = [2_000_000, 5_000_000, 8_000_000, 12_000_000, 20_000_000, 40_000_000, 80_000_000, 200_000_000];
@@ -104,7 +104,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
                 <div className={fcard}><L icon={MapPin} tone="other">Location</L><Pick label="Location" clearLabel="Anywhere in Kenya" leading={{ label: "Use my location", icon: <LocateFixed className="h-4 w-4" aria-hidden />, onClick: () => locateMe(5000, (circle) => set({ circle, polygon: undefined, countyCodes: undefined })) }} panelClassName="glass-menu" className={field} value={value.circle ? "geo:circle" : value.polygon ? "geo:poly" : county ? String(county) : ""} onChange={(v) => { if (v.startsWith("geo:")) return; set({ countyCodes: v ? [Number(v)] : undefined, circle: undefined, polygon: undefined }); }} options={locOptions} searchable /></div>
                 <div className={fcard}><L icon={Wallet} tone="idea">Max price</L><Pick label="Max price" clearLabel="Any price" panelClassName="glass-menu" className={field} value={value.priceMax ? String(value.priceMax) : ""} onChange={(v) => set({ priceMax: v ? Number(v) : undefined })} options={priceOptions} custom={{ placeholder: "Type a max price (KES)", label: (v) => `Up to ${kes(Number(v))}` }} /></div>
               </div>
-              <p className="mb-2 mt-5 text-sm font-bold">Buy, rent or stay</p><div className="mb-5 inline-flex max-w-full overflow-x-auto rounded-full border border-[#d4d4d8] bg-[#f4f4f5] p-1 [scrollbar-width:none]" role="tablist" aria-label="Listing type">
+              <p className="mb-2 mt-5 text-sm font-bold">Buy, rent or stay</p><div className="mb-5 inline-flex max-w-full overflow-x-auto rounded-full border border-border bg-muted p-1 [scrollbar-width:none]" role="tablist" aria-label="Listing type">
                 {[{ key: undefined as string | undefined, label: "All" }, ...LISTING_TYPES.map((t) => ({ key: t.key as string | undefined, label: t.short }))].map((t) => (
                   <Button variant="ghost" key={t.label} type="button" role="tab" aria-selected={value.listingType === t.key} onClick={() => set({ listingType: (filterSelection(value.listingType ?? "", t.key ?? "", true) || undefined) as SearchParams["listingType"], priceMin: undefined, priceMax: undefined })} className={`h-auto rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${value.listingType === t.key ? "cta" : "text-muted-foreground hover:text-foreground"}`}>{t.label}</Button>
                 ))}
@@ -163,7 +163,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
           </Dialog>
         </div>
         <div className="ml-auto flex shrink-0 items-center justify-end gap-1">
-          {(hasFilters(value) || text.length > 0 || ai.open) && <button type="button" data-tour="clear-all" onClick={clearAll} className="inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-xl 2xl:h-14 2xl:rounded-2xl border border-black/20 bg-white px-2.5 text-sm font-bold text-foreground shadow-sm transition hover:bg-muted"><X className="size-3.5" aria-hidden />Clear all</button>}
+          {(hasFilters(value) || text.length > 0 || ai.open) && <button type="button" data-tour="clear-all" onClick={clearAll} className="inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-xl 2xl:h-14 2xl:rounded-2xl border border-border bg-card px-2.5 text-sm font-bold text-foreground shadow-sm transition hover:bg-muted"><X className="size-3.5" aria-hidden />Clear all</button>}
           <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`cta-ink inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 2xl:h-14 2xl:rounded-2xl 2xl:px-5 text-sm font-bold ${ai.open ? "max-md:hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
             {ai.pending ? <Loader size="xs" /> : <Sparkles className="h-4 w-4" aria-hidden />}{ai.open ? "Refine" : "Ask AI"}
           </Button>

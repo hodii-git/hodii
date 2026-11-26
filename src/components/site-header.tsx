@@ -108,7 +108,7 @@ export function SiteHeader() {
               {compareCount > 0 && <span className="absolute right-1.5 top-1.5 size-2.5 rounded-full bg-primary" aria-hidden />}
             </button>
             <Link to="/" className="logo grid size-10 shrink-0 place-items-center" aria-label={`${BRAND.name} home`}><HodiiLogo /></Link>
-            <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-full bg-black/[0.06] px-3.5 text-left text-sm font-medium text-muted-foreground">
+            <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-full bg-foreground/[0.06] px-3.5 text-left text-sm font-medium text-muted-foreground">
               <Search className="size-4 shrink-0 text-foreground" aria-hidden /><span className="truncate">Search homes, places…</span>
             </button>
           </div>

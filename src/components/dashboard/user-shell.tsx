@@ -20,7 +20,7 @@ export function UserShell({ title, sub, children, aside, attention = [] }: { tit
     <DashFrame
       label="Account sections"
       bar={<DashHeader framed />}
-      brand={<div className="flex items-center gap-3 rounded-2xl border border-black/[0.06] bg-white p-3"><UserAvatar name={name} src={user?.avatarUrl} size="md" /><div className="min-w-0"><p className="truncate font-extrabold">{name}</p><p className="text-xs text-muted-foreground">Your account</p></div></div>}
+      brand={<div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3"><UserAvatar name={name} src={user?.avatarUrl} size="md" /><div className="min-w-0"><p className="truncate font-extrabold">{name}</p><p className="text-xs text-muted-foreground">Your account</p></div></div>}
       groups={[{ items: [
         { key: "profile", to: "/profile", label: "Profile", icon: UserRound },
         { key: "enq", to: "/dashboard", label: "Enquiries", icon: Inbox, exact: true },

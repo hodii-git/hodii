@@ -42,7 +42,7 @@ function CardPhotos({ p, priority }: { p: Card; priority: boolean }) {
         <div className="pointer-events-none absolute inset-x-0 bottom-2 flex items-center justify-center gap-1" aria-hidden>
           {photos.map((im, n) => {
             const size = n === i ? 0 : Math.max(3, 7 - Math.abs(n - i) - (n > i ? 1 : 0));
-            return <span key={im.url} style={n === i ? { width: 14, height: 6 } : { width: size, height: size }} className={`rounded-full transition-all duration-200 ${n === i ? "bg-white" : "bg-white/55"}`} />;
+            return <span key={im.url} style={n === i ? { width: 14, height: 6 } : { width: size, height: size }} className={`rounded-full transition-all duration-200 ${n === i ? "bg-card" : "bg-card/55"}`} />;
           })}
         </div>
       )}

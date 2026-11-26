@@ -120,7 +120,7 @@ export function Gallery({
             <span className="pointer-events-none absolute right-3 top-3 z-10 ld-font rounded-full bg-black/75 px-4 py-1 text-[12px] font-medium tabular-nums text-[#f3ead7] backdrop-blur-md">{i + 1} / {n}</span>
             <div ref={hero} onScroll={onHeroScroll} className="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {images.map((im, k) => (
-                <button key={im.url} type="button" onClick={() => setFull(true)} className={`block w-full shrink-0 snap-center snap-always cursor-zoom-in ${isPlan(k) ? "bg-white" : "bg-[#141416]"}`} aria-label={`View photo ${k + 1} full screen`}>
+                <button key={im.url} type="button" onClick={() => setFull(true)} className={`block w-full shrink-0 snap-center snap-always cursor-zoom-in ${isPlan(k) ? "bg-card" : "bg-[#141416]"}`} aria-label={`View photo ${k + 1} full screen`}>
                   <img src={im.url} alt={im.alt || (isPlan(k) ? `${title}, floor plan` : `${title}, photo ${k + 1}`)} width={im.width || 1200} height={im.height || 800} draggable={false} loading={Math.abs(k - i) <= 1 ? "eager" : "lazy"} className={`h-[52svh] min-h-[360px] max-h-[500px] w-full select-none ${isPlan(k) ? "bg-white object-contain" : "object-cover"}`} fetchPriority={k === 0 ? "high" : "auto"} />
                 </button>
               ))}

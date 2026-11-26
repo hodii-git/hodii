@@ -11,7 +11,8 @@ Kenya's property marketplace: homes, land and commercial space for sale and to r
 
 ## Look and feel
 
-- Dark theme across the whole app (black background, dark-grey cards), driven by shared colour tokens in `src/styles.css`.
+- **One place for all styling: `src/theme.css`.** Every colour, surface, border, shadow and the brand gradient is defined there once as a token. Components and other CSS read tokens (`var(--card)`), never raw colours. Change that file to restyle the whole app. `src/lib/theme.ts` mirrors the few values the browser and the PWA need (theme colour, manifest).
+- Dark theme across the whole app (black background, dark-grey cards). There is no light mode.
 - Brand colour is the gradient `#fd267a` to `#ff6036` (`--brand-gradient`). Primary buttons, the logo and the PWA icons all use it.
 - The logo is the gradient rounded square with a white house outline (`src/components/brand-logo.tsx`, `public/favicon.svg`, PWA icons in `public/`).
 - On phones (under 768px) the bottom navigation bar shows and the phone layout applies; wider screens use the medium and large layouts.

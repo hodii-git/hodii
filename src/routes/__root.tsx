@@ -40,6 +40,7 @@ import { getSiteStatus } from "@/lib/admin.functions";
 import { installGoogleAnalytics, trackPageView } from "@/lib/site-tracking";
 import { gaIdQuery } from "@/lib/analytics.functions";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
+import { THEME } from "@/lib/theme";
 
 function NotFoundComponent() {
   return (
@@ -110,11 +111,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, interactive-widget=resizes-visual" },
       { title: `${BRAND.name} — ${BRAND.tagline}` },
       { name: "description", content: BRAND.description },
-      { name: "theme-color", content: "#fd267a" },
+      { name: "theme-color", content: THEME.background },
+      { name: "color-scheme", content: "dark" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "Hodii" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: SITE_NAME },
       { property: "og:locale", content: "en_GB" },
@@ -157,7 +159,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang={BRAND.locale} data-listing-dark="1" suppressHydrationWarning>
+    <html lang={BRAND.locale} data-listing-dark="1" style={{ backgroundColor: THEME.background, colorScheme: "dark" }} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
         <HeadContent />

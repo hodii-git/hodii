@@ -13,12 +13,12 @@ export const Route = createFileRoute("/info/pricing")({
 
 const kes = (n: number) => `KES ${Number(n).toLocaleString("en-KE")}`;
 const Card = ({ title, price, note, children, tint, badge, dark }: { title: string; price: string; note?: string; children: React.ReactNode; tint?: string; badge?: string; dark?: boolean }) => (
-  <section className="reveal price-card relative flex flex-col overflow-hidden rounded-[1.75rem] p-6 sm:p-7" style={dark ? { background: "color-mix(in oklab, var(--primary) 14%, rgb(255 255 255 / .6))", backdropFilter: "blur(24px) saturate(180%)", boxShadow: "0 24px 60px -28px color-mix(in oklab, var(--primary) 55%, transparent), 0 1px 2px rgb(15 23 42 / .06)" } : { background: "rgb(255 255 255 / .6)", backdropFilter: "blur(24px) saturate(180%)", boxShadow: "0 1px 2px rgb(15 23 42 / .05), 0 18px 44px -26px rgb(15 23 42 / .28)" }}>
+  <section className="reveal price-card relative flex flex-col overflow-hidden rounded-[1.75rem] p-6 sm:p-7" style={dark ? { background: "color-mix(in oklab, var(--primary) 14%, rgb(255 255 255 / .06))", backdropFilter: "blur(24px) saturate(180%)", boxShadow: "0 24px 60px -28px color-mix(in oklab, var(--primary) 55%, transparent), 0 1px 2px rgb(15 23 42 / .06)" } : { background: "var(--card)", backdropFilter: "blur(24px) saturate(180%)", boxShadow: "0 1px 2px rgb(15 23 42 / .05), 0 18px 44px -26px rgb(15 23 42 / .28)" }}>
     {badge && <span className="absolute right-4 top-4 rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-900">{badge}</span>}
     <h2 className="font-display text-lg font-bold">{title}</h2>
     <p className="mt-3 font-display text-3xl font-extrabold">{price}</p>
     {note && <p className={`mt-1 text-sm font-medium ${"text-foreground/60"}`}>{note}</p>}
-    <div className={`mt-5 space-y-2.5 border-t pt-4 text-sm ${"border-black/10 text-foreground/80"}`}>{children}</div>
+    <div className={`mt-5 space-y-2.5 border-t pt-4 text-sm ${"border-border text-foreground/80"}`}>{children}</div>
   </section>
 );
 

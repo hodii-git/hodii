@@ -58,7 +58,7 @@ function AgencyLayout() {
       label="Dashboard sections"
       bar={<DashHeader framed />}
       brand={
-        <div className="flex items-center gap-3 rounded-2xl border border-black/[0.06] bg-white p-3">
+        <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
           <span aria-hidden className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-lg font-extrabold text-primary-foreground">{data.agency.name.slice(0, 1).toUpperCase()}</span>
           <div className="min-w-0">
             <p className="flex items-center gap-1 font-extrabold"><span className="truncate">{data.agency.name}</span>{v === "verified" && <BadgeCheck className="size-4 shrink-0 text-primary" aria-label="Verified" />}</p>
@@ -68,8 +68,8 @@ function AgencyLayout() {
       }
       groups={[...(can(r, "listing.create") ? [{ items: [{ key: "add", to: "/dashboard/agency/$slug/listings/$id", params: { slug, id: "new" }, label: "Add listing", icon: Plus, cta: true, tour: "add-listing" }] }] : []), ...sideGroups]}
       extra={<>
-        <Link to="/help" search={{ for: "agency" }} className="flex items-center justify-between rounded-xl border border-border bg-white px-4 py-2.5 text-sm font-semibold hover:bg-muted">Dashboard guide<span aria-hidden>→</span></Link>
-        <Link to="/agency/$slug" params={{ slug }} className="flex items-center justify-between rounded-xl border border-border bg-white px-4 py-2.5 text-sm font-semibold hover:bg-muted">View public page<span aria-hidden>→</span></Link>
+        <Link to="/help" search={{ for: "agency" }} className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold hover:bg-muted">Dashboard guide<span aria-hidden>→</span></Link>
+        <Link to="/agency/$slug" params={{ slug }} className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold hover:bg-muted">View public page<span aria-hidden>→</span></Link>
       </>}
     >
       <AttentionProvider items={attention}><Outlet /></AttentionProvider>

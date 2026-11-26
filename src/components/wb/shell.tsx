@@ -11,7 +11,7 @@ import { Bold, DarkBtn, WLink, magnet, unmagnet, useReveal } from "@/components/
 import { COMPANY_SPLIT, headerFor, type HeaderCfg } from "@/components/wb/header-config";
 
 const LogoMark = () => (
-  <svg style={{ background: "linear-gradient(135deg, #fd267a, #ff6036)", borderRadius: "28%" }} viewBox="0 0 32 32" aria-hidden="true" className="logo-mark h-8 w-8 shrink-0">
+  <svg style={{ background: "var(--brand-gradient)", borderRadius: "28%" }} viewBox="0 0 32 32" aria-hidden="true" className="logo-mark h-8 w-8 shrink-0">
     <path d="M7 15.5 16 8l9 7.5V24a1 1 0 0 1-1 1h-5v-6h-6v6H8a1 1 0 0 1-1-1z" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" stroke="#fff" />
   </svg>
 );

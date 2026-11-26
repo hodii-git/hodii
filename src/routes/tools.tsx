@@ -29,7 +29,7 @@ function Field({ id, label, value, onChange, suffix, step = 1, max }: { id: stri
   return (
     <div>
       <label htmlFor={id} className="mb-1.5 block text-sm font-bold">{label}</label>
-      <div className="relative rounded-2xl border border-black/10 bg-white/70 shadow-sm focus-within:border-black/25 focus-within:bg-white">
+      <div className="relative rounded-2xl border border-border bg-card/70 shadow-sm focus-within:border-border focus-within:bg-card">
         <input id={id} inputMode="decimal" type="number" min={0} max={max} step={step} value={Number.isFinite(value) ? value : 0}
           onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))}
           className="h-12 w-full rounded-2xl bg-transparent px-4 pr-16 text-base font-semibold outline-none" />
@@ -40,7 +40,7 @@ function Field({ id, label, value, onChange, suffix, step = 1, max }: { id: stri
 }
 
 const Result = ({ label, value, big = false }: { label: string; value: string; big?: boolean }) => (
-  <div className={big ? "rounded-2xl bg-primary p-5 text-primary-foreground" : "rounded-2xl border border-border bg-[#f4f4f5] p-5"}>
+  <div className={big ? "rounded-2xl bg-primary p-5 text-primary-foreground" : "rounded-2xl border border-border bg-muted p-5"}>
     <p className={`text-sm font-semibold ${big ? "opacity-70" : "text-muted-foreground"}`}>{label}</p>
     <p className="mt-1 font-display text-2xl font-extrabold">{value}</p>
   </div>
@@ -50,7 +50,7 @@ function Split({ parts }: { parts: { label: string; value: number; cls: string }
   const total = parts.reduce((a, b) => a + b.value, 0) || 1;
   return (
     <div className="mt-5">
-      <div className="flex h-3 overflow-hidden rounded-full bg-black/5" role="img" aria-label={parts.map((p) => `${p.label} ${Math.round((p.value / total) * 100)}%`).join(", ")}>
+      <div className="flex h-3 overflow-hidden rounded-full bg-foreground/5" role="img" aria-label={parts.map((p) => `${p.label} ${Math.round((p.value / total) * 100)}%`).join(", ")}>
         {parts.map((p) => <span key={p.label} className={p.cls} style={{ width: `${(p.value / total) * 100}%` }} />)}
       </div>
       <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs font-semibold text-muted-foreground">
@@ -84,7 +84,7 @@ function Tools() {
       <h1 className="font-display text-4xl font-extrabold leading-[1.05] sm:text-5xl">Plan your move, in numbers.</h1>
       <p className="mt-4 max-w-2xl text-lg text-muted-foreground">Quick estimates for a home loan, what you can borrow, and what moving in really costs. Rates change and lenders decide, so treat these as a guide.</p>
 
-      <div role="tablist" aria-label="Calculators" className="mt-8 inline-flex max-w-full flex-wrap gap-1 rounded-full border border-border bg-white p-1">
+      <div role="tablist" aria-label="Calculators" className="mt-8 inline-flex max-w-full flex-wrap gap-1 rounded-full border border-border bg-card p-1">
         {TABS.map(({ id, label, icon: Icon }) => (
           <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)}
             className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-bold transition ${tab === id ? "bg-primary text-primary-foreground shadow-float" : "text-muted-foreground hover:text-foreground"}`}>
@@ -93,7 +93,7 @@ function Tools() {
         ))}
       </div>
 
-      <section className="mt-6 rounded-[2rem] border border-border bg-white p-6 shadow-sm md:p-8" aria-live="polite">
+      <section className="mt-6 rounded-[2rem] border border-border bg-card p-6 shadow-sm md:p-8" aria-live="polite">
         {tab === "loan" && (<>
           <div className="grid gap-8 lg:grid-cols-2"><div className="grid content-start gap-4 sm:grid-cols-2">
             <Field id="price" label="Property price" value={price} onChange={setPrice} suffix="KES" step={100000} />

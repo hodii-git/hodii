@@ -57,12 +57,12 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
       return (
         <div key={it.key}>
           <button type="button" title={it.label} aria-expanded={isOpen} onClick={() => { if (!wide) { setOpen(true); setOpenSub(it.key); } else setOpenSub(isOpen ? null : it.key); }}
-            className={`flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-semibold text-muted-foreground transition hover:bg-black/5 hover:text-foreground ${wide ? "" : "justify-center px-0"}`}>
+            className={`flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-semibold text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground ${wide ? "" : "justify-center px-0"}`}>
             <it.icon className="size-[19px] shrink-0" aria-hidden />
             {wide && <><span className="truncate">{it.label}</span><ChevronDown className={`ml-auto size-4 transition ${isOpen ? "rotate-180" : ""}`} aria-hidden /></>}
           </button>
           {isOpen && <div className="ml-3 mt-2 space-y-2">
-            {it.sub.map((s) => <L key={s.key} to={s.to} {...(s.params ? { params: s.params } : {})} onClick={() => mobile && setOpen(false)} className="pill-soft flex h-10 items-center gap-2 rounded-full bg-white px-2 pr-4 text-sm font-semibold text-foreground" activeProps={{ className: "pill-soft flex h-10 items-center gap-2 rounded-full bg-primary px-2 pr-4 text-sm font-bold text-primary-foreground" }}><span aria-hidden className="grid size-7 shrink-0 place-items-center rounded-full bg-black/[0.06] text-xs font-extrabold">{s.label.slice(0, 1).toUpperCase()}</span><span className="truncate">{s.label}</span></L>)}
+            {it.sub.map((s) => <L key={s.key} to={s.to} {...(s.params ? { params: s.params } : {})} onClick={() => mobile && setOpen(false)} className="pill-soft flex h-10 items-center gap-2 rounded-full bg-card px-2 pr-4 text-sm font-semibold text-foreground" activeProps={{ className: "pill-soft flex h-10 items-center gap-2 rounded-full bg-primary px-2 pr-4 text-sm font-bold text-primary-foreground" }}><span aria-hidden className="grid size-7 shrink-0 place-items-center rounded-full bg-foreground/[0.06] text-xs font-extrabold">{s.label.slice(0, 1).toUpperCase()}</span><span className="truncate">{s.label}</span></L>)}
           </div>}
         </div>
       );
@@ -71,7 +71,7 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
       return <L key={it.key} to={it.to} {...(it.params ? { params: it.params } : {})} title={it.label} data-tour={it.tour} onClick={() => mobile && setOpen(false)}
         className={`flex h-11 items-center gap-3 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground transition hover:opacity-90 ${wide ? "" : "justify-center px-0"}`}><it.icon className="size-[19px] shrink-0" aria-hidden />{wide && <span className="truncate">{it.label}</span>}{!wide && <span className="sr-only">{it.label}</span>}</L>;
     }
-    const base = `relative flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition ${wide ? "" : "justify-center px-0"} ${it.danger ? "text-red-600 hover:bg-red-50" : "text-muted-foreground hover:bg-black/5 hover:text-foreground"}`;
+    const base = `relative flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition ${wide ? "" : "justify-center px-0"} ${it.danger ? "text-red-600 hover:bg-red-50" : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"}`;
     const on = "bg-primary/10 !text-primary";
     const inner = (
       <>
@@ -95,8 +95,8 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
       {overlay && <button type="button" aria-label="Close menu" className="fixed inset-0 z-[55] bg-black/30" onClick={() => setOpen(false)} />}
       {/* The spacer keeps the page from jumping when the menu opens over it on a phone. */}
       <div className={`relative shrink-0 transition-[width] duration-300 ${hiddenAll ? "w-0 overflow-hidden" : mobile ? "w-[4.25rem]" : open ? "w-[16.5rem]" : "w-[4.5rem]"}`}>
-        <aside aria-label={label} className={`dash-side flex flex-col border-r border-black/[0.06] bg-white/95 backdrop-blur-xl transition-[width] duration-300 ${overlay ? "fixed inset-y-0 left-0 z-[60] w-[17rem] !bg-white shadow-2xl" : "sticky top-0 h-dvh w-full"}`}>
-          <div className={`flex h-16 shrink-0 items-center gap-3 border-b border-black/[0.06] ${wide ? "px-4" : "justify-center"}`}>
+        <aside aria-label={label} className={`dash-side flex flex-col border-r border-border bg-card/95 backdrop-blur-xl transition-[width] duration-300 ${overlay ? "fixed inset-y-0 left-0 z-[60] w-[17rem] !bg-card shadow-2xl" : "sticky top-0 h-dvh w-full"}`}>
+          <div className={`flex h-16 shrink-0 items-center gap-3 border-b border-border ${wide ? "px-4" : "justify-center"}`}>
             <L to="/" aria-label={`${BRAND.name} home`} className="flex items-center gap-2 font-extrabold"><HodiiLogo />{wide && <span className="text-xl">{BRAND.name}</span>}</L>
           </div>
           {wide && <div className="shrink-0 px-3 pt-3">{brand}</div>}
@@ -109,13 +109,13 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
             ))}
             {extra && wide && <div className="space-y-2 pt-1">{extra}</div>}
           </nav>
-          <div className="shrink-0 space-y-1 border-t border-black/[0.06] p-2.5">
+          <div className="shrink-0 space-y-1 border-t border-border p-2.5">
             {mobile && <button type="button" onClick={() => { setHidden(true); setOpen(false); }} aria-label="Hide the menu completely"
-              className={`flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-semibold text-muted-foreground transition hover:bg-black/5 hover:text-foreground ${wide ? "" : "justify-center px-0"}`}>
+              className={`flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-semibold text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground ${wide ? "" : "justify-center px-0"}`}>
               <X className="size-[19px] shrink-0" aria-hidden />{wide && <span>Hide menu</span>}
             </button>}
             <button type="button" onClick={toggle} aria-expanded={open} aria-label={open ? "Collapse menu" : "Expand menu"}
-              className={`flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-semibold text-muted-foreground transition hover:bg-black/5 hover:text-foreground ${wide ? "" : "justify-center px-0"}`}>
+              className={`flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-semibold text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground ${wide ? "" : "justify-center px-0"}`}>
               {open ? <PanelLeftClose className="size-[19px] shrink-0" aria-hidden /> : <PanelLeftOpen className="size-[19px] shrink-0" aria-hidden />}
               {wide && <span>Collapse menu</span>}
             </button>
@@ -125,7 +125,7 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
       <div className="flex min-w-0 flex-1 flex-col" style={{ ["--site-w" as string]: "100%" }}>
         {bar}
         <main id="main" className="mx-auto w-full max-w-[96rem] flex-1 px-4 pb-16 pt-6 md:px-8">
-          {hiddenAll && <button type="button" onClick={() => { setHidden(false); setOpen(true); }} className="mb-4 inline-flex h-10 items-center gap-2 rounded-full border border-border bg-white px-4 text-sm font-semibold shadow-sm"><Menu className="size-4" aria-hidden />Menu</button>}
+          {hiddenAll && <button type="button" onClick={() => { setHidden(false); setOpen(true); }} className="mb-4 inline-flex h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-semibold shadow-sm"><Menu className="size-4" aria-hidden />Menu</button>}
           {children}
         </main>
         {footer === "site"

@@ -27,12 +27,12 @@ export function HeaderSearch() {
     void navigate({ to: "/properties", search: { ...urlFromParams({ ...params, ...next, page: 1 }), ...keepView(search) }, replace: true, resetScroll: false });
   };
   return (
-    <form role="search" className="mx-auto flex h-11 w-full max-w-xl items-center gap-2 rounded-full bg-[#f4f4f5] px-4 ring-1 ring-black/10 focus-within:ring-2 focus-within:ring-primary/40" onSubmit={(e) => { e.preventDefault(); clearTimeout(timer.current); run(text); }}>
+    <form role="search" className="mx-auto flex h-11 w-full max-w-xl items-center gap-2 rounded-full bg-muted px-4 ring-1 ring-border focus-within:ring-2 focus-within:ring-primary/40" onSubmit={(e) => { e.preventDefault(); clearTimeout(timer.current); run(text); }}>
       <Search className="size-4 shrink-0 text-muted-foreground" aria-hidden />
       <input data-bare type="search" value={text} aria-label="Search properties" placeholder="Try “2 bedroom in Kilimani under 80k” or a place"
         onChange={(e) => { const v = e.target.value; setText(v); clearTimeout(timer.current); timer.current = v.trim() === "" ? undefined : setTimeout(() => run(v), 800); if (v.trim() === "") run(""); }}
         className="min-w-0 flex-1 bg-transparent text-[0.95rem] outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden" />
-      {text && <button type="button" aria-label="Clear search" onClick={() => { setText(""); run(""); }} className="grid size-6 place-items-center rounded-full hover:bg-black/5"><X className="size-4" aria-hidden /></button>}
+      {text && <button type="button" aria-label="Clear search" onClick={() => { setText(""); run(""); }} className="grid size-6 place-items-center rounded-full hover:bg-foreground/5"><X className="size-4" aria-hidden /></button>}
     </form>
   );
 }

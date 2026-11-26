@@ -245,7 +245,7 @@ export function MobileListingHeroBody({
                 key={s.id}
                 type="button"
                 onClick={() => { setActiveShort(s.id); scrollTo(s.id); }}
-                className={`truncate rounded-full border px-2 py-1.5 text-center text-[12px] font-semibold transition active:scale-95 ${activeShort === s.id ? "border-white/25 bg-white/10 text-white" : "border-white/15 bg-[var(--ld-surface)] text-zinc-300"}`}
+                className={`truncate rounded-full border px-2 py-1.5 text-center text-[12px] font-semibold transition active:scale-95 ${activeShort === s.id ? "border-white/25 bg-card/10 text-white" : "border-white/15 bg-[var(--ld-surface)] text-zinc-300"}`}
               >
                 {s.label}
               </button>

@@ -158,7 +158,7 @@ function Dashboard({ me }: { me: Me }) {
     <Shell bar={false}>
       <DashFrame
         label="Admin sections" footer="slim" bar={<AdminBar framed />}
-        brand={<div className="flex items-center gap-3 rounded-2xl border border-black/[0.06] bg-white p-3"><span aria-hidden className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-lg font-extrabold text-primary-foreground">{me.username.slice(0, 1).toUpperCase()}</span><div className="min-w-0"><p className="truncate font-extrabold">{me.username}</p><p className="text-xs text-muted-foreground">{me.role === "admin" ? "Admin" : "Editor"}</p></div></div>}
+        brand={<div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3"><span aria-hidden className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-lg font-extrabold text-primary-foreground">{me.username.slice(0, 1).toUpperCase()}</span><div className="min-w-0"><p className="truncate font-extrabold">{me.username}</p><p className="text-xs text-muted-foreground">{me.role === "admin" ? "Admin" : "Editor"}</p></div></div>}
         groups={sideGroups}
       >
         <AttentionProvider items={attention}>

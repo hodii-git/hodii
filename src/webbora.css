@@ -7,8 +7,8 @@
 .wb {
   --radius: 0.625rem;
   /* Nostalgic, warm, muted palette */
-  --surface: oklch(0.955 0.007 80);
-  --surface-deep: oklch(0.915 0.01 78);
+  --surface: #1c1c1f;
+  --surface-deep: #1c1c1f;
   --ink: oklch(0.205 0.007 70);
   --cream: oklch(0.975 0.008 85);
   --taupe: oklch(0.58 0.022 72);
@@ -40,44 +40,13 @@
   --cocoa-grad-90: linear-gradient(90deg, color-mix(in oklab, var(--cream) 45%, var(--cocoa-3)) 0%, var(--cocoa-2) 55%, var(--cocoa-1) 100%);
   --iris: linear-gradient(90deg, var(--iris-5), var(--iris-1), var(--iris-2), var(--iris-3), var(--iris-4), var(--iris-5));
   /* Shared frosted-glass surface used by the header and the cards */
-  --glass-bg: color-mix(in oklab, oklch(1 0 0) 90%, transparent);
-  --glass-bg-strong: color-mix(in oklab, oklch(1 0 0) 96%, transparent);
+  --glass-bg: color-mix(in oklab, #141416 90%, transparent);
+  --glass-bg-strong: color-mix(in oklab, #141416 96%, transparent);
   --glass-blur: blur(24px) saturate(140%);
-  --glass-shadow: inset 0 1px 0 oklch(1 0 0 / 0.85), 0 1px 2px oklch(0.3 0.02 70 / 0.05), 0 14px 40px -14px oklch(0.35 0.03 70 / 0.22);
-  --glass-shadow-hover: inset 0 1px 0 oklch(1 0 0 / 0.9), 0 2px 4px oklch(0.3 0.02 70 / 0.06), 0 30px 60px -22px oklch(0.3 0.03 70 / 0.34);
+  --glass-shadow: inset 0 1px 0 #141416, 0 1px 2px oklch(0.3 0.02 70 / 0.05), 0 14px 40px -14px oklch(0.35 0.03 70 / 0.22);
+  --glass-shadow-hover: inset 0 1px 0 #141416, 0 2px 4px oklch(0.3 0.02 70 / 0.06), 0 30px 60px -22px oklch(0.3 0.03 70 / 0.34);
   --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.22 0.007 70);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  /* Semantic colours (--background, --card, --border, ...) come from theme.css; Webbora no longer carries its own palette. */
 }
 .wb { --site-w: min(84rem, calc(100vw - 2rem)); }
 @media (min-width: 640px) { .wb { --site-w: min(84rem, calc(100vw - 3rem)); } }
@@ -222,12 +191,12 @@
   transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s, padding .4s cubic-bezier(.2,.8,.2,1);
 }
 .wb .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 0.75rem 1.875rem -12px rgb(253 38 122 / 55%); }
-.wb .btn-light { background: var(--cream); color: var(--ink); box-shadow: inset 0 1px 0 oklch(1 0 0), 0 0.75rem 2rem -12px color-mix(in oklab, var(--ink) 60%, transparent); }
+.wb .btn-light { background: var(--cream); color: var(--ink); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.100), 0 0.75rem 2rem -12px color-mix(in oklab, var(--ink) 60%, transparent); }
 .wb .btn-dark::before, .wb .btn-light::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(110deg, transparent 30%, color-mix(in oklab, var(--cream) 30%, transparent) 50%, transparent 70%); transform: translateX(-120%); transition: transform .8s cubic-bezier(.2,.8,.2,1); }
-.wb .btn-light::before { background: linear-gradient(110deg, transparent 30%, oklch(1 0 0 / .9) 50%, transparent 70%); }
+.wb .btn-light::before { background: linear-gradient(110deg, transparent 30%, #141416 50%, transparent 70%); }
 .wb .btn-dark .btn-arrow, .wb .btn-light .btn-arrow { width: 0; opacity: 0; transform: translateX(-6px); transition: width .4s cubic-bezier(.2,.8,.2,1), opacity .3s, transform .4s; }
 .wb .btn-dark:hover { box-shadow: 0 1.25rem 2.75rem -14px color-mix(in oklab, var(--ink) 85%, transparent); }
-.wb .btn-light:hover { box-shadow: inset 0 1px 0 oklch(1 0 0), 0 1.5rem 3rem -14px color-mix(in oklab, var(--ink) 80%, transparent); }
+.wb .btn-light:hover { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.100), 0 1.5rem 3rem -14px color-mix(in oklab, var(--ink) 80%, transparent); }
 .wb .btn-dark:hover::before, .wb .btn-light:hover::before { transform: translateX(120%); }
 .wb .btn-dark:hover .btn-arrow, .wb .btn-light:hover .btn-arrow { width: 1rem; opacity: 1; transform: none; }
 .wb .btn-dark:active, .wb .btn-light:active { transform: translate(var(--tx), var(--ty)) scale(.97); }
@@ -248,7 +217,7 @@
 }
 .wb .glass-card::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  background: radial-gradient(17.5rem circle at var(--cx) var(--cy), oklch(1 0 0 / 0.75), transparent 65%);
+  background: radial-gradient(17.5rem circle at var(--cx) var(--cy), rgb(255 255 255 / 0.083), transparent 65%);
   opacity: 0; transition: opacity .4s;
 }
 .wb .glass-card:hover { --lift: -6px; background: var(--glass-bg-strong); box-shadow: var(--glass-shadow-hover); }
@@ -836,7 +805,7 @@
   box-shadow: inset 0 1px 0 color-mix(in oklab, var(--cream) 35%, transparent), 0 0 0 1px color-mix(in oklab, var(--ink) 6%, transparent), 0 1.5rem 3rem -1.5rem color-mix(in oklab, var(--ink) 25%, transparent); }
 .wb .review-stars { display: flex; gap: .2rem; color: oklch(0.8 0.16 80); }
 .wb .review-stars svg { fill: currentColor; }
-.wb .review-win { display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .7rem; border-radius: 999px; font-size: .8rem; font-weight: 500; color: oklch(0.42 0.12 155); background: color-mix(in oklab, oklch(0.93 0.06 155) 45%, transparent); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px color-mix(in oklab, oklch(0.6 0.12 155) 25%, transparent); }
+.wb .review-win { display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .7rem; border-radius: 999px; font-size: .8rem; font-weight: 500; color: oklch(0.42 0.12 155); background: color-mix(in oklab, #1c1c1f 45%, transparent); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px color-mix(in oklab, oklch(0.6 0.12 155) 25%, transparent); }
 .wb .review-q { margin-top: .9rem; font-size: .98rem; line-height: 1.5; }
 .wb .review-foot { display: flex; align-items: center; gap: .75rem; margin-top: 1rem; padding-top: .9rem; border-top: 1px solid color-mix(in oklab, var(--ink) 10%, transparent); }
 .wb .review-avatar { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 999px; font-weight: 600; font-size: .8rem; color: var(--cream); background: linear-gradient(135deg, var(--ink), color-mix(in oklab, var(--ink) 55%, oklch(0.6 0.12 250))); }

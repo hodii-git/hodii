@@ -165,6 +165,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <svg aria-hidden="true" focusable="false" width="0" height="0" style={{ position: "absolute" }}><defs><linearGradient id="hodii-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor={THEME.brandA} /><stop offset="1" stopColor={THEME.brandB} /></linearGradient></defs></svg>
         {children}
         <Scripts />
       </body>

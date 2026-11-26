@@ -164,3 +164,15 @@
 :root .wb .text-cocoa, :root .wb .text-cocoa-hero { background-image: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
 :root .wb .btn-split[data-tone="dark"] .btn-split-box { background: rgb(255 255 255 / 0.22); color: #fff; }
 :root .wb .btn-split[data-tone="light"] { background: var(--paper); color: var(--ink); }
+
+/* ---- Gradient text and icons: anything that used to be plain pink now uses the brand gradient ---- */
+.brand-word,
+.text-primary:not(svg):not([class*="bg-"]):not(button):not(input):not(.btn-split),
+.action-pill-on:not(svg) {
+  background-image: var(--brand-gradient);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.brand-word { padding-right: 0.06em; }
+svg.text-primary { stroke: url(#hodii-grad); }
+svg.text-primary.fill-current { fill: url(#hodii-grad); }

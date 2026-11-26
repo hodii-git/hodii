@@ -1547,7 +1547,6 @@ html[data-listing-dark="1"] .wb.wb-site .site-menu-panel > :last-child { padding
   html[data-listing-dark="1"] .place-suggest, html[data-listing-dark="1"] :is(.ls-card, .m-sheet) [role="listbox"]:not([data-floating-panel] *) { background: #1c1c1f; color: #f4f4f5; }
   html[data-listing-dark="1"] .ai-chat { background: #141416 !important; box-shadow: 0 0 0 1px rgb(255 255 255 / .12) !important; color: #f4f4f5; }
   html[data-listing-dark="1"] .ai-chat .bg-primary { background-color: var(--ld-theme) !important; color: #fff !important; }
-  html[data-listing-dark="1"] .ai-chat .text-primary { color: var(--ld-theme); }
 }
 }
 

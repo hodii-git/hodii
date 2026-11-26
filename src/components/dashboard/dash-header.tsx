@@ -54,7 +54,7 @@ export function DashHeader({ framed = false }: { framed?: boolean } = {}) {
     tone = "admin";
     left = (
       <div className="flex min-w-0 items-center gap-3">
-        <span className="hidden text-xl font-extrabold sm:inline">{BRAND.name}</span>
+        <span className="brand-word hidden text-xl font-extrabold sm:inline">{BRAND.name}</span>
         <Pill cls="bg-foreground/[0.06] text-foreground"><ShieldCheck className="size-3.5" />Admin console</Pill>
         {admin?.title && <span className="truncate text-sm font-semibold opacity-80">/ {admin.title}</span>}
       </div>
@@ -112,7 +112,7 @@ export function DashHeader({ framed = false }: { framed?: boolean } = {}) {
           <>
             <L to="/" className="flex shrink-0 items-center gap-2 pl-1 font-extrabold" aria-label={`${BRAND.name} home`}>
               {isAdmin ? <ShieldCheck className="size-6" /> : <HodiiLogo />}
-              {!isAdmin && <span className="hidden text-xl lg:inline">{BRAND.name}</span>}
+              {!isAdmin && <span className="brand-word hidden text-xl lg:inline">{BRAND.name}</span>}
             </L>
             <span aria-hidden className="hidden h-6 w-px bg-current opacity-15 sm:block" />
           </>

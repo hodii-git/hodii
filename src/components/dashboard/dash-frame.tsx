@@ -97,7 +97,7 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
       <div className={`relative shrink-0 transition-[width] duration-300 ${hiddenAll ? "w-0 overflow-hidden" : mobile ? "w-[4.25rem]" : open ? "w-[16.5rem]" : "w-[4.5rem]"}`}>
         <aside aria-label={label} className={`dash-side flex flex-col border-r border-border bg-card/95 backdrop-blur-xl transition-[width] duration-300 ${overlay ? "fixed inset-y-0 left-0 z-[60] w-[17rem] !bg-card shadow-2xl" : "sticky top-0 h-dvh w-full"}`}>
           <div className={`flex h-16 shrink-0 items-center gap-3 border-b border-border ${wide ? "px-4" : "justify-center"}`}>
-            <L to="/" aria-label={`${BRAND.name} home`} className="flex items-center gap-2 font-extrabold"><HodiiLogo />{wide && <span className="text-xl">{BRAND.name}</span>}</L>
+            <L to="/" aria-label={`${BRAND.name} home`} className="flex items-center gap-2 font-extrabold"><HodiiLogo />{wide && <span className="brand-word text-xl">{BRAND.name}</span>}</L>
           </div>
           {wide && <div className="shrink-0 px-3 pt-3">{brand}</div>}
           <nav aria-label={label} className="dash-nav min-h-0 flex-1 space-y-4 overflow-y-auto overflow-x-hidden px-2.5 pad-fixed">

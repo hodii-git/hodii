@@ -69,8 +69,8 @@ export function MobileTabBar() {
     inquiries: !isPropertyPage && path.startsWith("/notifications"),
     profile: !isPropertyPage && (path.startsWith("/profile") || path.startsWith("/auth")),
   };
-  const item = (active: boolean) => `flex flex-1 flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[0.7rem] font-medium transition-colors ${active ? "text-[#ff385c]" : "text-zinc-400 hover:text-zinc-200"}`;
-  const ico = (active: boolean) => ({ className: `size-[22px] ${active ? "text-[#ff385c]" : ""}`, strokeWidth: active ? 2.2 : 1.8, "aria-hidden": true as const });
+  const item = (active: boolean) => `flex flex-1 flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[0.7rem] font-medium transition-colors ${active ? "text-primary" : "text-zinc-400 hover:text-zinc-200"}`;
+  const ico = (active: boolean) => ({ className: `size-[22px] ${active ? "text-primary" : ""}`, strokeWidth: active ? 2.2 : 1.8, "aria-hidden": true as const });
   const current = (active: boolean) => (active ? ("page" as const) : undefined);
   const inquiryInner = (
     <>
@@ -85,7 +85,7 @@ export function MobileTabBar() {
   return (
     <nav ref={nav} aria-label="Main" data-floating className={`mobile-tabbar mobile-tabbar-dark fixed inset-x-0 bottom-0 z-[45] flex items-center justify-around border-t border-white/10 bg-black px-1 pb-[env(safe-area-inset-bottom)] transition-transform duration-300 md:hidden ${hide ? "translate-y-full" : "translate-y-0"}`}>
       <Link to="/" className={item(on.home)} aria-current={current(on.home)}>
-        <Home {...ico(on.home)} className={`size-[22px] fill-current ${on.home ? "text-[#ff385c]" : ""}`} />Home
+        <Home {...ico(on.home)} className={`size-[22px] fill-current ${on.home ? "text-primary" : ""}`} />Home
       </Link>
       <Link to="/properties" className={item(on.explore)} aria-current={current(on.explore)} aria-expanded={sheet}
         onClick={(e) => { if (path === "/properties") { e.preventDefault(); toggleSheet(); } else setSheet(true); }}>

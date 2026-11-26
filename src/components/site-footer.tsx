@@ -27,7 +27,7 @@ export function SiteFooter() {
           <div>
             <Link to="/" className="flex items-center gap-2 text-2xl font-extrabold text-primary">
               <HodiiLogo size="h-8 w-8" />
-              {BRAND.wordmark}
+              <span className="brand-word">{BRAND.wordmark}</span>
             </Link>
             <p className="mt-4 max-w-xs text-muted-foreground">
               {BRAND.tagline}. Homes, land and commercial space for sale and to rent, from verified agencies and owners.

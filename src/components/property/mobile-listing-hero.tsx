@@ -31,7 +31,7 @@ export function MobileListingTopBar({ p }: { p: PropertyDetail }) {
   const pill = "ld-pill shrink-0 whitespace-nowrap";
   return (
     <div className="ld-font sticky top-0 z-40 bg-black lg:hidden"><div className="mx-auto flex w-full max-w-[82rem] items-center px-1.5 py-3 md:px-4 md:py-3.5">
-      <Link to="/" aria-label={`${BRAND.name} home`} className="mr-3 hidden shrink-0 items-center gap-2.5 text-white md:flex"><HodiiLogo /><span className="font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span></Link>
+      <Link to="/" aria-label={`${BRAND.name} home`} className="mr-3 hidden shrink-0 items-center gap-2.5 text-white md:flex"><HodiiLogo /><span className="brand-word font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span></Link>
       <button type="button" aria-label="Filters" aria-haspopup="dialog" onClick={() => window.dispatchEvent(new Event(OPEN_LISTING_SEARCH))} style={{ color: "#ffffff" }} className="grid size-10 shrink-0 place-items-center active:scale-95">
         <svg viewBox="0 0 28 28" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden>
           <path d="M3 8h11M22 8h3M3 20h3M14 20h11" />

@@ -18,7 +18,7 @@ const LogoMark = () => (
 const Logo = () => (
   <Link to="/" className="logo flex min-w-0 items-center gap-2.5 text-foreground" aria-label={`${BRAND.name} home`}>
     <LogoMark />
-    <span className="truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
+    <span className="brand-word truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
   </Link>
 );
 

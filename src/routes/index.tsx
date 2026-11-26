@@ -2,12 +2,12 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { searchHeading } from "@/lib/search-title";
 import { LocationBar, scopeText, useNearbyHome } from "@/components/property/near-you";
-import { lazy, Suspense, useEffect, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { LayoutPill } from "@/components/property/layout-pill";
+import { HomeSearch } from "@/components/home/home-search";
+import { ExploreBar } from "@/components/property/explore-bar";
 import { ViewPill } from "@/components/property/view-pill";
 import { InfiniteResults } from "@/components/property/infinite-results";
-import { ClientOnly } from "@tanstack/react-router";
 import { PropertyGrid, PropertyGridSkeleton } from "@/components/property/property-card";
 import { useSavedSet } from "@/components/property/results";
 import { DataUnavailable } from "@/components/data-unavailable";
@@ -15,8 +15,6 @@ import { homeQuery, searchListings, searchQuery } from "@/lib/properties.functio
 import { absUrl } from "@/lib/site";
 import { paramsFromUrl, urlFromParams, type SearchUrl } from "@/lib/search-url";
 import type { SearchParams } from "@/lib/listing-search";
-
-const SearchMap = lazy(() => import("@/components/property/search-map").then((m) => ({ default: m.SearchMap })));
 
 const KEYS = ["q", "for", "cat", "type", "county", "area", "min", "max", "beds", "baths", "sqmMin", "sqmMax", "features", "furnishing", "cond", "verified", "sort", "lat", "lng", "r", "poly"] as const;
 
@@ -46,7 +44,6 @@ function HomePage() {
   const params = paramsFromUrl(search);
   const filtering = Object.keys(search).length > 0;
   const change = (next: Partial<SearchParams>) => navigate({ to: "/properties", search: urlFromParams({ ...params, ...next, page: 1 }) });
-  const setGeo = (g: Pick<SearchParams, "circle" | "polygon">) => change({ circle: undefined, polygon: undefined, ...g });
   const q = useQuery({ ...searchQuery({ ...params, page: 1 }), placeholderData: keepPreviousData, enabled: filtering });
   const geoSearch = urlFromParams(params);
   const { setPlace, nearby } = useNearbyHome();
@@ -56,29 +53,20 @@ function HomePage() {
   const latestNote = nearby && nearby.latest.length > 0 ? scopeText(nearby.latestScopes) : "";
   const saved = useSavedSet([...featured, ...latest]);
   const heading = searchHeading(params);
-  // The map sits beside the search on wide screens and after all listings otherwise.
-  const [wide, setWide] = useState(true);
-  useEffect(() => { const mq = window.matchMedia("(min-width: 1024px)"); const f = () => setWide(mq.matches); f(); mq.addEventListener("change", f); return () => mq.removeEventListener("change", f); }, []);
-  const mapEl = (
-    <ClientOnly fallback={<div className="glass-lg h-full rounded-[1.5rem]" />}>
-      <Suspense fallback={<div className="glass-lg h-full rounded-[1.5rem]" />}>
-        <div data-tour="home-map" className="h-full rounded-[1.5rem]"><SearchMap variant="home" params={params} onGeo={setGeo} /></div>
-      </Suspense>
-    </ClientOnly>
-  );
-
+  const homeResult = q.data && !q.data.unavailable ? { total: q.data.nearest ? 0 : q.data.total, ...(q.data.nearest ? { nearest: q.data.nearest } : {}), loading: q.isPlaceholderData || q.isFetching } : undefined;
   return (
-    <main className="pt-24 pb-20 max-sm:px-4 md:pt-32">
+    <main className="pt-[calc(5rem+var(--pills-h,4rem))] pb-24 transition-[padding] duration-500 ease-out max-sm:px-4 md:pt-[calc(6.5rem+var(--pills-h,4rem))] lg:pt-[calc(4.5rem+var(--pills-h,5rem))]">
+      {/* Kept for search engines and screen readers only; nothing is shown to visitors. */}
+      <div className="sr-only"><h1>{heading.title}</h1>{heading.subtitle && <p>{heading.subtitle}</p>}</div>
+      {/* Phone: the search sheet (opened from the header bar or the Explore tab). Hidden on large screens, where the header carries the search. */}
+      <div className="mx-auto max-w-[112rem]">
+        <ExploreBar deferred value={params} onChange={change} result={homeResult} />
+        <div className="mx-auto mt-4 max-w-4xl lg:hidden"><HomeSearch deferred value={params} onChange={change} result={homeResult} /></div>
+      </div>
       <div className="mx-auto grid max-w-[112rem] gap-5">
-        <div className="min-w-0">
-          <div className="mb-4">
-            <h1 title={heading.title} className="line-clamp-2 font-display text-2xl font-extrabold leading-tight sm:line-clamp-1 sm:text-3xl">{heading.title}</h1>
-            {heading.subtitle && <p className="mt-1 text-sm text-muted-foreground sm:text-base">{heading.subtitle}</p>}
-          </div>
-        </div>
 
-        <div className={`min-w-0 lg:col-span-2 ${filtering ? "" : "hidden"}`}>
-          <div className="mt-10 md:mt-14">
+        <div className={`min-w-0 ${filtering ? "" : "hidden"}`}>
+          <div className="mt-6 md:mt-8">
             {filtering ? (
               <div className={q.isPlaceholderData ? "opacity-60 transition-opacity" : "transition-opacity"}>
                 {q.data && !q.data.unavailable && (
@@ -99,8 +87,8 @@ function HomePage() {
         </div>
 
       </div>
-      {!filtering && (data.unavailable ? <div className="mx-auto mt-10 max-w-[112rem]"><DataUnavailable /></div> : (
-        <div className="mx-auto mt-12 max-w-[112rem] space-y-10 md:mt-16">
+      {!filtering && (data.unavailable ? <div className="mx-auto mt-6 max-w-[112rem]"><DataUnavailable /></div> : (
+        <div className="mx-auto mt-6 max-w-[112rem] space-y-10 md:mt-8">
           {(() => {
             const items = [...featured.filter((c) => c.tier === "premium"), ...featured.filter((c) => c.tier === "boost")];
             return items.length > 0 && (

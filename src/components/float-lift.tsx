@@ -21,11 +21,16 @@ export function FloatLift() {
       if (lift > vh * 0.55) root.setAttribute("data-footer-near", ""); else root.removeAttribute("data-footer-near");
     };
     const tick = () => { if (!raf) raf = requestAnimationFrame(run); };
+    // The floating chips (List/Map, Feedback, guide) slip away while scrolling down and come back as soon as you scroll up.
+    let last = window.scrollY;
+    const dir = () => { const y = window.scrollY; if (y > last + 6 && y > 90) root.setAttribute("data-float-away", ""); else if (y < last - 6 || y < 40) root.removeAttribute("data-float-away"); last = y; };
+    root.removeAttribute("data-float-away");
     run();
+    window.addEventListener("scroll", dir, { passive: true });
     window.addEventListener("scroll", tick, { passive: true });
     window.addEventListener("resize", tick);
     const ro = new ResizeObserver(tick); ro.observe(document.body);
-    return () => { window.removeEventListener("scroll", tick); window.removeEventListener("resize", tick); ro.disconnect(); if (raf) cancelAnimationFrame(raf); root.style.removeProperty("--lift"); root.removeAttribute("data-footer-near"); };
+    return () => { window.removeEventListener("scroll", dir); root.removeAttribute("data-float-away"); window.removeEventListener("scroll", tick); window.removeEventListener("resize", tick); ro.disconnect(); if (raf) cancelAnimationFrame(raf); root.style.removeProperty("--lift"); root.removeAttribute("data-footer-near"); };
   }, [path]);
   return null;
 }

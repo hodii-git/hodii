@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Compass, Pause, X } from "lucide-react";
+import { Compass, X } from "lucide-react";
 import { ToneIcon, POP_BTN, POP_BTN_GHOST, POP_BTN_OUTLINE } from "@/components/ui/tone-icon";
 import { useRouterState } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
@@ -154,10 +154,9 @@ export function TourRunner() {
 
   if (state.status === "paused") {
     return (
-      hidden ? null : <div ref={card} className="tour-prompt tour-paused keep-tones glass-menu popup-clean fixed bottom-4 left-3 z-[95] sm:bottom-6 sm:left-6 flex max-w-[calc(100vw-1.5rem)] flex-wrap items-center gap-2 rounded-3xl p-2 pl-3 text-sm font-semibold">
-        <ToneIcon icon={Pause} tone="idea" size="sm" />Tour paused
-        <Button size="sm" className={POP_BTN} onClick={() => update(resume(state))}>Resume</Button>
-        <Button size="sm" variant="ghost" className={POP_BTN_GHOST} onClick={() => update(dismiss(state))}>Don't show again</Button>
+      hidden ? null : <div ref={card} data-floating className="tour-prompt tour-paused keep-tones glass-menu popup-clean fixed bottom-4 left-3 z-[95] sm:bottom-6 sm:left-6">
+        <button type="button" className="resume-btn" onClick={() => update(resume(state))}><Compass className="size-4" aria-hidden />Resume guide</button>
+        <button type="button" className="resume-x" aria-label="Stop the guide" title="Stop the guide" onClick={() => update(dismiss(state))}><X className="size-4" aria-hidden /></button>
       </div>
     );
   }

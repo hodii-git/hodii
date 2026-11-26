@@ -37,13 +37,17 @@ const BATHS: PickOption[] = [1, 2, 3, 4].map((n) => ({ value: String(n), label: 
 const num = (s: string) => { const n = Number(s.replace(/[, ]/g, "")); return s.trim() !== "" && Number.isFinite(n) && n >= 0 ? Math.floor(n) : undefined; };
 
 /** The homepage search bar: location, price, a "More filters" panel and an AI button. Filters apply on the page, without leaving it. */
-export function HomeSearch({ value, onChange, result, deferred = false, pinned = false }: { pinned?: boolean; value: SearchParams; onChange: (next: Partial<SearchParams>) => void; result?: AiResult; /** Homepage: nothing searches while typing; Enter, a filter or Ask AI sends the person to the search page. */ deferred?: boolean }) {
+export function HomeSearch({ value, onChange, result, deferred = false, pinned = false, popup, onPopupClose }: { /** Large screens: when set (even to null) this renders only popups, opened from the Filters and Ask AI buttons beside the type chips. */ popup?: "ai" | "filters" | null; onPopupClose?: () => void; pinned?: boolean; value: SearchParams; onChange: (next: Partial<SearchParams>) => void; result?: AiResult; /** Homepage: nothing searches while typing; Enter, a filter or Ask AI sends the person to the search page. */ deferred?: boolean }) {
   const set = (p: Partial<SearchParams>) => onChange({ ...p, page: 1 });
   const [moreOpen, setMoreOpen] = useState(false);
   const [phone, setPhone] = useState(false);
   const sheetOpen = useSheetOpen();
+  const isPopup = popup !== undefined;
   // Closing the sheet puts it back on the plain search next time; the filters stay applied.
-  useEffect(() => { if (phone && !sheetOpen) setMoreOpen(false); }, [phone, sheetOpen]);
+  useEffect(() => { if (!isPopup && phone && !sheetOpen) setMoreOpen(false); }, [isPopup, phone, sheetOpen]);
+  useEffect(() => { if (isPopup && popup === null) setMoreOpen(false); }, [isPopup, popup]);
+  /** The phone layout: the bottom sheet on a phone, and the Ask AI popup on large screens (same card, same buttons, filters open inside it). */
+  const sheetLike = phone || popup === "ai";
   useEffect(() => { const m = window.matchMedia("(max-width: 767px)"); const f = () => setPhone(m.matches); f(); m.addEventListener("change", f); return () => m.removeEventListener("change", f); }, []);
   const [text, setText] = useState(value.q ?? "");
   const [notes, setNotes] = useState<string[]>([]);
@@ -63,14 +67,14 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
   /** Everything back to nothing: the words, the filters, the map area and any chat. */
   chatOpen.current = ai.open;
   // Ask AI is always the bottom sheet, whatever the screen size.
-  useEffect(() => { if (!phone && !pinned) setSheet(ai.open); }, [ai.open, phone, pinned]);
+  useEffect(() => { if (!phone && !pinned && !isPopup) setSheet(ai.open); }, [ai.open, phone, pinned, isPopup]);
   // Pinned (map page on wide screens): the chat is open from the start.
   useEffect(() => { if (pinned && !phone) ai.show(); }, [pinned, phone]); // eslint-disable-line react-hooks/exhaustive-deps
   const clearAll = () => { clearTimeout(timer.current); ai.close(); setText(""); setNotes([]); fromText.current = []; applied.current = ""; onChange({ ...CLEAR_ALL }); };
   /** The X: closes the chat and clears the box. Words typed without chat only lose what they set. */
   const clearBox = () => { clearTimeout(timer.current); if (ai.open) { clearAll(); return; } setText(""); search(""); };
   const submitAi = () => { clearTimeout(timer.current); const t = text; setText(""); ai.send(t); };
-  const submit = () => { clearTimeout(timer.current); if (ai.open) { const t = text; setText(""); ai.send(t); } else { search(text); setSheet(false); } };
+  const submit = () => { clearTimeout(timer.current); if (ai.open) { const t = text; setText(""); ai.send(t); } else { search(text); setSheet(false); if (isPopup) onPopupClose?.(); } };
   const pickPlace = (h: import("@/lib/places.server").PlaceHit) => {
     const base = Object.fromEntries(Object.entries(pickCriteria(latest.current)).filter(([k]) => k !== "q" && k !== "countyCodes"));
     const rest = understand(text.trim()).understood.criteria;
@@ -131,9 +135,22 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
               </div>
             </div>
   );
-  return (
-    <SearchSheet ai={ai.open} pinned={pinned && !phone}>
-      <form role="search" aria-label="Search properties" data-tour="hero-search" onSubmit={(e) => { e.preventDefault(); submit(); }} className={`home-search ${phone && moreOpen ? "hidden" : ""} glass-solid ${ai.open ? "mt-4 lg:mt-5" : "mt-8 lg:mt-12"} flex w-full min-w-0 flex-col gap-3 rounded-[2rem] p-3 sm:p-4 ${typing ? "" : "2xl:flex-row 2xl:items-center"}`}>
+  const filtersOpen = isPopup ? popup === "filters" : moreOpen && !sheetLike;
+  const closeFilters = () => { setMoreOpen(false); if (isPopup) onPopupClose?.(); };
+  const filtersDialog = (
+    <>
+          {filtersOpen && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[55]" onClick={closeFilters} />, document.body)}
+          <Dialog open={filtersOpen} onOpenChange={(o) => { if (!o) closeFilters(); else setMoreOpen(true); }} modal={false}>
+          <DialogContent onInteractOutside={(e) => { if ((e.target as Element | null)?.closest?.("[data-floating-panel]")) e.preventDefault(); }} className={`${POPUP_CARD} z-[81] sm:max-w-xl md:max-w-2xl [&>*]:min-w-0`}>
+            <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><ToneIcon icon={SlidersHorizontal} tone="other" />More filters</DialogTitle><DialogDescription className="popup-note mt-3 text-left">Results update as you choose. Pick only what matters to you.</DialogDescription></DialogHeader>
+            {filtersBody}
+          </DialogContent>
+          </Dialog>
+    </>
+  );
+  const sheetBody = (
+    <>
+      <form role="search" aria-label="Search properties" data-tour="hero-search" onSubmit={(e) => { e.preventDefault(); submit(); }} className={`home-search ${sheetLike && moreOpen ? "hidden" : ""} glass-solid ${popup === "ai" ? "mt-1" : ai.open ? "mt-4 lg:mt-5" : "mt-8 lg:mt-12"} flex w-full min-w-0 flex-col gap-3 rounded-[2rem] p-3 sm:p-4 ${typing || sheetLike ? "" : "2xl:flex-row 2xl:items-center"}`}>
         <div className={`input-glass relative flex min-w-0 items-start gap-3 rounded-[1.5rem] px-5 py-4 ${typing ? "w-full" : "flex-1"}`}>
           <Search className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={1.7} aria-hidden />
           <label htmlFor="home-q" className="sr-only">Describe the place you want</label>
@@ -147,30 +164,24 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
           <button type="submit" aria-label={ai.open ? "Send message" : "Search"} disabled={ai.pending} className="send-icon absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:text-foreground disabled:opacity-60">{ai.pending ? <Loader size="xs" /> : <Send className="size-5" aria-hidden />}</button>
         </div>
         {!ai.open && placeWords(text).length >= 3 && <PlaceSuggest text={text} onPick={pickPlace} />}
-        <div className={`flex min-w-0 flex-row flex-nowrap items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:justify-between sm:gap-3 ${typing ? "w-full" : "2xl:shrink-0"}`}>
-        <div ref={moreRef} className={`input-glass flex w-auto shrink-0 items-center rounded-xl px-3 ${typing ? "" : "2xl:h-14 2xl:rounded-2xl 2xl:px-4"}`}>
-          <Button variant="ghost" type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen((o) => !o)} className="flex h-10 w-full justify-start gap-2 2xl:h-full bg-transparent p-0 text-left text-sm hover:bg-transparent">
+        <div className={`flex min-w-0 flex-row flex-nowrap items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:justify-between sm:gap-3 ${typing || sheetLike ? "w-full" : "2xl:shrink-0"}`}>
+        <div ref={moreRef} className={`input-glass flex w-auto shrink-0 items-center rounded-xl px-3 ${typing || sheetLike ? "" : "2xl:h-14 2xl:rounded-2xl 2xl:px-4"}`}>
+          <Button variant="ghost" type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen((o) => !o)} className={`flex h-10 w-full justify-start gap-2 ${sheetLike ? "" : "2xl:h-full"} bg-transparent p-0 text-left text-sm hover:bg-transparent`}>
             <SlidersHorizontal className="h-4 w-4 shrink-0 text-foreground" strokeWidth={2} aria-hidden />
             <span className="relative shrink-0 whitespace-nowrap pr-2 font-semibold text-foreground">More filters
               {active > 0 && <span className="cta absolute -right-0.5 -top-3 grid h-[1.1rem] min-w-[1.1rem] place-items-center rounded-full px-1 text-[0.65rem] font-bold leading-none">{active}</span>}</span>
           </Button>
-          {moreOpen && !phone && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[55]" onClick={() => setMoreOpen(false)} />, document.body)}
-          <Dialog open={moreOpen && !phone} onOpenChange={setMoreOpen} modal={false}>
-          <DialogContent onInteractOutside={(e) => { if ((e.target as Element | null)?.closest?.("[data-floating-panel]")) e.preventDefault(); }} className={`${POPUP_CARD} z-[81] sm:max-w-xl md:max-w-2xl [&>*]:min-w-0`}>
-            <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><ToneIcon icon={SlidersHorizontal} tone="other" />More filters</DialogTitle><DialogDescription className="popup-note mt-3 text-left">Results update as you choose. Pick only what matters to you.</DialogDescription></DialogHeader>
-            {filtersBody}
-          </DialogContent>
-          </Dialog>
+          {!isPopup && filtersDialog}
         </div>
         <div className="ml-auto flex shrink-0 items-center justify-end gap-1">
-          {(hasFilters(value) || text.length > 0 || ai.open) && <button type="button" data-tour="clear-all" onClick={clearAll} className="inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-xl 2xl:h-14 2xl:rounded-2xl border border-border bg-card px-2.5 text-sm font-bold text-foreground shadow-sm transition hover:bg-muted"><X className="size-3.5" aria-hidden />Clear all</button>}
-          <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`ask-ai-btn inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 2xl:h-14 2xl:rounded-2xl 2xl:px-5 text-sm font-bold ${ai.open ? "max-md:hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
+          {(hasFilters(value) || text.length > 0 || ai.open) && <button type="button" data-tour="clear-all" onClick={clearAll} className={`inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-xl ${sheetLike ? "" : "2xl:h-14 2xl:rounded-2xl"} border border-border bg-card px-2.5 text-sm font-bold text-foreground shadow-sm transition hover:bg-muted`}><X className="size-3.5" aria-hidden />Clear all</button>}
+          <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`ask-ai-btn inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 ${sheetLike ? "" : "2xl:h-14 2xl:rounded-2xl 2xl:px-5"} text-sm font-bold ${ai.open ? "max-md:hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
             {ai.pending ? <Loader size="xs" /> : <Sparkles className="h-4 w-4" aria-hidden />}{ai.open ? "Refine" : "Ask AI"}
           </Button>
         </div>
         </div>
       </form>
-      {phone && moreOpen && (
+      {sheetLike && moreOpen && (
         <div className="filters-plain pb-2">
           <div className="mb-3 flex items-center justify-between gap-2">
             <p className="flex items-center gap-2 text-base font-extrabold"><ToneIcon icon={SlidersHorizontal} tone="other" />More filters</p>
@@ -182,6 +193,25 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
       {notes.length > 0 && <p className="mt-3 px-2 text-sm text-muted-foreground">Understood: {notes.join(" · ")}</p>}
       {ai.panel}
       {ai.dialog}
+    </>
+  );
+  if (isPopup) {
+    return (
+      <>
+        {popup === "filters" && filtersDialog}
+        <Dialog open={popup === "ai"} onOpenChange={(o) => { if (!o) onPopupClose?.(); }} modal={false}>
+          {popup === "ai" && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[55]" onClick={() => onPopupClose?.()} />, document.body)}
+          <DialogContent onInteractOutside={(e) => { if ((e.target as Element | null)?.closest?.("[data-floating-panel]")) e.preventDefault(); }} className={`${POPUP_CARD} z-[81] sm:max-w-[28rem] [&>*]:min-w-0`}>
+            <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><ToneIcon icon={Search} tone="other" />Search</DialogTitle><DialogDescription className="sr-only">Describe the place you want, set filters or ask AI.</DialogDescription></DialogHeader>
+            {sheetBody}
+          </DialogContent>
+        </Dialog>
+      </>
+    );
+  }
+  return (
+    <SearchSheet ai={ai.open} pinned={pinned && !phone}>
+      {sheetBody}
     </SearchSheet>
   );
 }

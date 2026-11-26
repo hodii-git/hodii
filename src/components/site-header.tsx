@@ -1,5 +1,4 @@
-import { HeaderPills } from "@/components/header-search";
-import { HeaderSearch } from "@/components/header-search";
+import { HeaderPills, HeaderSearch } from "@/components/header-search";
 import { useEffect, useRef, useState } from "react";
 import { installApp, updateApp, usePwa } from "@/lib/pwa";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
@@ -27,17 +26,27 @@ const NAV: NavItem[] = [
 ];
 
 /** The one site header: a copy of the squared header on the pricing page (same logo, bar, hamburger and menu). */
-/** The type pills slide away when you scroll down and slowly return when you scroll up; the page below follows (see --pills-h). */
-function PillsRow() {
+/**
+ * The row under the header bar. On large screens it is the big search bar (the type chips live on the content side there);
+ * on smaller screens it is the type chips. It slides away when you scroll down and slowly returns when you scroll up; the page below follows (see --pills-h).
+ */
+function ExtraRows({ search }: { search: boolean }) {
   const [hidden, setHidden] = useState(false);
+  const [lg, setLg] = useState(false);
+  useEffect(() => { const mq = window.matchMedia("(min-width: 1024px)"); const f = () => setLg(mq.matches); f(); mq.addEventListener("change", f); return () => mq.removeEventListener("change", f); }, []);
   useEffect(() => {
     let last = window.scrollY;
     const on = () => { const y = window.scrollY; if (y > last + 6 && y > 90) setHidden(true); else if (y < last - 6 || y < 40) setHidden(false); last = y; };
     window.addEventListener("scroll", on, { passive: true });
     return () => { window.removeEventListener("scroll", on); document.documentElement.style.removeProperty("--pills-h"); };
   }, []);
-  useEffect(() => { document.documentElement.style.setProperty("--pills-h", hidden ? "0rem" : "4.5rem"); }, [hidden]);
-  return <div className="pills-row" data-hidden={hidden || undefined}><div className="overflow-hidden"><div className="px-3 pb-2 lg:px-6"><HeaderPills /></div></div></div>;
+  useEffect(() => { document.documentElement.style.setProperty("--pills-h", hidden ? "0rem" : lg ? (search ? "5rem" : "0rem") : "4rem"); }, [hidden, lg, search]);
+  return (
+    <>
+      <div className="lg:hidden"><div className="pills-row" data-hidden={hidden || undefined}><div className="overflow-hidden"><div className="px-3 pb-2"><HeaderPills /></div></div></div></div>
+      {search && <div className="max-lg:hidden"><div className="pills-row" data-hidden={hidden || undefined}><div className="overflow-hidden"><div className="px-6 pb-4 pt-1"><HeaderSearch /></div></div></div></div>}
+    </>
+  );
 }
 
 export function SiteHeader() {
@@ -51,11 +60,11 @@ export function SiteHeader() {
   const navigate = useNavigate();
   const sheet = useSheetOpen();
   /** Phone layout on explore pages: logo and menu sit outside, the bar in the middle is the search. */
-  const solid = path === "/properties"; // the explore page: header and type pills form one solid, edge-to-edge block
-  const showHeaderSearch = path === "/properties" && !/[?&]view=map/.test(searchStr); // map view carries its own search below the map
+  const solid = path === "/properties" || path === "/"; // the explore page and the homepage: header and type pills form one solid, edge-to-edge block
+  const showHeaderSearch = solid && !/[?&]view=map/.test(searchStr); // map view carries its own search below the map
   const explore = isSearchPage(path) || path === "/developments" || path === "/neighbourhoods" || path === "/agencies";
   const isPropertyPage = path.startsWith("/property/");
-  const openSearch = () => { setOpen(false); if (path === "/properties") toggleSheet(); else { void navigate({ to: "/properties" }); setSheet(true); } };
+  const openSearch = () => { setOpen(false); if (path === "/properties" || path === "/") toggleSheet(); else { void navigate({ to: "/properties" }); setSheet(true); } };
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 24);
@@ -99,6 +108,8 @@ export function SiteHeader() {
 
   return (
     <div className="wb wb-site">
+      {/* Same full-screen dark overlay as the dashboard side menus; tapping it closes the menu. (Listing pages keep their own, inside the header.) */}
+      {!isPropertyPage && <div className="hdr-scrim" data-open={open} onClick={close} aria-hidden="true" />}
       {!solid && <div aria-hidden="true" className={`nav-blur-zone ${isPropertyPage ? "max-lg:hidden" : ""} ${on ? "is-scrolled" : ""}`} />}
       <div ref={ref} className={solid ? "solid-head glass-nav pointer-events-auto fixed inset-x-0 top-0 z-50" : `pointer-events-none fixed inset-x-0 z-50 mx-auto w-[var(--site-w)] ${isPropertyPage ? "top-12 md:top-4 lg:top-5" : "top-3 sm:top-4 lg:top-5"}`} data-floating>
         {explore && (
@@ -107,19 +118,20 @@ export function SiteHeader() {
             <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-full bg-foreground/[0.06] px-3.5 text-left text-sm font-medium text-muted-foreground">
               <Search className="size-4 shrink-0 text-foreground" aria-hidden /><span className="truncate">Search homes, places…</span>
             </button>
+            {signedIn && <span className="inline-flex shrink-0"><NotificationBell /></span>}
+            {signedIn && <span className="inline-flex shrink-0"><AccountButton /></span>}
             <button type="button" className="menu-btn relative shrink-0" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               {open ? <X className="h-5 w-5" /> : <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 5h18M8 12h13M13 19h8" /></svg>}
               {compareCount > 0 && <span className="absolute right-1.5 top-1.5 size-2.5 rounded-full bg-primary" aria-hidden />}
             </button>
           </div>
         )}
-        <header data-tour="search" className={`${solid ? "" : "pointer-events-auto glass-nav hk-co"} ${isPropertyPage ? "max-lg:hidden" : explore ? "max-md:hidden" : ""} grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-2.5 ${solid ? "px-4" : "pl-5 pr-2.5"} lg:grid-cols-[auto_1fr_auto] lg:px-6 ${!solid && on ? "is-scrolled" : ""}`}>
+        <header data-tour="search" className={`${solid ? "" : "pointer-events-auto glass-nav hk-co"} ${isPropertyPage ? "max-lg:hidden" : explore ? "max-md:hidden" : ""} grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-2.5 ${solid ? "px-4" : "pl-5 pr-2.5"} ${solid ? "lg:grid-cols-[1fr_auto_1fr]" : "lg:grid-cols-[auto_1fr_auto]"} lg:px-6 ${!solid && on ? "is-scrolled" : ""}`}>
           <Link to="/" className="logo flex min-w-0 items-center gap-2.5 text-foreground" aria-label={`${BRAND.name} home`}>
             <HodiiLogo />
             <span className="brand-word truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
           </Link>
-          {showHeaderSearch && <div className="hidden min-w-0 lg:block"><HeaderSearch /></div>}
-          <nav aria-label="Main" className={`${showHeaderSearch ? "hidden" : "hidden lg:flex"} items-center justify-center gap-7 text-[0.875rem] font-medium text-foreground/80`}>
+          <nav aria-label="Main" className={`hidden lg:flex items-center justify-center gap-7 text-[0.875rem] font-medium text-foreground/80`}>
             {NAV.map((n) => {
               const cur = n.on(path, searchStr);
               const cls = `nav-link${cur ? " is-current" : ""}`;
@@ -138,7 +150,7 @@ export function SiteHeader() {
             </button>
           </div>
         </header>
-        {solid && <PillsRow />}
+        {solid && <ExtraRows search={showHeaderSearch} />}
         {isPropertyPage && <div className="menu-scrim pointer-events-auto" data-open={open} onClick={close} aria-hidden="true" />}
         <div id="site-menu" data-open={open} className="menu-panel site-menu-panel glass-menu pointer-events-auto mt-3 rounded-[1.75rem] px-3 pad-fixed lg:ml-auto lg:w-[34rem]">
           {isPropertyPage && (

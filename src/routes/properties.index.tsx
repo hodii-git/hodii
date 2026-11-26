@@ -11,6 +11,7 @@ import { searchHeading } from "@/lib/search-title";
 import { Pick } from "@/components/ui/pick";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { HomeSearch } from "@/components/home/home-search";
+import { ExploreBar } from "@/components/property/explore-bar";
 import { SaveSearchButton } from "@/components/property/save-search";
 import { InfiniteResults } from "@/components/property/infinite-results";
 import { LayoutPill } from "@/components/property/layout-pill";
@@ -69,16 +70,17 @@ function PropertiesPage() {
   const setGeo = (g: Pick<SearchParams, "circle" | "polygon">) => change({ circle: undefined, polygon: undefined, ...g, page: 1 });
 
   return (
-    <main className="pt-[calc(5rem+var(--pills-h,4.5rem))] pb-24 transition-[padding] duration-500 ease-out max-sm:px-4 md:pt-[calc(6.5rem+var(--pills-h,4.5rem))]">
+    <main className="pt-[calc(5rem+var(--pills-h,4rem))] pb-24 transition-[padding] duration-500 ease-out max-sm:px-4 md:pt-[calc(6.5rem+var(--pills-h,4rem))] lg:pt-[calc(4.5rem+var(--pills-h,5rem))]">
       {!(map && wide) && <div className="mx-auto max-w-[112rem]">
         <div className="mx-auto mt-4 max-w-4xl lg:hidden"><HomeSearch value={params} onChange={change} result={aiResult} /></div>
       </div>}
       <div className={`mx-auto mt-6 max-w-[112rem] md:mt-8 ${map ? "lg:pr-[35.5rem]" : ""}`}>
-      {map && <aside className="map-aside max-lg:mb-6 lg:fixed lg:bottom-4 lg:right-4 lg:top-[calc(5.25rem+var(--pills-h,4.5rem))] lg:transition-[top] lg:duration-500 lg:z-30 lg:flex lg:w-[34rem] lg:flex-col lg:gap-3 xl:right-[max(1rem,calc((100vw-112rem)/2+1rem))]">
+      {map && <aside className="map-aside max-lg:mb-6 lg:fixed lg:bottom-4 lg:right-4 lg:top-[calc(5.25rem+var(--pills-h,4rem))] lg:transition-[top] lg:duration-500 lg:z-30 lg:flex lg:w-[34rem] lg:flex-col lg:gap-3 xl:right-[max(1rem,calc((100vw-112rem)/2+1rem))]">
         <Suspense fallback={<LoaderBlock className="py-10" />}><SearchMap params={params} onGeo={setGeo} /></Suspense>
         {wide && <div className="flex min-h-0 flex-1 flex-col"><HomeSearch pinned value={params} onChange={change} result={aiResult} /></div>}
       </aside>}
       <div className="min-w-0">
+      <div className="mb-4 lg:mb-5"><ExploreBar value={params} onChange={change} result={aiResult} /></div>
       <div className="mb-4">
         <h1 title={heading.title} className="line-clamp-2 font-display text-2xl font-extrabold leading-tight sm:line-clamp-1 sm:text-3xl">{heading.title}</h1>
         {heading.subtitle && <p className="mt-1 text-sm text-muted-foreground sm:text-base">{heading.subtitle}</p>}

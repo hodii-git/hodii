@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ComponentType, ReactNode } from "react";
-import { BadgeCheck, BellRing, ExternalLink, Globe, Inbox, Plus, Search, ShieldCheck, Users } from "lucide-react";
+import { BadgeCheck, BellRing, ExternalLink, Globe, Home, Inbox, Plus, Search, ShieldCheck, Users } from "lucide-react";
 import { HodiiLogo } from "@/components/brand-logo";
 import { NotificationBell } from "@/components/notification-bell";
 import { AccountButton } from "@/components/account-button";
@@ -28,6 +28,15 @@ const Action = ({ to, params, search, icon: I, children, primary }: { to: string
     <I className="size-4" />{children}
   </L>
 );
+
+/** A button on every dashboard header that goes back to the public homepage. */
+function HomeButton({ hideFromMd = false }: { hideFromMd?: boolean }) {
+  return (
+    <L to="/" aria-label="Back to homepage" title="Back to homepage" className={`inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border border-border bg-background/70 px-3 text-sm font-semibold hover:bg-muted sm:px-4 ${hideFromMd ? "md:hidden" : ""}`}>
+      <Home className="size-4" aria-hidden /><span className="hidden sm:inline">Home</span>
+    </L>
+  );
+}
 
 type AgencyData = { agency: { name: string; access: Subject }; verification: string; newLeads: number };
 
@@ -120,6 +129,7 @@ export function DashHeader({ framed = false }: { framed?: boolean } = {}) {
         <div className="min-w-0 flex-1">{left}</div>
         <div className="ml-auto flex shrink-0 items-center gap-1.5">
           {right}
+          <HomeButton hideFromMd={isAdmin} />
           {!isAdmin && (
             <>
               <span className="inline-flex rounded-full hdr-circle header-circle header-size [&>button]:!size-full"><NotificationBell /></span>
@@ -153,6 +163,7 @@ export function AdminBar({ framed = false }: { framed?: boolean } = {}) {
         <div className="ml-auto flex shrink-0 items-center gap-2">
           {admin && admin.waiting > 0 && <Pill cls="bg-amber-400 text-amber-950"><BellRing className="size-3.5" />{admin.waiting} waiting</Pill>}
           {admin && <Pill cls="bg-foreground/[0.06] text-foreground capitalize">{admin.name} · {admin.role}</Pill>}
+          <HomeButton hideFromMd />
           <L to="/" className="hidden h-10 items-center gap-2 rounded-full bg-foreground/[0.06] px-4 text-sm font-semibold md:inline-flex"><Globe className="size-4" />View site</L>
         </div>
       </div>

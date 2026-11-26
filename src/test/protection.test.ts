@@ -10,9 +10,17 @@ describe("protection", () => {
     for (let i = 0; i < LIMITS.read; i++) expect(inspectRequest(req("/"), 0).action).toBe("allow");
     expect(inspectRequest(req("/"), 0)).toMatchObject({ status: 429 });
   });
-  it("limits writes to 60 per minute", () => {
-    for (let i = 0; i < 60; i++) expect(inspectRequest(req("/_serverFn/x", "POST"), 0).action).toBe("allow");
+  it("limits writes per minute", () => {
+    for (let i = 0; i < LIMITS.write; i++) expect(inspectRequest(req("/_serverFn/x", "POST"), 0).action).toBe("allow");
     expect(inspectRequest(req("/_serverFn/x", "POST"), 0)).toMatchObject({ status: 429 });
+  });
+  it("never counts built files and images against a visitor", () => {
+    for (let i = 0; i < LIMITS.read * 3; i++) expect(inspectRequest(req(`/assets/chunk-${i}.js`), 0).action).toBe("allow");
+    expect(inspectRequest(req("/"), 0).action).toBe("allow");
+  });
+  it("does not lock out visitors whose address is unknown", () => {
+    const noIp = { method: "GET", url: "https://x.test/", headers: new Headers({ "user-agent": "Mozilla/5.0" }) };
+    for (let i = 0; i < LIMITS.read * 2; i++) expect(inspectRequest(noIp, 0).action).toBe("allow");
   });
   it("blocks exploit probes and scanners", () => {
     expect(inspectRequest(req("/wp-login.php"))).toMatchObject({ status: 404 });

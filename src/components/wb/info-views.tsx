@@ -290,7 +290,7 @@ export function LegalView({ slug, page }: { slug: string; page: InfoPage }) {
         <div className="mx-auto grid max-w-3xl gap-5">
           {secs.map((b, n) => (
             <div key={b.heading} className="reveal footer-panel legal-glass rounded-2xl p-6 sm:p-8">
-              <h2 className="font-display text-[1.35rem] font-semibold">{n + 1}. {b.heading}</h2>
+              <h2 className="font-display text-[1.35rem] font-semibold">{/^\d+\./.test(b.heading) ? b.heading : `${n + 1}. ${b.heading}`}</h2>
               {b.body?.map((t, i) => <p key={i} className="footer-muted mt-3 text-[0.95rem] leading-relaxed">{linkify(t)}</p>)}
               {b.bullets && <ul className="footer-muted mt-3 list-disc space-y-2 pl-5 text-[0.95rem] leading-relaxed">{b.bullets.map((t) => <li key={t}>{linkify(t)}</li>)}</ul>}
             </div>

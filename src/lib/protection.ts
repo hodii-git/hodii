@@ -20,8 +20,8 @@ const GOOD_BOTS = /(googlebot|bingbot|duckduckbot|applebot|facebookexternalhit|t
 export const LIMITS = {
   /** Page and asset reads per visitor per minute — generous for real readers. */
   read: 300,
-  /** Writes / server calls per visitor per minute. */
-  write: 60,
+  /** Writes / server calls per visitor per minute. A single page makes several, plus the 15 s and 30 s refreshes and hover preloads. */
+  write: 240,
   /** Sign-in and sign-up attempts per visitor per 10 minutes. */
   auth: 20,
   /** Largest request body accepted, in bytes. */
@@ -59,6 +59,11 @@ export function clientKey(headers: Headers): string {
   );
 }
 
+/** Built bundles, dev-server modules, fonts and images: served as files, never rate limited. */
+export function isStaticAsset(pathname: string): boolean {
+  return /^\/(assets|icons|splash|src|node_modules|@vite|@fs|@id|@react-refresh)\//.test(pathname) || /\.(js|mjs|css|map|png|jpe?g|webp|avif|svg|ico|woff2?|ttf|webmanifest)$/i.test(pathname);
+}
+
 export function inspectRequest(req: { method: string; url: string; headers: Headers }, now = Date.now()): Verdict {
   const url = new URL(req.url);
   const ua = req.headers.get("user-agent") ?? "";
@@ -77,6 +82,12 @@ export function inspectRequest(req: { method: string; url: string; headers: Head
   if (ban && now < ban.bannedUntil) {
     return { action: "block", status: 429, reason: "temporarily blocked", retryAfter: Math.ceil((ban.bannedUntil - now) / 1000) };
   }
+
+  // Built files and images never count: one page load fetches dozens of them, and counting them locked real visitors out
+  // (every request then answered 429, so pages stayed blank and nothing could be clicked).
+  if (isStaticAsset(url.pathname)) return { action: "allow" };
+  // No client address at all (a proxy that does not forward it) would put every visitor in one shared bucket. Do not limit those.
+  if (ip === "unknown") return { action: "allow" };
 
   const isWrite = req.method !== "GET" && req.method !== "HEAD";
   const isAuth = isWrite && /signin|signup|login|auth/i.test(url.pathname + url.search);

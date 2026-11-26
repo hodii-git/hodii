@@ -1694,5 +1694,50 @@ html:root .tour-paused { padding-block: .85rem !important; min-height: 3.9rem; a
   html[data-dash] .tour-prompt { left: calc(var(--dash-side-w, 0px) + 1.25rem) !important; }
 }
 
-/* The big word at the bottom of the footer uses the brand gradient. */
-html:root .wb .footer-word { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; opacity: .9; }
+/* The big word at the bottom of the footer keeps its subtle fade, tinted with the brand pink instead of the old cream/violet. */
+html:root .wb .footer-word { background: linear-gradient(180deg, color-mix(in oklab, #fd267a 30%, transparent) 0%, color-mix(in oklab, #ff6036 3%, transparent) 85%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Search bars: one clean pill, no boxes or rectangles inside it. */
+html:root :is(.hk-search input, .admin-search input, .home-search input, .home-search textarea, [role="search"] input[data-bare]) { background: transparent !important; background-color: transparent !important; box-shadow: none !important; border: 0 !important; outline: none !important; border-radius: 0 !important; }
+html:root :is(.home-search .input-glass, .m-sheet .home-search .input-glass, .ls-card .home-search .input-glass):has(textarea, input[type="text"], input[type="search"]) { background: transparent !important; border: 0 !important; box-shadow: none !important; }
+html:root :is(input[type="search"], input[aria-label*="earch" i], input[placeholder^="Search" i], input[name="q"], #sf-q):not([data-bare]):not(.hk-search input):not(.admin-search input) { border-radius: 9999px !important; }
+
+/* Floating chips (List/Map, Feedback, guide button and card) slip away while scrolling down and return on scroll up (see float-lift.tsx). */
+.fb-fab, .view-pill, .tour-prompt { transition: bottom .3s ease, opacity .25s ease, visibility 0s linear 0s; }
+html[data-float-away] .fb-fab, html[data-float-away] .view-pill, html[data-float-away] .tour-prompt { opacity: 0 !important; pointer-events: none !important; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
+
+/* The paused guide is one small pill in the bottom-left corner, on the same row as the feedback button; it is no longer a wide strip. */
+html:root .tour-paused { display: inline-flex !important; flex-wrap: nowrap !important; align-items: center !important; gap: .1rem !important; width: auto !important; min-height: 0 !important; padding: .25rem .3rem .25rem .25rem !important; border-radius: 9999px !important; font-size: .8rem !important; left: .75rem !important; right: auto !important; }
+html:root .tour-paused .resume-btn { display: inline-flex; align-items: center; gap: .4rem; height: 2.25rem; padding: 0 .8rem 0 .6rem; border-radius: 9999px; font-weight: 700; white-space: nowrap; }
+html:root .tour-paused .resume-btn:hover { background: rgb(255 255 255 / .08); }
+html:root .tour-paused .resume-x { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 9999px; color: var(--muted-foreground); }
+html:root .tour-paused .resume-x:hover { background: rgb(255 255 255 / .08); color: var(--foreground); }
+@media (max-width: 767px) { html:root .tour-paused, html:root:has(.view-pill) .tour-paused { bottom: calc(var(--tab-h, 0px) + .6rem) !important; } }
+@media (min-width: 768px) { html:root .tour-paused, html:root:has(.view-pill) .tour-paused { bottom: 1.5rem !important; left: 1.5rem !important; } }
+@media (min-width: 1024px) { html[data-dash] .tour-paused { left: calc(var(--dash-side-w, 0px) + 1.25rem) !important; } }
+
+/* Guide card note: the old soft amber tint (12% fill, 45% edge), now in the brand pink-to-orange, subtle and glassy. */
+html:root .tour-prompt .popup-note, html:root[data-listing-dark="1"] .tour-prompt .popup-note {
+  background: linear-gradient(135deg, rgb(253 38 122 / .12), rgb(255 96 54 / .12)) !important;
+  border: 1px solid rgb(253 38 122 / .38) !important;
+  border-image: none !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .06) !important;
+  backdrop-filter: blur(10px) saturate(140%);
+  color: #ffd9cf !important;
+}
+
+/* ===== One dark overlay behind every header menu, the same as behind the dashboard side menus ===== */
+:root { --hdr-scrim: rgb(0 0 0 / .3); }
+.hdr-scrim { position: fixed; inset: 0; z-index: 49; background: var(--hdr-scrim); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
+.hdr-scrim[data-open="true"] { opacity: 1; visibility: visible; transition: opacity .25s ease, visibility 0s; }
+/* Account, notification and other dropdowns opened from a header (site or dashboard): the same overlay; clicking it closes them. */
+html::before { content: ""; position: fixed; inset: 0; z-index: 49; background: var(--hdr-scrim); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+html:has(.wb-site [aria-haspopup][data-state="open"], [data-dash] [aria-haspopup][data-state="open"], header [aria-haspopup][data-state="open"])::before { opacity: 1; pointer-events: auto; }
+
+/* Homepage and properties header (solid, edge-to-edge): the same #141416 surface and blur as the other headers, with a subtle bottom line and soft shadow. */
+html:root[data-listing-dark="1"] .wb.wb-site .solid-head, html:root[data-listing-dark="1"] .wb.wb-site .solid-head.glass-nav, html:root .wb.wb-site .solid-head.glass-nav.is-scrolled {
+  background: #141416 !important;
+  backdrop-filter: blur(20px) saturate(170%) !important; -webkit-backdrop-filter: blur(20px) saturate(170%) !important;
+  border: 0 !important; border-bottom: 1px solid rgb(255 255 255 / .1) !important;
+  box-shadow: 0 10px 28px -14px rgb(0 0 0 / .75), inset 0 -1px 0 rgb(255 255 255 / .03) !important;
+}

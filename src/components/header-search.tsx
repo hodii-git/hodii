@@ -27,12 +27,12 @@ export function HeaderSearch() {
     void navigate({ to: "/properties", search: { ...urlFromParams({ ...params, ...next, page: 1 }), ...keepView(search) }, replace: true, resetScroll: false });
   };
   return (
-    <form role="search" className="mx-auto flex h-11 w-full max-w-xl items-center gap-2 rounded-full bg-muted px-4 ring-1 ring-border focus-within:ring-2 focus-within:ring-primary/40" onSubmit={(e) => { e.preventDefault(); clearTimeout(timer.current); run(text); }}>
-      <Search className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+    <form role="search" className="mx-auto flex h-[3.75rem] w-full max-w-[52rem] items-center gap-2 rounded-full bg-muted pl-7 pr-2 shadow-[0_10px_30px_-14px_rgb(0_0_0/0.8)] ring-1 ring-border focus-within:ring-2 focus-within:ring-primary/40" onSubmit={(e) => { e.preventDefault(); clearTimeout(timer.current); run(text); }}>
       <input data-bare type="search" value={text} aria-label="Search properties" placeholder="Try “2 bedroom in Kilimani under 80k” or a place"
         onChange={(e) => { const v = e.target.value; setText(v); clearTimeout(timer.current); timer.current = v.trim() === "" ? undefined : setTimeout(() => run(v), 800); if (v.trim() === "") run(""); }}
-        className="min-w-0 flex-1 bg-transparent text-[0.95rem] outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden" />
-      {text && <button type="button" aria-label="Clear search" onClick={() => { setText(""); run(""); }} className="grid size-6 place-items-center rounded-full hover:bg-foreground/5"><X className="size-4" aria-hidden /></button>}
+        className="min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden" />
+      {text && <button type="button" aria-label="Clear search" onClick={() => { setText(""); run(""); }} className="grid size-8 shrink-0 place-items-center rounded-full hover:bg-foreground/5"><X className="size-4" aria-hidden /></button>}
+      <button type="submit" aria-label="Search" className="grid size-12 shrink-0 place-items-center rounded-full text-white transition hover:brightness-110" style={{ background: "var(--brand-gradient)" }}><Search className="size-5" strokeWidth={2.4} aria-hidden /></button>
     </form>
   );
 }

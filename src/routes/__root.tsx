@@ -204,7 +204,7 @@ function RootComponent() {
           <a href="#main" className="sr-only z-[100] rounded-full bg-primary px-4 py-2 font-bold text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4" onClick={(e) => { e.preventDefault(); const m = document.querySelector("main"); if (m) { m.setAttribute("tabindex", "-1"); m.focus(); m.scrollIntoView(); } }}>Skip to main content</a>
           <ColorGlow />
           <LiveUpdates />
-          {isFramedPath(pathname) ? null : isDashboardPath(pathname) ? <DashHeader /> : !pathname.startsWith("/info/") && <SiteHeader />}
+          {isFramedPath(pathname) ? null : isDashboardPath(pathname) ? <DashHeader /> : <SiteHeader />}
           {paused ? (
             <main className="flex flex-1 items-center justify-center px-4 pt-28 pb-24">
               <div className="empty-card max-w-lg p-8 text-center">

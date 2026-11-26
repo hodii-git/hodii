@@ -147,7 +147,7 @@ export function WbFooter() {
               <button type="button" className="foot-link ml-2 items-center gap-1.5" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
                 <Bold t="Back to top" /><ArrowUp className="h-4 w-4" />
               </button>
-              <Link to="/admin" aria-label="Admin" title="Admin" className="foot-link grid size-6 place-items-center rounded-full text-[0.7rem] font-bold opacity-50 ring-1 ring-current transition hover:opacity-100" style={{ padding: 0 }}>A</Link>
+              <Link to="/admin" aria-label="Admin" title="Admin" className="foot-link inline-flex size-6 items-center justify-center rounded-full text-[0.7rem] font-bold leading-none opacity-50 ring-1 ring-current transition hover:opacity-100" style={{ padding: 0 }}>A</Link>
             </div>
           </div>
           <div aria-hidden="true" className="footer-word relative mt-6 select-none whitespace-nowrap text-center font-display">{BRAND.name}</div>
@@ -165,7 +165,6 @@ export function WbPage({ slug, children, bg }: { slug: string; children: ReactNo
   return (
     <div className="wb wb-page" data-section={cfg.kind}>
       <div className="site-shell overflow-x-clip bg-surface text-foreground">
-        <WbHeader cfg={cfg} slug={slug} />
         <main id="main">{children}</main>
         {bg === "legal" && null}
       </div>

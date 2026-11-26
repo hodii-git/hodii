@@ -47,7 +47,7 @@ function Team() {
                   {can(role, "team.change_role") && !m.isMe && !m.pending ? (
                     <Sel aria-label={`Role for ${m.username}`} value={m.role} onChange={(e) => changeRole.mutate({ userId: m.userId, role: e.target.value as "owner" | "admin" | "agent" })} className={`${inputCls} h-9 w-28`}><option value="owner">Owner</option><option value="admin">Admin</option><option value="agent">Agent</option></Sel>
                   ) : <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-bold capitalize">{m.role}</span>}
-                  {m.permissions && <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">Custom access</span>}
+                  {m.permissions && <span className="rounded-full bg-foreground/10 px-2.5 py-0.5 text-xs font-bold text-primary">Custom access</span>}
                   {!m.isMe && canShapeMember(role, m.role) && <button type="button" className={`${btnGhost} h-9 px-3`} aria-expanded={editing === m.userId} onClick={() => { if (editing === m.userId) { setEditing(null); return; } setEditing(m.userId); setCustom(!!m.permissions); setDraft(m.permissions ?? [...actionsOf(m.role)]); }}>Access</button>}
                   {m.canRemove && <button className={`${btnGhost} h-9 px-3 text-destructive`} onClick={() => confirm(m.pending ? "Cancel this invitation?" : `Remove ${m.username} from the team?`) && remove.mutate(m.userId)}>{m.pending ? "Cancel" : "Remove"}</button>}
                 </div>
@@ -128,7 +128,7 @@ function PermissionPicker({ value, onChange, giver }: { value: string[]; onChang
                 const allowed = mine.includes(it.action);
                 return (
                   <label key={it.action} className={`flex items-start gap-2.5 rounded-lg px-2 py-1.5 text-sm ${allowed ? "cursor-pointer hover:bg-muted" : "opacity-45"}`}>
-                    <input type="checkbox" className="mt-0.5 size-4 accent-primary" disabled={!allowed} checked={value.includes(it.action)} onChange={() => toggle(it.action)} />
+                    <input type="checkbox" className="mt-0.5 size-4 accent-white" disabled={!allowed} checked={value.includes(it.action)} onChange={() => toggle(it.action)} />
                     <span>{it.label}</span>
                   </label>
                 );

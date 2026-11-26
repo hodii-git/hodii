@@ -38,7 +38,7 @@ function Enquiries() {
     <div>
       <PageHeader title="Enquiries" sub="People who asked about your listings. Move each one along as you speak to them." />
       <div className="mb-5 flex gap-1 overflow-x-auto">
-        {[undefined, ...ENQUIRY_STATUSES].map((s) => <button key={s ?? "all"} type="button" aria-pressed={status === s} onClick={() => navigate({ search: s ? { status: s } : {} })} className={`shrink-0 rounded-full border px-4 py-1.5 text-sm font-semibold ${status === s ? "border-primary bg-primary text-primary-foreground" : "border-input bg-background"}`}>{s ? label(s) : "All"}</button>)}
+        {[undefined, ...ENQUIRY_STATUSES].map((s) => <button key={s ?? "all"} type="button" aria-pressed={status === s} onClick={() => navigate({ search: s ? { status: s } : {} })} className={`shrink-0 rounded-full border px-4 py-1.5 text-sm font-semibold ${status === s ? "border-foreground bg-foreground text-background" : "border-input bg-background"}`}>{s ? label(s) : "All"}</button>)}
       </div>
       {isPending ? <LoaderBlock className="py-10" /> : isError ? <p role="alert" className="text-sm text-destructive">{errorText(error, "Could not load enquiries.")}</p> : !data.items.length ? <div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">No enquiries here yet.</p></div> : (
         <>

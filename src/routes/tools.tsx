@@ -87,7 +87,7 @@ function Tools() {
       <div role="tablist" aria-label="Calculators" className="mt-8 inline-flex max-w-full flex-wrap gap-1 rounded-full border border-border bg-card p-1">
         {TABS.map(({ id, label, icon: Icon }) => (
           <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)}
-            className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-bold transition ${tab === id ? "bg-primary text-primary-foreground shadow-float" : "text-muted-foreground hover:text-foreground"}`}>
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-bold transition ${tab === id ? "bg-foreground text-background shadow-float" : "text-muted-foreground hover:text-foreground"}`}>
             <Icon className="h-4 w-4" aria-hidden />{label}
           </button>
         ))}

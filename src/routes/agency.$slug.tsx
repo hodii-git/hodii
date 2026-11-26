@@ -68,7 +68,7 @@ function AgencyPage() {
             {a.logo ? <img src={a.logo} alt="" width={112} height={112} className="h-28 w-28 rounded-2xl border-4 border-background bg-white object-contain p-2 shadow" /> : <div className="flex h-28 w-28 items-center justify-center rounded-2xl border-4 border-background bg-muted text-4xl font-extrabold shadow">{a.name[0]}</div>}
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="flex flex-wrap items-center gap-2 text-3xl font-extrabold">{a.name}{a.verified && <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary"><BadgeCheck className="h-4 w-4" aria-hidden />Verified</span>}</h1>
+            <h1 className="flex flex-wrap items-center gap-2 text-3xl font-extrabold">{a.name}{a.verified && <span className="inline-flex items-center gap-1 rounded-full bg-foreground/10 px-3 py-1 text-sm font-bold text-primary"><BadgeCheck className="h-4 w-4" aria-hidden />Verified</span>}</h1>
             {a.tagline && <p className="mt-1 text-muted-foreground">{a.tagline}</p>}
             <div className="mt-3"><ShareButton title={a.name} /></div>
             <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground">

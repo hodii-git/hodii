@@ -85,7 +85,7 @@ function SearchFormInner({ value, onChange, side = false, result }: Props & { re
     <form role="search" aria-label="Search properties" data-tour="filters" onSubmit={(e) => { e.preventDefault(); clearTimeout(timers.current.get("q")); if (ai.open) { const t = q; setQ(""); ai.send(t); } else search(true); }} className={`rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8 ${side ? "lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:overscroll-contain" : ""}`}>
       <div className="mb-5 flex flex-wrap items-center gap-2"><div className={`rounded-full bg-muted p-1 ${side ? "flex w-full" : "inline-flex"}`} role="tablist" aria-label="Listing type">
         {[{ key: undefined, label: "All" }, ...LISTING_TYPES.map((t) => ({ key: t.key as string | undefined, label: t.short }))].map((t) => (
-          <button key={t.label} type="button" role="tab" aria-selected={value.listingType === t.key} onClick={() => set({ listingType: t.key as SearchParams["listingType"] })} className={`whitespace-nowrap rounded-full ${side ? "flex-1 px-2" : "px-3"} py-1.5 text-sm font-semibold transition ${value.listingType === t.key ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:text-foreground"}`}>{t.label}</button>
+          <button key={t.label} type="button" role="tab" aria-selected={value.listingType === t.key} onClick={() => set({ listingType: t.key as SearchParams["listingType"] })} className={`whitespace-nowrap rounded-full ${side ? "flex-1 px-2" : "px-3"} py-1.5 text-sm font-semibold transition ${value.listingType === t.key ? "bg-foreground text-background shadow" : "text-muted-foreground hover:text-foreground"}`}>{t.label}</button>
         ))}
         
       </div>
@@ -106,7 +106,7 @@ function SearchFormInner({ value, onChange, side = false, result }: Props & { re
         <div className="flex flex-wrap gap-2">
           <button type="submit" className={`h-12 flex-1 rounded-xl bg-primary px-5 text-[0.95rem] font-bold text-primary-foreground md:flex-none`}>Search</button>
           <button type="button" disabled={ai.pending} onClick={() => { const t = q; setQ(""); ai.send(t); }} title={ai.open ? "Send your message to the AI" : "Describe what you want in your own words"}
-            className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-xl border border-primary/40 bg-primary/10 px-5 text-[0.95rem] font-bold text-primary disabled:opacity-50">
+            className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-xl border border-foreground/30 bg-foreground/10 px-5 text-[0.95rem] font-bold text-primary disabled:opacity-50">
             {ai.pending ? <Loader size="xs" /> : <Sparkles className="h-4 w-4" aria-hidden />}{ai.open ? "Refine" : "Ask AI"}
           </button>
           {(hasFilters(value) || q.length > 0 || ai.open) && <button type="button" onClick={clearAll} className="inline-flex h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-4 text-[0.95rem] font-semibold text-muted-foreground hover:bg-muted hover:text-foreground"><X className="size-4" aria-hidden />Clear all</button>}

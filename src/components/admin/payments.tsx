@@ -54,7 +54,7 @@ export function Payments() {
               <div className="rounded-2xl border border-border p-4"><p className="text-xs text-muted-foreground">Average sale</p><p className="text-2xl font-extrabold">{kes(rev.data.averageKes)}</p></div>
             </div>
             <div className="flex h-24 items-end gap-px rounded-2xl border border-border p-3" role="img" aria-label={`Daily net revenue for the last ${days} days`}>
-              {(() => { const max = Math.max(1, ...rev.data.byDay.map((d) => d.kes)); return rev.data.byDay.map((d) => <div key={d.day} title={`${d.day}: ${kes(d.kes)}`} className="min-w-px flex-1 rounded-t bg-primary/70" style={{ height: `${Math.max(2, (d.kes / max) * 100)}%` }} />); })()}
+              {(() => { const max = Math.max(1, ...rev.data.byDay.map((d) => d.kes)); return rev.data.byDay.map((d) => <div key={d.day} title={`${d.day}: ${kes(d.kes)}`} className="min-w-px flex-1 rounded-t bg-foreground/70" style={{ height: `${Math.max(2, (d.kes / max) * 100)}%` }} />); })()}
             </div>
             <div className="grid gap-3 md:grid-cols-2">
               <ul className="divide-y divide-border rounded-2xl border border-border text-sm">{rev.data.byKind.map((k) => <li key={k.kind} className="flex justify-between p-3"><span>{k.kind === "premium_package" ? "Premium packages" : k.kind === "space_pack" ? "Extra space" : "Boosts"} <span className="text-muted-foreground">· {k.count}</span></span><b>{kes(k.kes)}</b></li>)}{!rev.data.byKind.length && <li className="p-3 text-muted-foreground">No sales in this period.</li>}</ul>

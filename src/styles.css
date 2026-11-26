@@ -315,12 +315,12 @@ header:hover .animate-nav-strip { animation-play-state: paused; }
 .avatar-orb { display: inline-grid; place-items: center; flex-shrink: 0; border-radius: 999px; font-weight: 800; color: oklch(0.99 0 0);
   background: radial-gradient(circle at 30% 25%, oklch(0.8 0.14 calc(var(--avatar-hue) * 1deg)), oklch(0.42 0.16 calc((var(--avatar-hue) + 40) * 1deg)));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.050), 0 10px 24px -10px oklch(0.3 0.12 300 / 55%); }
-.profile-hero { color: oklch(0.98 0 0); background: radial-gradient(120% 140% at 0% 0%, oklch(0.42 0.17 300), oklch(0.19 0.025 285) 60%), var(--primary); }
+.profile-hero { color: oklch(0.98 0 0); background: radial-gradient(120% 140% at 0% 0%, oklch(0.42 0.17 300), oklch(0.19 0.025 285) 60%), #141416; }
 .action-pill { display: inline-flex; align-items: center; gap: 0.45rem; border-radius: 999px; padding: 0.6rem 1.1rem; font-size: 0.875rem; font-weight: 700; color: var(--muted-foreground); transition: background 160ms, color 160ms, transform 120ms; }
 .action-pill:hover, .action-pill:focus-visible { background: var(--navigation-highlight); color: var(--foreground); outline: none; }
 .action-pill:active { transform: scale(0.96); }
 /* Active like/save: only the icon fills with the brand colour; no solid button. */
-.action-pill-on, .action-pill-on:hover { color: var(--primary); }
+.action-pill-on, .action-pill-on:hover { color: var(--foreground); }
 .action-pill svg, .comment-action svg { transition: color 180ms, fill 180ms; }
 @keyframes icon-pop { 0% { transform: scale(1); } 35% { transform: scale(1.38) rotate(-8deg); } 65% { transform: scale(0.9); } 100% { transform: scale(1); } }
 .icon-pop { animation: icon-pop 420ms cubic-bezier(.34,1.56,.64,1); }
@@ -428,7 +428,7 @@ header:hover .animate-nav-strip { animation-play-state: paused; }
 }
 .loader-track { position: absolute; inset: 0; border-radius: 999px; box-shadow: inset 0 0 0 var(--loader-stroke, 3px) oklch(0.65 0.1 255 / 18%); }
 .loader-glow { position: absolute; inset: 14%; border-radius: 999px; background: radial-gradient(circle, oklch(0.72 0.14 255 / 55%), transparent 70%); filter: blur(8px); animation: loader-breathe 1.8s ease-in-out infinite; }
-.loader-moon { position: relative; width: 44%; height: 44%; color: var(--primary); animation: loader-moon 1.8s ease-in-out infinite; }
+.loader-moon { position: relative; width: 44%; height: 44%; color: #fff; animation: loader-moon 1.8s ease-in-out infinite; }
 .loader[data-size="xs"] .loader-glow, .loader[data-size="xs"] .loader-moon { display: none; }
 .loader-label { font-size: 0.82rem; font-weight: 700; letter-spacing: 0; background: linear-gradient(90deg, var(--muted-foreground) 30%, var(--brand-b) 50%, var(--muted-foreground) 70%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 2s linear infinite; }
 @keyframes loader-spin { to { transform: rotate(360deg); } }
@@ -542,7 +542,7 @@ textarea.admin-input { line-height: 1.6; resize: vertical; }
 .admin-badge[data-tone="warn"] { color: oklch(0.55 0.13 65); }
 .admin-badge[data-tone="ok"] { color: oklch(0.5 0.13 150); }
 .admin-badge[data-tone="bad"] { color: var(--destructive); }
-.admin-badge[data-tone="brand"] { color: oklch(0.5 0.16 330); }
+.admin-badge[data-tone="brand"] { color: var(--foreground); }
 .admin-bar-track { height: 0.45rem; border-radius: 999px; background: oklch(0.19 0.025 285 / 7%); overflow: hidden; }
 .admin-bar { height: 100%; border-radius: 999px; background: var(--brand-gradient); transition: width 600ms cubic-bezier(.22,1,.36,1); }
 .admin-btn { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 0.4rem; min-height: 2.25rem; border-radius: 999px; padding: 0.45rem 1rem; font-size: 0.8rem; font-weight: 700; white-space: nowrap; color: var(--foreground); background: linear-gradient(180deg, #141416, rgb(255 255 255 / 0.082)); border: 1px solid rgb(255 255 255 / 0.12); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.100), 0 8px 20px -12px oklch(0.3 0.12 300 / 40%); transition: transform 150ms, box-shadow 200ms, background 200ms; }
@@ -551,7 +551,7 @@ textarea.admin-input { line-height: 1.6; resize: vertical; }
 .admin-btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
 .admin-btn:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--field-focus-ring); }
 .admin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.admin-btn[data-tone="primary"] { color: var(--primary-foreground); background: radial-gradient(120% 160% at 0% 0%, oklch(0.38 0.1 300), transparent 60%), var(--primary); border-color: var(--primary); box-shadow: 0 14px 30px -14px oklch(0.25 0.1 300 / 70%), inset 0 1px 0 rgb(255 255 255 / 0.016); }
+.admin-btn[data-tone="primary"] { color: #fff; background: var(--brand-gradient); border-color: transparent; box-shadow: 0 14px 30px -14px oklch(0.25 0.1 300 / 70%), inset 0 1px 0 rgb(255 255 255 / 0.016); }
 .admin-btn[data-tone="primary"]:hover:not(:disabled) { box-shadow: 0 20px 36px -14px oklch(0.25 0.12 300 / 80%), inset 0 1px 0 rgb(255 255 255 / 0.020); }
 .admin-btn[data-tone="danger"] { color: var(--destructive); }
 .admin-btn[data-tone="danger"]:hover:not(:disabled) { background: linear-gradient(180deg, #1c1c1f, #1c1c1f); }
@@ -681,7 +681,7 @@ html { font-size: 93.75%; }
 /* Every blue button is the brand gradient, never a flat fill. */
 .bg-primary { background-image: var(--brand-gradient); }
 .bg-primary:hover:not(:disabled) { filter: brightness(1.06); }
-@keyframes ping-soft { 0% { box-shadow: 0 0 0 0 rgb(253 38 122 / 55%); } 70% { box-shadow: 0 0 0 7px rgb(253 38 122 / 0%); } 100% { box-shadow: 0 0 0 0 rgb(253 38 122 / 0%); } }
+@keyframes ping-soft { 0% { box-shadow: 0 0 0 0 rgb(255 255 255 / 25%); } 70% { box-shadow: 0 0 0 7px rgb(255 255 255 / 0%); } 100% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0%); } }
 .dot-pulse { animation: ping-soft 1.6s ease-out infinite; }
 @keyframes flow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 .pill-flow { background-image: linear-gradient(100deg, #1d4ed8, #3b82f6, #60a5fa, #3b82f6, #1d4ed8); background-size: 200% 100%; animation: flow 3s linear infinite; }
@@ -699,8 +699,8 @@ html { font-size: 93.75%; }
 @utility surface { background: var(--card); box-shadow: var(--surface-shadow); border: 1px solid rgb(255 255 255 / 0.12); }
 @utility cta { background: var(--brand-gradient); color: var(--primary-foreground); box-shadow: var(--cta-shadow); }
 .home-map .leaflet-container { background: #e9eef3; font-family: var(--font-sans); }
-.price-pin { background: var(--primary); color: var(--primary-foreground); font-weight: 700; font-size: 0.8rem; padding: 0.35rem 0.7rem; border-radius: 999px; white-space: nowrap; box-shadow: 0 6px 14px -6px rgb(24 24 27 / 60%); position: relative; transform: translate(-50%, -120%); display: inline-block; }
-.price-pin::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: var(--primary); transform: translateX(-50%) rotate(45deg); border-radius: 2px; z-index: -1; }
+.price-pin { background: #f4f4f5; color: #09090b; font-weight: 700; font-size: 0.8rem; padding: 0.35rem 0.7rem; border-radius: 999px; white-space: nowrap; box-shadow: 0 6px 14px -6px rgb(24 24 27 / 60%); position: relative; transform: translate(-50%, -120%); display: inline-block; }
+.price-pin::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: #f4f4f5; transform: translateX(-50%) rotate(45deg); border-radius: 2px; z-index: -1; }
 
 /* Premium glass: frosted header, agents strip, search bar and clean home map controls. */
 @utility glass { background: var(--glass-bg); backdrop-filter: blur(22px) saturate(180%); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
@@ -805,7 +805,7 @@ h3, h4, legend { font-weight: 700; }
 /* Menu rows behave like the feedback option cards: a tinted card with a fine border on hover. */
 .glass-menu [role="menuitem"] { border-radius: 1rem; }
 .glass-menu [role="menuitem"]:hover, .glass-menu [role="menuitem"][data-highlighted] { background: var(--menu-item-hover); box-shadow: inset 0 0 0 1px var(--border); }
-.glass-menu [role="menuitem"][aria-current="page"], .glass-menu [role="menuitem"].active { background: color-mix(in oklab, var(--primary) 10%, transparent); box-shadow: inset 0 0 0 1px var(--primary); }
+.glass-menu [role="menuitem"][aria-current="page"], .glass-menu [role="menuitem"].active { background: color-mix(in oklab, var(--foreground) 10%, transparent); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .28); }
 @utility popup-note { border-radius: 1rem; border: 1px solid var(--note-border); background: var(--note-bg); padding: 0.75rem 1rem; font-size: 0.875rem; color: var(--foreground); }
 /* Black theme strip at the bottom of a menu, end to end. */
 .theme-strip { background: var(--strip); color: var(--strip-fg); }
@@ -820,7 +820,7 @@ h3, h4, legend { font-weight: 700; }
 /* ---- Menu cards: each menu row is its own card, like the feedback options ---- */
 .glass-menu [role="menuitem"].menu-card { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-radius: 1rem; border: 1px solid var(--border); background: color-mix(in oklab, var(--background) 45%, transparent); font-size: 0.875rem; transform: none; box-shadow: none; transition: background 150ms, border-color 150ms, transform 150ms, box-shadow 150ms; }
 .glass-menu [role="menuitem"].menu-card:hover, .glass-menu [role="menuitem"].menu-card[data-highlighted] { background: color-mix(in oklab, var(--muted) 55%, transparent); border-color: color-mix(in oklab, var(--foreground) 18%, var(--border)); transform: translateY(-1px); box-shadow: 0 10px 22px -16px rgb(24 24 27 / 35%); }
-.glass-menu [role="menuitem"].menu-card[aria-current="page"], .glass-menu [role="menuitem"].menu-card.active { border-color: var(--primary); background: color-mix(in oklab, var(--primary) 10%, transparent); }
+.glass-menu [role="menuitem"].menu-card[aria-current="page"], .glass-menu [role="menuitem"].menu-card.active { border-color: rgb(255 255 255 / .3); background: color-mix(in oklab, var(--foreground) 10%, transparent); }
 .glass-menu .menu-card .menu-tile { width: 2rem; height: 2rem; border-radius: 0.5rem; transform: none !important; }
 .glass-menu .menu-card .menu-tile svg { width: 1.05rem !important; height: 1.05rem !important; }
 .glass-menu .theme-card { padding: 1rem; }
@@ -891,7 +891,7 @@ body:has([role="menu"][data-state="open"], [role="listbox"][data-state="open"], 
 .hl-svg { width: 76%; height: 76%; overflow: visible; animation: hl-pop 1.8s ease-in-out infinite; }
 .hl-box { fill: none; }
 .hl { background: var(--brand-gradient); border-radius: 28%; }
-.hl-orbit { --primary: #ff6036; }
+.hl-orbit { --primary: #ffffff; }
 .hl-house { fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; stroke-dashoffset: 100; animation: hl-draw 1.8s cubic-bezier(.65,0,.35,1) infinite; }
 .hl-orbit { position: absolute; inset: 0; border-radius: 28%; background: conic-gradient(from 0deg, transparent 0 62%, var(--primary) 100%); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); animation: hl-spin 1.1s linear infinite; opacity: .9; }
 .hl-spin { display: inline-block; width: var(--hl, 1rem); height: var(--hl, 1rem); border-radius: 999px; border: 2px solid color-mix(in oklab, currentColor 20%, transparent); border-top-color: currentColor; animation: hl-spin .7s linear infinite; }
@@ -938,7 +938,7 @@ html[data-sheet] .fb-fab, html[data-sheet] .view-pill, html[data-sheet] .tour-pr
 
 /* Voice recording: rings grow with the real loudness of the voice (--lvl set from the microphone) */
 .voice-btn { position: absolute; --lvl: 0; }
-.voice-ring { position: absolute; inset: 0; border-radius: 9999px; background: var(--primary); opacity: calc(.18 + var(--lvl) * .35); transform: scale(calc(1 + var(--lvl) * .9)); transition: transform .08s linear, opacity .08s linear; pointer-events: none; z-index: -1; }
+.voice-ring { position: absolute; inset: 0; border-radius: 9999px; background: rgb(255 255 255 / .6); opacity: calc(.18 + var(--lvl) * .35); transform: scale(calc(1 + var(--lvl) * .9)); transition: transform .08s linear, opacity .08s linear; pointer-events: none; z-index: -1; }
 .voice-ring-2 { opacity: calc(.1 + var(--lvl) * .2); transform: scale(calc(1 + var(--lvl) * 1.6)); }
 
 /* Padding that stays even while the content scrolls: the border is outside the scrolling area, so content is clipped at it */
@@ -1082,7 +1082,6 @@ html[data-sheet] .wb.wb-site .nav-blur-zone { backdrop-filter: none !important; 
   .m-sheet[data-pinned] > p { display: none; }
 }
 @keyframes sheet-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-@media (min-width: 768px) { .dash-title { background: var(--ta); border-color: var(--tb); } }
 
 /* Phones: a plain background, no gradient wash. */
 @media (max-width: 767px) { :root { --page-wash: none !important; } .app-shell, .aurora { background-image: none !important; background-color: #000000 !important; } .wb, body { background-color: #000000 !important; } }
@@ -1098,7 +1097,7 @@ html[data-sheet] .wb.wb-site .nav-blur-zone { backdrop-filter: none !important; 
 @media (min-width: 640px) { .admin-card { padding: 1.5rem; } }
 .admin-input { border-radius: 0.75rem; border: 1px solid var(--border); background: #141416; box-shadow: none; }
 .admin-input:hover { background: #1c1c1f; }
-.admin-input:focus, .admin-input:focus-visible { background: #141416; border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 18%, transparent); }
+.admin-input:focus, .admin-input:focus-visible { background: #141416; border-color: var(--field-focus-border); box-shadow: 0 0 0 3px var(--field-focus-ring); }
 
 /* Floating buttons ride up above the footer instead of covering it, and fade once the footer fills the screen. */
 .fb-fab, .view-pill { transform: translateY(calc(var(--lift, 0px) * -1)); transition: bottom .3s, transform .15s linear, opacity .2s; }
@@ -1179,7 +1178,7 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
     --card-foreground: #f4f4f5;
     --popover: var(--ld-surface);
     --popover-foreground: #f4f4f5;
-    --primary: #fd267a;
+    --primary: #f4f4f5;
     --primary-foreground: #ffffff;
     --secondary: var(--ld-surface-2);
     --secondary-foreground: #f4f4f5;
@@ -1324,7 +1323,7 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
   }
 }
 .ld-heart svg { stroke: #0a0a0a !important; fill: transparent; }
-.ld-heart [aria-pressed="true"] svg { fill: #ff2d6f !important; stroke: #0a0a0a !important; }
+.ld-heart [aria-pressed="true"] svg { fill: url(#hodii-grad) !important; stroke: transparent !important; }
 .ld-heart button { filter: none; }
 
 /* Listing page menu: the base layer forces a white panel with !important, and layered !important beats unlayered, so the dark panel has to live in the same layer. */
@@ -1370,7 +1369,7 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
 
 /* "Take me there" wears the theme colour of the active tab in the bottom bar. */
 @media screen {
-  html[data-listing-dark="1"] .bg-primary.take-btn { background-color: var(--ld-theme) !important; background-image: none !important; color: #ffffff !important; }
+  html[data-listing-dark="1"] .bg-primary.take-btn { background: var(--brand-gradient) !important; color: #ffffff !important; }
   html[data-listing-dark="1"] .bg-primary.take-btn:hover:not(:disabled) { background-color: #ff4d6d !important; }
 }
 
@@ -1433,7 +1432,7 @@ html[data-sheet] .listing-dock { display: none; }
   html[data-listing-dark="1"] .compare-tray { background: #141416 !important; background-image: none !important; border: 1px solid rgb(255 255 255 / .14) !important; color: #fff !important; box-shadow: 0 14px 40px -14px rgb(0 0 0 / .9) !important; backdrop-filter: none !important; z-index: 46; }
   html[data-listing-dark="1"] .compare-tray p { color: #fff; }
   html[data-listing-dark="1"] .compare-tray .text-muted-foreground { color: #a1a1aa !important; }
-  html[data-listing-dark="1"] .compare-tray .cta-ink { background: var(--ld-theme) !important; color: #fff !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] .compare-tray .cta-ink { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: none !important; }
   html[data-listing-dark="1"] .compare-tray .close-circle { background: #26262a !important; color: #fff !important; border: 1px solid rgb(255 255 255 / .12) !important; }
 }
 @media (max-width: 767px) {
@@ -1459,20 +1458,20 @@ html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link { c
 html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link:hover,
 html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .nav-link.is-current { color: #fff; }
 html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .logo { color: #fff; }
-html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark { background: var(--ld-theme) !important; color: #fff !important; box-shadow: 0 10px 22px -12px rgb(255 56 92 / .6) !important; }
-html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark:hover { box-shadow: 0 14px 28px -12px rgb(255 56 92 / .75) !important; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: 0 10px 22px -12px rgb(0 0 0 / .5) !important; }
+html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark:hover { box-shadow: 0 14px 28px -12px rgb(0 0 0 / .6) !important; }
 html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark::before { background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / .22) 50%, transparent 70%); }
 
 
 /* ---- Footer: four link groups in a 2 x 2 grid on every screen; the List button wears the theme colour (the active Home tab). ---- */
 .footer-group { background: color-mix(in oklab, var(--foreground) 4%, transparent); }
-.footer-list-btn { background: var(--ld-theme, #ff385c) !important; background-image: none !important; color: #fff !important; }
+.footer-list-btn { background: var(--brand-gradient) !important; color: #fff !important; }
 .footer-list-btn:hover { background: #ff4d6d !important; }
 html[data-listing-dark="1"] .footer-group { background: rgb(255 255 255 / .04); }
 
 /* ---- Listing hero icons: white outline by default; Compare turns black (on a white chip so it reads on any photo) when picked. ---- */
 .ld-heart svg { stroke: #fff !important; fill: transparent; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .55)); }
-.ld-heart [aria-pressed="true"] svg { fill: #ff2d6f !important; stroke: #fff !important; }
+.ld-heart [aria-pressed="true"] svg { fill: url(#hodii-grad) !important; stroke: transparent !important; }
 .hero-icon, .ld-heart { color: #fff; border-radius: 9999px; background: rgb(12 12 14 / .5); border: 1px solid rgb(255 255 255 / .16); -webkit-backdrop-filter: blur(12px) saturate(160%); backdrop-filter: blur(12px) saturate(160%); box-shadow: 0 2px 10px rgb(0 0 0 / .35); }
 .hero-icon[aria-pressed="true"] { color: #0a0a0a; background: rgb(255 255 255 / .95); border-color: transparent; }
 .ld-heart svg { filter: none; }
@@ -1514,12 +1513,12 @@ html[data-listing-dark="1"] .wb.wb-site .site-menu-panel > :last-child { padding
   html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(input:not([type=checkbox]):not([type=radio]), textarea, select) { background-color: #26262a !important; color: #f4f4f5 !important; border-color: rgb(255 255 255 / .14) !important; box-shadow: none !important; }
   html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(input, textarea):focus-visible { border-color: rgb(255 255 255 / .4) !important; box-shadow: 0 0 0 3px rgb(255 255 255 / .08) !important; }
   html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) button[aria-haspopup], html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) button[aria-expanded][class*="border"] { background-color: #26262a !important; color: #f4f4f5 !important; border-color: rgb(255 255 255 / .14) !important; }
-  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) .border-primary { border-color: var(--ld-theme) !important; }
-  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(.bg-primary\/10) { background-color: rgb(255 56 92 / .14) !important; }
-  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) input[type="checkbox"] { accent-color: var(--ld-theme); }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) .border-primary { border-color: rgb(255 255 255 / .5) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(.bg-primary\/10) { background-color: rgb(255 255 255 / .10) !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) input[type="checkbox"] { accent-color: #f4f4f5; }
 
   /* buttons: primary = theme colour with white text, secondary = dark with a light edge (as in the quick filters) */
-  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(.cta, .cta-ink, .cta:hover, .cta-ink:hover) { background: var(--ld-theme) !important; background-image: none !important; color: #fff !important; box-shadow: none !important; }
+  html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) :is(.cta, .cta-ink, .cta:hover, .cta-ink:hover) { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: none !important; }
   html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) button[data-tour="clear-all"] { background: #1c1c1f !important; color: #f4f4f5 !important; border: 1px solid rgb(255 255 255 / .16) !important; box-shadow: none !important; }
   html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) button[data-tour="clear-all"]:hover { background: #26262a !important; }
   html[data-listing-dark="1"] :is(.ls-card, .m-sheet, .popup-frame) .close-circle { background: #26262a !important; color: #fff !important; border: 1px solid rgb(255 255 255 / .12) !important; }
@@ -1538,15 +1537,15 @@ html[data-listing-dark="1"] .wb.wb-site .site-menu-panel > :last-child { padding
   html[data-listing-dark="1"] [data-floating-panel] [role="option"][aria-selected="true"] { color: #fff; font-weight: 700; }
   html[data-listing-dark="1"] [data-floating-panel] .text-muted-foreground { color: #a1a1aa !important; }
   html[data-listing-dark="1"] [data-floating-panel] :is(input:not([type=checkbox])) { background-color: #26262a !important; color: #f4f4f5 !important; border: 1px solid rgb(255 255 255 / .14) !important; box-shadow: none !important; }
-  html[data-listing-dark="1"] [data-floating-panel] :is(.cta, button[type="submit"]) { background: var(--ld-theme) !important; color: #fff !important; }
-  html[data-listing-dark="1"] [data-floating-panel] .bg-primary { background-color: var(--ld-theme) !important; border-color: var(--ld-theme) !important; color: #fff !important; }
-  html[data-listing-dark="1"] [data-floating-panel] :is([class*="bg-primary\/10"]) { background-color: rgb(255 56 92 / .14) !important; color: #ff7a93 !important; }
+  html[data-listing-dark="1"] [data-floating-panel] :is(.cta, button[type="submit"]) { background: var(--brand-gradient) !important; color: #fff !important; }
+  html[data-listing-dark="1"] [data-floating-panel] .bg-primary { background: var(--brand-gradient) !important; border-color: rgb(255 255 255 / .5) !important; color: #fff !important; }
+  html[data-listing-dark="1"] [data-floating-panel] :is([class*="bg-primary\/10"]) { background-color: rgb(255 255 255 / .10) !important; color: #f4f4f5 !important; }
   html[data-listing-dark="1"] [data-floating-panel] .border-input { border-color: rgb(255 255 255 / .25) !important; }
   html[data-listing-dark="1"] [data-floating-panel] .tone-icon { background: #2a2a30 !important; color: #fff !important; box-shadow: none !important; }
   html[data-listing-dark="1"] [data-floating-panel] .text-primary { color: #fff; }
   html[data-listing-dark="1"] .place-suggest, html[data-listing-dark="1"] :is(.ls-card, .m-sheet) [role="listbox"]:not([data-floating-panel] *) { background: #1c1c1f; color: #f4f4f5; }
   html[data-listing-dark="1"] .ai-chat { background: #141416 !important; box-shadow: 0 0 0 1px rgb(255 255 255 / .12) !important; color: #f4f4f5; }
-  html[data-listing-dark="1"] .ai-chat .bg-primary { background-color: var(--ld-theme) !important; color: #fff !important; }
+  html[data-listing-dark="1"] .ai-chat .bg-primary { background: var(--brand-gradient) !important; color: #fff !important; }
 }
 }
 
@@ -1577,3 +1576,62 @@ html[data-listing-dark="1"] .wb .glass-nav, html[data-listing-dark="1"] .wb.wb-s
 html[data-listing-dark="1"] .wb .glass-nav a:not(.btn-dark):not(.btn-light) { color: #e4e4e7; }
 html[data-listing-dark="1"] :is(input[type="search"], input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], textarea):not([data-bare]) { background-color: var(--ld-surface-2) !important; color: #f4f4f5; }
 html[data-listing-dark="1"] input::placeholder, html[data-listing-dark="1"] textarea::placeholder { color: #8b8b93; }
+
+/* =====================================================================================
+ * Brand pass (kept last so it wins over everything above).
+ * Rule: there is no solid pink anywhere. Pink/orange only ever appears as --brand-gradient,
+ * and only on real calls to action, small marks and accent text. Selected states, tabs,
+ * pills and toggles are neutral (white on dark).
+ * ===================================================================================== */
+
+/* Dark canvas everywhere, including the PWA safe areas under the tab bar and behind overscroll. */
+html, body { background-color: #000; color-scheme: dark; }
+html { min-height: 100%; }
+body { min-height: 100dvh; }
+
+/* Light pastel leftovers from the old palette, made dark so nothing renders white or lilac. */
+:root:root .wb { --lilac: #26262a; --lilac-soft: #1c1c1f; --peach: #1c1c1f; --mint: #1c1c1f; --glow-warm: transparent; --taupe: #52525b; --night: #09090b; --night-raised: #141416; }
+:root:root .wb .footer-card,
+:root:root .wb-footer .footer-card { background: #0b0b0c !important; border: 1px solid var(--border); color: #f4f4f5; box-shadow: none; }
+:root:root .wb .footer-panel { background: #141416; box-shadow: none; border: 1px solid var(--border); }
+:root:root .wb.wb-site .menu-panel { background: var(--popup-bg, #141416); border: 1px solid var(--border); box-shadow: 0 30px 60px -28px rgb(0 0 0 / .8); }
+.wb .price-card, .wb .guide-card { box-shadow: 0 0 0 1px var(--border); }
+
+/* Loading and empty cards match the dark cards. */
+.skeleton { background: linear-gradient(90deg, #141416 25%, #202024 50%, #141416 75%); background-size: 200% 100%; border: 1px solid rgb(255 255 255 / .06); }
+.empty-card { background: #0f0f11; border-color: var(--border); }
+.card-skeleton { background: transparent; }
+
+/* Filled call-to-action: every .bg-primary is the brand gradient with white text. */
+:root:root .bg-primary { background-color: transparent; background-image: var(--brand-gradient); color: #fff; }
+:root:root .bg-primary.text-primary-foreground, :root:root .bg-primary .text-primary-foreground { color: #fff; }
+:root:root .cta, :root:root .cta-ink, :root:root .btn-dark { color: #fff; box-shadow: 0 8px 20px -12px rgb(0 0 0 / .7); }
+
+/* Accent text: gradient. Works on links and flex rows; icons inside take the gradient stroke. */
+:root:root .text-primary:not(svg):not(.bg-primary):not(input):not(.btn-split),
+:root:root .brand-word,
+:root:root .action-pill-on:not(svg) {
+  background-image: var(--brand-gradient); -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; text-decoration-color: rgb(255 255 255 / .55);
+}
+:root:root .text-primary:not(svg):not(.bg-primary) svg { stroke: url(#hodii-grad); }
+:root:root svg.text-primary { stroke: url(#hodii-grad); }
+:root:root svg.text-primary.fill-current { fill: url(#hodii-grad); }
+.brand-word { padding-right: 0.06em; }
+
+/* Gradient outline for the few cards that should stand out (premium plans, featured). */
+.ring-grad { position: relative; }
+.ring-grad::after { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: var(--brand-gradient); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+
+/* Pills for list/map, filters, guides and compare are neutral, not gradient. */
+.pill-filter[aria-pressed="true"], .pill-filter[aria-pressed="true"]:hover { background: var(--foreground); color: var(--background); border-color: transparent; }
+.pill-soft { background: #141416; border: 1px solid rgb(255 255 255 / .12); box-shadow: none; backdrop-filter: none; }
+.pill-premium { background: #1c1c1f; color: var(--foreground); }
+.map-clean .leaflet-control-zoom a { background: #141416 !important; color: #f4f4f5 !important; }
+.map-clean .leaflet-control-attribution { background: rgb(20 20 22 / .8) !important; color: #a1a1aa; }
+.map-clean .leaflet-control-attribution a { color: #d4d4d8; }
+
+/* Focus: a plain light ring, never pink. */
+:focus-visible { outline-color: rgb(255 255 255 / .7); }
+input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: #f4f4f5; }
+::selection { background: rgb(255 255 255 / .22); color: inherit; }

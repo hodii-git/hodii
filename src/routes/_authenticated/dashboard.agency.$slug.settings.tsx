@@ -97,7 +97,7 @@ function ProfileForm({ slug, p }: { slug: string; p: Profile }) {
         <fieldset className="sm:col-span-2" disabled={readonly}>
           <legend className="mb-2 text-sm font-semibold">Counties you cover</legend>
           <div className="flex max-h-48 flex-wrap gap-1.5 overflow-y-auto">
-            {COUNTY_LIST_NAIROBI_FIRST.map((c) => { const on = areas.includes(c.code); return <button key={c.code} type="button" aria-pressed={on} onClick={() => setAreas((a) => (on ? a.filter((x) => x !== c.code) : a.length < AGENCY_LIMITS.serviceAreasMax ? [...a, c.code] : a))} className={`rounded-full border px-3 py-1 text-xs ${on ? "border-primary bg-primary text-primary-foreground" : "border-input bg-background"}`}>{c.name}</button>; })}
+            {COUNTY_LIST_NAIROBI_FIRST.map((c) => { const on = areas.includes(c.code); return <button key={c.code} type="button" aria-pressed={on} onClick={() => setAreas((a) => (on ? a.filter((x) => x !== c.code) : a.length < AGENCY_LIMITS.serviceAreasMax ? [...a, c.code] : a))} className={`rounded-full border px-3 py-1 text-xs ${on ? "border-foreground bg-foreground text-background" : "border-input bg-background"}`}>{c.name}</button>; })}
           </div>
         </fieldset>
         <Field id="a-reg" label="Business registration number" hint="From your certificate of incorporation or business name registration."><input id="a-reg" name="reg" defaultValue={p.businessRegNumber ?? ""} maxLength={AGENCY_LIMITS.registrationNumberMax} disabled={readonly} className={inputCls} /></Field>
@@ -110,7 +110,7 @@ function ProfileForm({ slug, p }: { slug: string; p: Profile }) {
         <h2 id="ver" className="text-lg font-extrabold">Verification</h2>
         <Badge value={p.verification.status === "verified" ? "verified" : p.verification.status === "pending" ? "pending" : "unverified"} />
         {p.verification.status === "verified" && <p className="text-sm text-muted-foreground">You are verified. Your listings go live straight away and show the verified badge.</p>}
-        {p.verification.status === "pending" && <p className="flex items-start gap-2 text-sm text-muted-foreground"><span aria-hidden className="mt-1 inline-block size-3.5 shrink-0 animate-spin rounded-full border-2 border-primary border-t-transparent" />Verification in progress. Our team is checking your details. Keep listing as normal: your listings go live straight away, and the verified badge appears once you are approved.</p>}
+        {p.verification.status === "pending" && <p className="flex items-start gap-2 text-sm text-muted-foreground"><span aria-hidden className="mt-1 inline-block size-3.5 shrink-0 animate-spin rounded-full border-2 border-foreground/60 border-t-transparent" />Verification in progress. Our team is checking your details. Keep listing as normal: your listings go live straight away, and the verified badge appears once you are approved.</p>}
         {p.verification.status === "rejected" && <p role="note" className="text-sm text-destructive">Not approved{p.verification.rejectionReason ? `: ${p.verification.rejectionReason}` : "."} Update your details and submit again.</p>}
         {(p.verification.status === "unverified" || p.verification.status === "rejected") && <>
           <p className="text-sm text-muted-foreground">Save your registration number, then submit. You can list without waiting. Verified agencies get a verified badge on their agency page and listings.</p>

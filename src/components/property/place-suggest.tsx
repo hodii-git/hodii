@@ -26,7 +26,7 @@ export function PlaceSuggest({ text, onPick }: { text: string; onPick: (hit: Pla
         {hits.map((h) => { const I = icon[h.kind]; return (
           <li key={h.id}>
             <button type="button" role="option" aria-selected={false} onClick={() => { setHidden(debounced); onPick(h); }} className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none">
-              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/10 text-primary"><I className="size-4" aria-hidden /></span>
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-foreground/10 text-primary"><I className="size-4" aria-hidden /></span>
               <span className="min-w-0"><span className="block truncate font-semibold">{h.label}</span><span className="block truncate text-xs text-muted-foreground">{h.detail}</span></span>
             </button>
           </li>

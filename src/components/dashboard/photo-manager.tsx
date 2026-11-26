@@ -39,7 +39,7 @@ export function PhotoManager({ slug, images, onChange, max = LISTING_LIMITS.imag
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3">
-        <button type="button" onClick={() => input.current?.click()} disabled={images.length >= max} className="inline-flex h-11 items-center gap-2 rounded-xl border border-dashed border-primary px-5 text-sm font-bold text-primary disabled:opacity-50"><ImagePlus className="h-4 w-4" aria-hidden />Add photos</button>
+        <button type="button" onClick={() => input.current?.click()} disabled={images.length >= max} className="inline-flex h-11 items-center gap-2 rounded-xl border border-dashed border-foreground/60 px-5 text-sm font-bold text-primary disabled:opacity-50"><ImagePlus className="h-4 w-4" aria-hidden />Add photos</button>
         <input ref={input} type="file" accept="image/*,.heic,.heif,.avif,.jfif" multiple hidden onChange={(e) => add(e.target.files)} aria-label="Choose photos" />
         <p className="text-sm text-muted-foreground" aria-live="polite">{busy > 0 ? `Uploading ${busy}…` : `${images.length} of ${max} photos. At least ${LISTING_LIMITS.imagesMin} is needed to publish; the first is the cover.`}</p>
       </div>

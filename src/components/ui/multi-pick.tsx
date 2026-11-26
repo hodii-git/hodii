@@ -49,7 +49,7 @@ export function MultiPick({ values, onChange, options, label, allLabel, max, cla
                     return (
                       <li key={o.value} role="presentation">
                         <button type="button" role="option" aria-selected={on} onClick={() => toggle(o.value)} className={row}>
-                          <span className={`grid h-4 w-4 shrink-0 place-items-center rounded border ${on ? "border-primary bg-primary text-primary-foreground" : "border-input"}`}>{on && <Check className="h-3 w-3" aria-hidden />}</span>
+                          <span className={`grid h-4 w-4 shrink-0 place-items-center rounded border ${on ? "border-foreground bg-foreground text-background" : "border-input"}`}>{on && <Check className="h-3 w-3" aria-hidden />}</span>
                           <span className={on ? "font-semibold" : ""}>{o.label}</span>
                         </button>
                       </li>

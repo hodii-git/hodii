@@ -29,7 +29,7 @@ export function RadiusEditor({ radiusM, onChange, compact = false }: { radiusM: 
         <span className="text-muted-foreground">km</span>
       </label>
       <button type="button" className={btn} aria-label="Larger radius" disabled={radiusM >= MAX_RADIUS_M} onClick={() => onChange(clampRadius(radiusM + radiusStep(radiusM)))}><Plus className="size-4" aria-hidden /></button>
-      {!compact && RADIUS_PRESETS.map((r) => <button key={r} type="button" aria-pressed={radiusM === r} onClick={() => onChange(r)} className={`h-7 rounded-full border px-2.5 text-xs font-bold ${radiusM === r ? "border-primary bg-primary/10 text-primary" : "border-input"}`}>{radiusLabel(r)}</button>)}
+      {!compact && RADIUS_PRESETS.map((r) => <button key={r} type="button" aria-pressed={radiusM === r} onClick={() => onChange(r)} className={`h-7 rounded-full border px-2.5 text-xs font-bold ${radiusM === r ? "border-foreground/60 bg-foreground/10 text-primary" : "border-input"}`}>{radiusLabel(r)}</button>)}
     </div>
   );
 }

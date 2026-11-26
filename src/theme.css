@@ -19,7 +19,7 @@
   --card-foreground: #f4f4f5;
   --popover: #141416;
   --popover-foreground: #f4f4f5;
-  --primary: #fd267a;
+  --primary: #f4f4f5;
   --primary-foreground: #ffffff;
   --secondary: #1c1c1f;
   --secondary-foreground: #f4f4f5;
@@ -34,9 +34,9 @@
   --destructive-foreground: oklch(0.99 0 0);
   --border: rgb(255 255 255 / 0.12);
   --input: rgb(255 255 255 / 0.16);
-  --ring: #fd267a;
+  --ring: rgb(255 255 255 / 0.45);
   --chart-1: oklch(0.55 0.2 262); --chart-2: oklch(0.6 0.15 260); --chart-3: oklch(0.7 0.15 160); --chart-4: oklch(0.8 0.15 80); --chart-5: oklch(0.6 0.2 300);
-  --sidebar: #0b0b0c; --sidebar-foreground: #f4f4f5; --sidebar-primary: #fd267a; --sidebar-primary-foreground: #ffffff; --sidebar-accent: #1c1c1f; --sidebar-accent-foreground: #f4f4f5; --sidebar-border: rgb(255 255 255 / 0.12); --sidebar-ring: #fd267a;
+  --sidebar: #0b0b0c; --sidebar-foreground: #f4f4f5; --sidebar-primary: #f4f4f5; --sidebar-primary-foreground: #09090b; --sidebar-accent: #1c1c1f; --sidebar-accent-foreground: #f4f4f5; --sidebar-border: rgb(255 255 255 / 0.12); --sidebar-ring: rgb(255 255 255 / 0.45);
   --glass: #141416;
   --glass-strong: #141416;
   --live: #f4f4f5;
@@ -64,7 +64,7 @@
   --switch-off-border: #52525b;
   --brand-a: #fd267a;
   --brand-b: #ff6036;
-  --like: #ff385c;
+  --like: #f4f4f5;
   --brand-gradient: linear-gradient(135deg, #fd267a 0%, #ff6036 100%);
   /* Mobile dark listing theme tokens */
   --ld-bg: #000000;
@@ -73,23 +73,23 @@
   --ld-border: rgb(255 255 255 / 0.12);
   --ld-price: #2ee86c;
   --ld-bolt: #b44cff;
-  --ld-pink: #ff2d6f;
+  --ld-pink: #f4f4f5;
   --ld-yellow: #facc15;
   --ld-green: #22c55e;
   --ld-wa: #25d366;
   --ld-blue: #2997ff;
-  --ld-theme: #fd267a;
+  --ld-theme: #f4f4f5;
 }
 
 :root {
-  --scrollbar-track: oklch(0.96 0.01 250 / 60%);
-  --scrollbar-thumb-from: oklch(0.8 0.004 260);
-  --scrollbar-thumb-to: oklch(0.72 0.005 260);
-  --scrollbar-thumb-hover-from: oklch(0.62 0.006 260);
-  --scrollbar-thumb-hover-to: oklch(0.55 0.006 260);
+  --scrollbar-track: #0b0b0c;
+  --scrollbar-thumb-from: #3f3f46;
+  --scrollbar-thumb-to: #3f3f46;
+  --scrollbar-thumb-hover-from: #52525b;
+  --scrollbar-thumb-hover-to: #52525b;
 }
 
-:root { --page-wash: linear-gradient(to bottom, #1c1c1f 0, #1c1c1f 9rem, #1c1c1f 24rem, transparent 46rem), radial-gradient(75rem 70rem at 100% 0%, #1c1c1f, #1c1c1f 45%, transparent 72%), radial-gradient(55rem 40rem at 55% 0%, #1c1c1f, transparent 70%), #141416; --surface-shadow: 0 1px 2px rgb(24 24 27 / 4%), 0 8px 24px -12px rgb(24 24 27 / 12%); --cta-shadow: 0 10px 24px -12px rgb(253 38 122 / 55%); --star: #f5a623; }
+:root { --page-wash: linear-gradient(to bottom, #1c1c1f 0, #1c1c1f 9rem, #1c1c1f 24rem, transparent 46rem), radial-gradient(75rem 70rem at 100% 0%, #1c1c1f, #1c1c1f 45%, transparent 72%), radial-gradient(55rem 40rem at 55% 0%, #1c1c1f, transparent 70%), #141416; --surface-shadow: 0 1px 2px rgb(24 24 27 / 4%), 0 8px 24px -12px rgb(24 24 27 / 12%); --cta-shadow: 0 10px 24px -12px rgb(0 0 0 / 70%); --star: #f5a623; }
 
 :root { --glass-bg: linear-gradient(135deg, rgb(255 255 255 / 0.080), rgb(255 255 255 / 0.062)); --glass-border: rgb(255 255 255 / 0.083); --glass-shadow: 0 1px 1px rgb(24 24 27 / 4%), 0 12px 32px -14px rgb(24 24 27 / 22%), inset 0 1px 0 #141416; --glass-shadow-lg: 0 2px 4px rgb(24 24 27 / 4%), 0 24px 48px -20px rgb(24 24 27 / 28%), inset 0 1px 0 #141416; }
 
@@ -99,11 +99,11 @@
 
 :root { --header-hover: #1c1c1f; --header-circle: #1c1c1f; --header-circle-border: #1c1c1f; --chevron-glass: linear-gradient(160deg, rgb(255 255 255 / 0.073), rgb(255 255 255 / 0.058)); }
 
-:root { --popup-scrim: oklch(1 0 0 / 38%); }
+:root {  }
 
-:root { --skeleton: oklch(0.94 0 0); --skeleton-shine: oklch(0.975 0 0); }
+:root { --skeleton: #141416; --skeleton-shine: #26262a; }
 
-:root { --popup-scrim: oklch(1 0 0 / 14%); }
+:root {  }
 
 :root { --menu-tile-bg: #1c1c1f; --menu-tile-fg: oklch(0.5 0 0); --menu-item-hover: #1c1c1f; }
 
@@ -111,7 +111,7 @@
 
 :root { --tone-a: #60a5fa; --tone-b: #2563eb; --note-bg: oklch(0.77 0.16 70 / 10%); --note-border: oklch(0.77 0.16 70 / 40%); --strip: oklch(0.16 0 0); --strip-fg: #1c1c1f; --strip-hover: rgb(255 255 255 / 0.037); --menu-item-hover: color-mix(in oklab, var(--muted) 70%, transparent); }
 
-:root { --popup-scrim: oklch(0.2 0.02 260 / 28%); }
+:root {  }
 
 :root { --tab-h: 0px; --cmp-h: 0px; --sheet-h: 0px; }
 
@@ -125,7 +125,7 @@
   --brand-a: #fd267a;
   --brand-b: #ff6036;
   --brand-gradient: linear-gradient(135deg, #fd267a 0%, #ff6036 100%);
-  --cta-shadow: 0 10px 24px -12px rgb(253 38 122 / 55%);
+  --cta-shadow: 0 10px 24px -12px rgb(0 0 0 / 70%);
 }
 
 /* ---- Info / marketing pages: same palette, expressed in the names those pages use ---- */
@@ -165,14 +165,4 @@
 :root .wb .btn-split[data-tone="dark"] .btn-split-box { background: rgb(255 255 255 / 0.22); color: #fff; }
 :root .wb .btn-split[data-tone="light"] { background: var(--paper); color: var(--ink); }
 
-/* ---- Gradient text and icons: anything that used to be plain pink now uses the brand gradient ---- */
-.brand-word,
-.text-primary:not(svg):not([class*="bg-"]):not(button):not(input):not(.btn-split),
-.action-pill-on:not(svg) {
-  background-image: var(--brand-gradient);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent; color: transparent;
-}
-.brand-word { padding-right: 0.06em; }
-svg.text-primary { stroke: url(#hodii-grad); }
-svg.text-primary.fill-current { fill: url(#hodii-grad); }
+/* Gradient text and icon rules live at the end of styles.css ("Brand pass"). */

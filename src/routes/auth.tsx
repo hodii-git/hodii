@@ -144,7 +144,7 @@ function AuthPage() {
         {mode !== "recover" && <div role="tablist" className="flex gap-1 rounded-full bg-secondary p-1">
           {(["signin", "signup"] as const).map((m) => (
             <button key={m} role="tab" aria-selected={mode === m} onClick={() => switchMode(m)}
-              className={`flex-1 rounded-full py-2.5 text-sm font-bold transition ${mode === m ? "bg-primary text-primary-foreground shadow-float" : "text-muted-foreground"}`}>
+              className={`flex-1 rounded-full py-2.5 text-sm font-bold transition ${mode === m ? "bg-foreground text-background shadow-float" : "text-muted-foreground"}`}>
               {m === "signin" ? "Sign in" : "Create account"}
             </button>
           ))}
@@ -157,7 +157,7 @@ function AuthPage() {
               <legend className="auth-label">I am</legend>
               <div className="grid gap-2.5">
                 {([["user", "Looking for property", "Save listings and send enquiries"], ["agency", "Listing property", "Agent, developer, manager or landlord"]] as const).map(([k, t, d]) => (
-                  <label key={k} className={`flex cursor-pointer items-center gap-3 rounded-2xl bg-card p-3.5 text-left transition ${accountType === k ? "shadow-[0_0_0_2px_var(--primary),0_10px_24px_-14px_rgb(24_24_27/.3)]" : "shadow-[var(--btn-shadow)] hover:shadow-[var(--btn-shadow-hover)]"}`}><span aria-hidden className={`grid size-10 shrink-0 place-items-center rounded-full ${accountType === k ? "bg-primary text-primary-foreground" : "bg-foreground/[0.06]"}`}>{k === "user" ? <Search className="size-4" /> : <Building2 className="size-4" />}</span>
+                  <label key={k} className={`flex cursor-pointer items-center gap-3 rounded-2xl bg-card p-3.5 text-left transition ${accountType === k ? "shadow-[0_0_0_2px_var(--primary),0_10px_24px_-14px_rgb(24_24_27/.3)]" : "shadow-[var(--btn-shadow)] hover:shadow-[var(--btn-shadow-hover)]"}`}><span aria-hidden className={`grid size-10 shrink-0 place-items-center rounded-full ${accountType === k ? "bg-foreground text-background" : "bg-foreground/[0.06]"}`}>{k === "user" ? <Search className="size-4" /> : <Building2 className="size-4" />}</span>
                     <input type="radio" name="accountType" value={k} checked={accountType === k} onChange={() => setAccountType(k)} className="sr-only" />
                     <span className="min-w-0"><span className="block text-sm font-bold">{t}</span><span className="block text-xs text-muted-foreground">{d}</span></span>
                   </label>

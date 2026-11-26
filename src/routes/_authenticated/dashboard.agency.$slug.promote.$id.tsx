@@ -80,7 +80,7 @@ function Promote() {
         <p className="text-sm font-bold text-primary">{data.status === "published" ? "Your listing is live" : data.status === "pending_review" ? "Your listing is awaiting review" : data.status === "frozen" ? "Your listing is frozen" : data.status === "expired" ? "Your listing has expired" : "Your listing is saved as a draft"}</p>
         <h2 className="mt-1 text-2xl font-extrabold">Want more people to see it?</h2>
         <p className="mt-1 text-muted-foreground">{["draft", "frozen", "expired"].includes(data.status) ? <><strong>{data.title}</strong> is not live yet. <strong>It goes live as soon as your payment is confirmed</strong> and the boost starts then, so pay when you are ready. </> : <><strong>{data.title}</strong> is already published. </>}A boost lifts it in search results, shows it with a Boosted badge and can place it in the boosted strips on the home page. Results still favour what people searched for, so a boost helps a good match, it does not replace one. It is optional.</p>
-        {data.boostUntil && <p className="mt-2 rounded-xl bg-primary/10 p-3 text-sm">Already boosted until {new Date(data.boostUntil).toLocaleDateString("en-KE", { dateStyle: "long" })}. Buying more time adds to the end.</p>}
+        {data.boostUntil && <p className="mt-2 rounded-xl bg-foreground/10 p-3 text-sm">Already boosted until {new Date(data.boostUntil).toLocaleDateString("en-KE", { dateStyle: "long" })}. Buying more time adds to the end.</p>}
         {data.premiumUntil && <p className="mt-2 inline-flex items-center gap-2 rounded-xl bg-amber-500/15 p-3 text-sm"><Crown className="size-4" aria-hidden />Premium through your package until {new Date(data.premiumUntil).toLocaleDateString("en-KE", { dateStyle: "long" })}. You do not need to boost it as well.</p>}
       </header>
 
@@ -100,7 +100,7 @@ function Promote() {
             <legend className="mb-2 text-sm font-bold">How many days?</legend>
             <div className="flex flex-wrap gap-2">
               {BOOST_PRESETS.filter((d) => d <= maxDays).map((d) => (
-                <button key={d} type="button" aria-pressed={chosenDays === d} onClick={() => setDays(d)} className={`rounded-full border px-4 py-2 text-sm font-bold ${chosenDays === d ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{d} days</button>
+                <button key={d} type="button" aria-pressed={chosenDays === d} onClick={() => setDays(d)} className={`rounded-full border px-4 py-2 text-sm font-bold ${chosenDays === d ? "border-foreground bg-foreground text-background" : "border-border"}`}>{d} days</button>
               ))}
             </div>
             <label htmlFor="days" className="mt-3 block text-sm font-semibold">Or choose any number of days (up to {maxDays})</label>

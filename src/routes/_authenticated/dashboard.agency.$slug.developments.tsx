@@ -82,14 +82,14 @@ function DevForm({ slug, start, onDone }: { slug: string; start: DevelopmentInpu
         <button type="button" className="text-sm font-semibold text-muted-foreground hover:underline" onClick={onDone}>Back to developments</button>
       </div>
       <nav aria-label="Steps" className="flex flex-wrap gap-2">
-        {stepsList.map((t, i) => <button key={t} type="button" aria-current={step === i ? "step" : undefined} onClick={() => setStep(i)} className={`rounded-full border px-4 py-1.5 text-sm font-bold ${step === i ? "border-primary bg-primary text-primary-foreground" : i < step ? "border-primary/50" : "border-border text-muted-foreground"}`}>{i + 1}. {t}</button>)}
+        {stepsList.map((t, i) => <button key={t} type="button" aria-current={step === i ? "step" : undefined} onClick={() => setStep(i)} className={`rounded-full border px-4 py-1.5 text-sm font-bold ${step === i ? "border-foreground bg-foreground text-background" : i < step ? "border-foreground/30" : "border-border text-muted-foreground"}`}>{i + 1}. {t}</button>)}
       </nav>
-      <Pane n={0}><Sec id="d-s-basics" title="About the project" icon={<FileText />} tone="bg-primary/10 text-primary">
+      <Pane n={0}><Sec id="d-s-basics" title="About the project" icon={<FileText />} tone="bg-foreground/10 text-primary">
       <Field id="d-name" label="Project name"><input id="d-name" className={inputCls} value={f.name} maxLength={DEVELOPMENT_LIMITS.nameMax} onChange={(e) => up("name", e.target.value)} required /></Field>
       <Field id="d-stage" label="Stage"><Pick label="Stage" value={f.status} onChange={(v) => up("status", v as DevelopmentInput["status"])} options={STAGES.map(([k, l]) => ({ value: k, label: l }))} /></Field>
       <div className="sm:col-span-2"><Field id="d-desc" label="About the project" hint={`At least ${DEVELOPMENT_LIMITS.descriptionMin} characters to publish.`}><textarea id="d-desc" rows={6} className={areaCls} maxLength={DEVELOPMENT_LIMITS.descriptionMax} value={f.description} onChange={(e) => up("description", e.target.value)} /></Field></div>
       </Sec></Pane>
-      <Pane n={1}><Sec id="d-s-place" title="Price and place" icon={<MapPin />} tone="bg-rose-500/15 text-rose-600">
+      <Pane n={1}><Sec id="d-s-place" title="Price and place" icon={<MapPin />} tone="bg-violet-500/15 text-violet-400">
       <Field id="d-county" label="County"><Pick label="County" value={String(f.countyCode)} onChange={(v) => up("countyCode", Number(v) || 47)} options={COUNTY_OPTIONS} searchable /></Field>
       <Field id="d-area" label="Area or neighbourhood"><input id="d-area" className={inputCls} value={f.areaName} onChange={(e) => up("areaName", e.target.value)} required minLength={2} /></Field>
       <Field id="d-done" label="Expected completion" hint="Leave empty if not yet known."><input id="d-done" type="date" className={inputCls} value={f.completionDate ?? ""} onChange={(e) => up("completionDate", e.target.value || null)} /></Field>

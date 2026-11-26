@@ -374,14 +374,14 @@ function Overview({ name }: { name: string }) {
         )}
       </section>
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        <Tile icon={<Home />} label="Live listings" value={p.listings["published"] ?? 0} tone="bg-primary/10 text-primary" />
+        <Tile icon={<Home />} label="Live listings" value={p.listings["published"] ?? 0} tone="bg-foreground/10 text-primary" />
         <Tile icon={<Building2 />} label="Agencies (verified)" value={`${Object.values(p.agencies).reduce((a, b) => a + b, 0)} (${p.agencies["verified"] ?? 0})`} tone="bg-sky-500/15 text-sky-600" />
         <Tile icon={<Users />} label="Accounts (new this week)" value={`${p.users} (${p.newUsers})`} tone="bg-violet-500/15 text-violet-600" />
         <Tile icon={<MessageSquare />} label="Enquiry response rate" value={p.responseRate === null ? "—" : `${p.responseRate}%`} tone="bg-emerald-500/15 text-emerald-600" />
         <Tile icon={<Eye />} label="Listing views" value={p.last30.views} tone="bg-sky-500/15 text-sky-600" />
         <Tile icon={<Inbox />} label="Enquiries" value={p.last30.enquiries} tone="bg-violet-500/15 text-violet-600" />
         <Tile icon={<Phone />} label="Phone reveals" value={p.last30.phoneReveals} tone="bg-emerald-500/15 text-emerald-600" />
-        <Tile icon={<Heart />} label="Saves" value={p.last30.saves} tone="bg-rose-500/15 text-rose-600" />
+        <Tile icon={<Heart />} label="Saves" value={p.last30.saves} tone="bg-violet-500/15 text-violet-400" />
         <Tile icon={<Globe />} label="Site visitors" value={stats.visitors} tone="bg-indigo-500/15 text-indigo-600" />
         <Tile icon={<MousePointerClick />} label="Site page views" value={stats.views} tone="bg-amber-500/15 text-amber-600" />
         <Tile icon={<Sun />} label="Views today" value={stats.today} tone="bg-orange-500/15 text-orange-600" />

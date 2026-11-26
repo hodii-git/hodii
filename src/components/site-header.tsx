@@ -103,13 +103,13 @@ export function SiteHeader() {
       <div ref={ref} className={solid ? "solid-head glass-nav pointer-events-auto fixed inset-x-0 top-0 z-50" : `pointer-events-none fixed inset-x-0 z-50 mx-auto w-[var(--site-w)] ${isPropertyPage ? "top-12 md:top-4 lg:top-5" : "top-3 sm:top-4 lg:top-5"}`} data-floating>
         {explore && (
           <div className={solid ? "flex items-center gap-2 px-3 py-2 md:hidden" : "pointer-events-auto glass-nav hk-co flex items-center gap-2 !px-2 !py-2 md:hidden"}>
-            <button type="button" className="menu-btn relative shrink-0" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
-              {<svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 5h18M8 12h13M13 19h8" /></svg>}
-              {compareCount > 0 && <span className="absolute right-1.5 top-1.5 size-2.5 rounded-full bg-primary" aria-hidden />}
-            </button>
             <Link to="/" className="logo grid size-10 shrink-0 place-items-center" aria-label={`${BRAND.name} home`}><HodiiLogo /></Link>
             <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-full bg-foreground/[0.06] px-3.5 text-left text-sm font-medium text-muted-foreground">
               <Search className="size-4 shrink-0 text-foreground" aria-hidden /><span className="truncate">Search homes, places…</span>
+            </button>
+            <button type="button" className="menu-btn relative shrink-0" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
+              {open ? <X className="h-5 w-5" /> : <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 5h18M8 12h13M13 19h8" /></svg>}
+              {compareCount > 0 && <span className="absolute right-1.5 top-1.5 size-2.5 rounded-full bg-primary" aria-hidden />}
             </button>
           </div>
         )}
@@ -129,7 +129,7 @@ export function SiteHeader() {
             })}
           </nav>
           <div className="flex items-center justify-end gap-1.5">
-            <span className={solid ? "hidden" : "hidden xl:inline-flex"}><Link to="/list-property" data-tour="list" className="btn-dark btn-compact" onMouseMove={magnet} onMouseLeave={unmagnet}>List a property<ArrowRight className="btn-arrow h-4 w-4" /></Link></span>
+            <span className="hidden lg:inline-flex"><Link to="/list-property" data-tour="list" className="btn-dark btn-compact whitespace-nowrap" onMouseMove={magnet} onMouseLeave={unmagnet}>List a property<ArrowRight className="btn-arrow h-4 w-4" /></Link></span>
             {signedIn && <span data-tour="bell" className="inline-flex"><NotificationBell /></span>}
             <span data-tour="account" className="inline-flex"><AccountButton /></span>
             <button type="button" className="menu-btn relative" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
@@ -164,7 +164,7 @@ export function SiteHeader() {
             <Link to="/agencies" className={row} onClick={close}>{Tile(Users)}<span className="mr-auto">Agents and developers</span>{Chev}</Link>
             <Link to="/tools" className={row} onClick={close}>{Tile(Calculator)}<span className="mr-auto">Calculators</span>{Chev}</Link>
             <Link to="/compare" className={row} onClick={close}>{Tile(Scale)}<span className="mr-auto">Compare{compareCount ? ` (${compareCount})` : ""}</span>{Chev}</Link>
-            <Link to="/list-property" className={`${row} ${solid ? "" : "xl:hidden"}`} onClick={close}>{Tile(PlusCircle)}<span className="mr-auto">List a property</span>{Chev}</Link>
+            <Link to="/list-property" className={`${row} lg:hidden`} onClick={close}>{Tile(PlusCircle)}<span className="mr-auto">List a property</span>{Chev}</Link>
           </div>
         </div>
       </div>

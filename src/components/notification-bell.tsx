@@ -44,7 +44,7 @@ export type NotificationItem = { id: string; kind: string; title: string; body: 
 export function NotificationRow({ n, actions, onDone }: { n: NotificationItem; actions: ReturnType<typeof useNotificationActions>; onDone?: () => void }) {
   const Icon = ICONS[n.kind] ?? Bell;
   return (
-    <li className={`group relative flex gap-3 rounded-2xl p-3 ${n.read ? "" : "bg-primary/5"}`}>
+    <li className={`group relative flex gap-3 rounded-2xl p-3 ${n.read ? "" : "bg-foreground/5"}`}>
       <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-muted"><Icon className="h-4 w-4" aria-hidden /></span>
       <div className="min-w-0 flex-1">
         <button type="button" disabled={!n.link} onClick={() => { actions.open(n); onDone?.(); }} className={`block w-full text-left ${n.link ? "cursor-pointer" : "cursor-default"}`}>

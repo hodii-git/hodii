@@ -72,7 +72,7 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
         className={`flex h-11 items-center gap-3 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground transition hover:opacity-90 ${wide ? "" : "justify-center px-0"}`}><it.icon className="size-[19px] shrink-0" aria-hidden />{wide && <span className="truncate">{it.label}</span>}{!wide && <span className="sr-only">{it.label}</span>}</L>;
     }
     const base = `relative flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition ${wide ? "" : "justify-center px-0"} ${it.danger ? "text-red-600 hover:bg-red-50" : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"}`;
-    const on = "bg-primary/10 !text-primary";
+    const on = "bg-foreground/10 !text-primary";
     const inner = (
       <>
         <it.icon className="size-[19px] shrink-0" aria-hidden />

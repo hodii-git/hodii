@@ -160,7 +160,7 @@ export function Gallery({
             <ul className="mt-3 flex gap-2 overflow-x-auto pb-1" aria-label="Photo thumbnails">
               {images.map((im, k) => (
                 <li key={im.url} className="shrink-0">
-                  <button type="button" onClick={() => setI(k)} aria-label={isPlan(k) ? `Show floor plan ${k - photos.length + 1}` : `Show photo ${k + 1}`} aria-current={k === i} className={`block overflow-hidden rounded-xl border-2 ${k === i ? "border-primary" : "border-transparent opacity-80"}`}>
+                  <button type="button" onClick={() => setI(k)} aria-label={isPlan(k) ? `Show floor plan ${k - photos.length + 1}` : `Show photo ${k + 1}`} aria-current={k === i} className={`block overflow-hidden rounded-xl border-2 ${k === i ? "border-foreground/60" : "border-transparent opacity-80"}`}>
                     <img src={im.thumbUrl ?? im.url} alt="" width={96} height={72} loading="lazy" className={`h-[4.5rem] w-24 ${isPlan(k) ? "bg-white object-contain" : "object-cover"}`} />
                   </button>
                 </li>

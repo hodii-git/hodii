@@ -6,18 +6,11 @@ export const areaCls = "w-full rounded-xl border border-input bg-background px-3
 export const btnPrimary = "inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground disabled:opacity-60";
 export const btnGhost = "inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-input bg-background px-5 text-sm font-bold disabled:opacity-60";
 
-/** The title block every dashboard page starts with, so no page is without a heading. */
-const ACCENTS: [RegExp, number][] = [
-  [/premium|boost|plan|billing|payment/i, 85], [/saved|favou?rite/i, 250], [/notif|alert/i, 55], [/profile|overview|hello|good/i, 250],
-  [/enquir|lead|message/i, 190], [/listing/i, 275], [/develop/i, 300], [/team|member|people|user/i, 160], [/setting|security|account/i, 235], [/agenc|verif/i, 145],
-];
-export function accentHue(title: string): number { return ACCENTS.find(([r]) => r.test(title))?.[1] ?? 250; }
-/** Page title block with a quiet tint of the page's own colour. */
+/** The title block every dashboard page starts with: one colour (the theme text colour) on the plain page background, the same on every page. */
 export function PageTitle({ title, right }: { title: ReactNode; sub?: ReactNode; right?: ReactNode }) {
-  const hue = accentHue(typeof title === "string" ? title : "");
   return (
-    <header className="dash-title mb-5 flex flex-wrap items-end justify-between gap-3 md:rounded-2xl md:border md:px-5 md:py-4" style={{ "--ta": `oklch(0.975 0.018 ${hue})`, "--tb": `oklch(0.91 0.04 ${hue})` } as React.CSSProperties}>
-      <div className="min-w-0"><h1 className="text-2xl font-extrabold md:text-3xl" style={{ color: `oklch(0.34 0.1 ${hue})` }}>{title}</h1></div>
+    <header className="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <div className="min-w-0"><h1 className="text-2xl font-extrabold text-foreground md:text-3xl">{title}</h1></div>
       {right && <div className="flex shrink-0 flex-wrap gap-2">{right}</div>}
     </header>
   );
@@ -50,7 +43,7 @@ export function Stat({ label, value, hint }: { label: string; value: ReactNode; 
 const TONES: Record<string, string> = {
   published: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400", pending_review: "bg-amber-500/15 text-amber-600 dark:text-amber-400", draft: "bg-muted text-muted-foreground",
   paused: "bg-muted text-muted-foreground", expired: "bg-orange-500/15 text-orange-600", rejected: "bg-red-500/15 text-red-600", closed: "bg-muted text-muted-foreground",
-  new: "bg-primary/15 text-primary", contacted: "bg-sky-500/15 text-sky-600", viewing: "bg-violet-500/15 text-violet-600", won: "bg-emerald-500/15 text-emerald-600", lost: "bg-muted text-muted-foreground", spam: "bg-red-500/15 text-red-600",
+  new: "bg-foreground/15 text-primary", contacted: "bg-sky-500/15 text-sky-600", viewing: "bg-violet-500/15 text-violet-600", won: "bg-emerald-500/15 text-emerald-600", lost: "bg-muted text-muted-foreground", spam: "bg-red-500/15 text-red-600",
   verified: "bg-emerald-500/15 text-emerald-600", unverified: "bg-muted text-muted-foreground", pending: "bg-amber-500/15 text-amber-600",
 };
 export const label = (s: string) => s.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());

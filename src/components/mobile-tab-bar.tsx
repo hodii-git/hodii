@@ -76,7 +76,7 @@ export function MobileTabBar() {
     <>
       <span className="relative">
         <MessageCircle {...ico(on.inquiries)} />
-        {hasEnquiryNotes && <span className="absolute -right-0.5 -top-0.5 size-2 rounded-full bg-[#ff385c]" aria-label="New enquiry updates" />}
+        {hasEnquiryNotes && <span className="absolute -right-0.5 -top-0.5 size-2 rounded-full bg-foreground" aria-label="New enquiry updates" />}
       </span>
       Inquiries
     </>

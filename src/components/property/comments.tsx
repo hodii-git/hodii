@@ -119,7 +119,7 @@ export function ListingComments({ propertyId, slug }: { propertyId: string; slug
         </div>
         <div className="glass flex gap-1 rounded-full p-1">
           {(["newest", "top", "oldest"] as const).map((s) => (
-            <button key={s} onClick={() => setSort(s)} className={`rounded-full px-4 py-1.5 text-xs font-bold capitalize ${sort === s ? "bg-primary text-primary-foreground" : "nav-hover text-muted-foreground"}`}>{s}</button>
+            <button key={s} onClick={() => setSort(s)} className={`rounded-full px-4 py-1.5 text-xs font-bold capitalize ${sort === s ? "bg-foreground text-background" : "nav-hover text-muted-foreground"}`}>{s}</button>
           ))}
         </div>
       </div>

@@ -34,8 +34,8 @@ function Trend({ series }: { series: { date: string; views: number; enquiries: n
     <figure>
       <svg viewBox={`0 0 ${W} ${H}`} className="h-44 w-full" role="img" aria-label={`Views over ${series.length} active days: ${total} views and ${leads} enquiries in total. Busiest day had ${maxV} views.`} preserveAspectRatio="none">
         {[0, 0.5, 1].map((g) => <line key={g} x1="0" x2={W} y1={H - 24 - g * (H - 40)} y2={H - 24 - g * (H - 40)} stroke="currentColor" className="text-border" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />)}
-        {area && <path d={area} className="fill-primary/10" />}
-        <path d={line} fill="none" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" className="stroke-primary" vectorEffect="non-scaling-stroke" />
+        {area && <path d={area} className="fill-foreground/10" />}
+        <path d={line} fill="none" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" className="stroke-foreground" vectorEffect="non-scaling-stroke" />
         {series.map((s, i) => s.enquiries > 0 && <rect key={s.date} x={x(i) - 3} width="6" y={H - 22 - (s.enquiries / maxE) * 18} height={(s.enquiries / maxE) * 18 + 0.5} rx="2" className="fill-foreground/70"><title>{`${fmt(s.date)}: ${s.enquiries} enquiries`}</title></rect>)}
         {series.map((s, i) => <circle key={`c${s.date}`} cx={x(i)} cy={y(s.views)} r="8" fill="transparent"><title>{`${fmt(s.date)}: ${s.views} views, ${s.enquiries} enquiries`}</title></circle>)}
       </svg>
@@ -52,7 +52,7 @@ function Overview() {
   const live = n("published"), review = n("pending_review"), draft = n("draft"), expired = n("expired"), rejected = n("rejected");
   const total = Math.max(1, live + review + draft + expired + rejected);
   const attention = [
-    { to: "/dashboard/agency/$slug/enquiries", icon: <Inbox className="size-4" />, label: "New enquiries", n: d.newLeads, tone: "text-primary bg-primary/10", search: undefined },
+    { to: "/dashboard/agency/$slug/enquiries", icon: <Inbox className="size-4" />, label: "New enquiries", n: d.newLeads, tone: "text-primary bg-foreground/10", search: undefined },
     { to: "/dashboard/agency/$slug/listings", icon: <Clock className="size-4" />, label: "Waiting for review", n: review, tone: "text-amber-600 bg-amber-500/15", search: { status: "pending_review" } },
     { to: "/dashboard/agency/$slug/listings", icon: <TimerOff className="size-4" />, label: "Expired, renew to show again", n: expired, tone: "text-orange-600 bg-orange-500/15", search: { status: "expired" } },
     { to: "/dashboard/agency/$slug/listings", icon: <XCircle className="size-4" />, label: "Rejected, needs changes", n: rejected, tone: "text-red-600 bg-red-500/15", search: { status: "rejected" } },
@@ -72,7 +72,7 @@ function Overview() {
       <AttentionSlot overview />
 
       {d.canSeeStats && <section aria-label="Last 30 days" className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        <Kpi icon={<Home className="size-5" />} label="Live listings" value={live} tone="bg-primary/10 text-primary" />
+        <Kpi icon={<Home className="size-5" />} label="Live listings" value={live} tone="bg-foreground/10 text-primary" />
         <Kpi icon={<Eye className="size-5" />} label="Views, 30 days" value={d.last30.views.toLocaleString("en-KE")} tone="bg-sky-500/15 text-sky-600" />
         <Kpi icon={<MessageSquare className="size-5" />} label="Enquiries, 30 days" value={d.last30.enquiries.toLocaleString("en-KE")} tone="bg-violet-500/15 text-violet-600" />
         <Kpi icon={<Phone className="size-5" />} label="Phone reveals, 30 days" value={d.last30.phoneReveals.toLocaleString("en-KE")} tone="bg-emerald-500/15 text-emerald-600" />

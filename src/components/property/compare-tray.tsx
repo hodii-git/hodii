@@ -29,7 +29,7 @@ export function CompareTray() {
       className="compare-tray glass-white fixed inset-x-0 z-40 mx-auto flex w-[min(92vw,28rem)] items-center justify-between gap-3 rounded-full px-4 py-2 text-foreground">
       <p className="text-sm font-semibold">{ids.length} to compare</p>
       <div className="flex items-center gap-2">
-        {ids.length >= 2 ? <Link to="/compare" search={{ ids: key }} className="cta-ink rounded-full px-4 py-1.5 text-sm font-bold">Compare</Link> : <span className="text-xs text-muted-foreground">Pick one more</span>}
+        {ids.length >= 2 ? <Link to="/compare" search={{ ids: key }} className="rounded-full bg-foreground px-4 py-1.5 text-sm font-bold text-background">Compare</Link> : <span className="text-xs text-muted-foreground">Pick one more</span>}
         <button type="button" onClick={clearCompare} aria-label="Clear comparison" className="close-circle"><X className="h-4 w-4" aria-hidden /></button>
       </div>
     </div>

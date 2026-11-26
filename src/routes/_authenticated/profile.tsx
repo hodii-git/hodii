@@ -60,7 +60,7 @@ function ProfilePage() {
 
       <dl className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         {([
-          [Heart, "Saved properties", a.stats.saved, "bg-rose-500/15 text-rose-600", "/saved"],
+          [Heart, "Saved properties", a.stats.saved, "bg-violet-500/15 text-violet-400", "/saved"],
           [Search, "Saved searches", a.stats.searches, "bg-sky-500/15 text-sky-600", "/saved"],
           [MessageSquare, "Enquiries sent", a.stats.enquiries, "bg-violet-500/15 text-violet-600", "/dashboard"],
           [MessageSquare, "Comments", a.comments.comments, "bg-amber-500/15 text-amber-600", null],

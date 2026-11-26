@@ -276,7 +276,7 @@ export function SearchMap({ params, onGeo, variant = "default", overlay }: { par
   const redraw = () => { setEditing(false); setBar(false); onGeo({}); setMode(params.polygon ? "shape" : "pin"); };
   const remove = () => { setEditing(false); setBar(false); onGeo({}); };
   const tool = (m: Mode, label: string, icon: React.ReactNode, hint: string) => (
-    <button type="button" aria-pressed={mode === m} title={hint} onClick={() => setMode(mode === m ? "pan" : m)} className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-[0.8125rem] font-semibold transition-all ${mode === m ? (home ? "cta" : "border border-primary bg-primary text-primary-foreground shadow-sm") : (home ? "glass hover:-translate-y-px" : "border border-border bg-background shadow-sm")}`}>{icon}{label}</button>
+    <button type="button" aria-pressed={mode === m} title={hint} onClick={() => setMode(mode === m ? "pan" : m)} className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-[0.8125rem] font-semibold transition-all ${mode === m ? (home ? "bg-foreground text-background" : "border border-foreground bg-foreground text-background shadow-sm") : (home ? "glass hover:-translate-y-px" : "border border-border bg-background shadow-sm")}`}>{icon}{label}</button>
   );
   const hasArea = !!(params.circle || params.polygon);
   const chip = home ? "inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold hover:bg-muted/70" : "inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-xs font-bold hover:bg-muted";

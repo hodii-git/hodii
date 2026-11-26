@@ -93,7 +93,7 @@ export function Pick({ value, onChange, options, label, clearLabel, searchable, 
       <FloatingPanel anchor={root} open={open} onClose={() => setOpen(false)} className={panelClassName}>
         <>
           {leading && (
-            <div className="p-1.5 pb-0"><button type="button" onClick={() => { setOpen(false); leading.onClick(); }} className="flex h-10 w-full items-center gap-2 rounded-xl bg-primary/10 px-3 text-sm font-bold text-primary hover:bg-primary/15">{leading.icon}{leading.label}</button></div>
+            <div className="p-1.5 pb-0"><button type="button" onClick={() => { setOpen(false); leading.onClick(); }} className="flex h-10 w-full items-center gap-2 rounded-xl bg-foreground/10 px-3 text-sm font-bold text-primary hover:bg-foreground/15">{leading.icon}{leading.label}</button></div>
           )}
           {custom && (
             <form className="flex gap-1.5 p-1.5" onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); const n = typed.replace(/[^0-9]/g, ""); if (n) { pick(n); setTyped(""); } }}>

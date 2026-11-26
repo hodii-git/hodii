@@ -19,11 +19,11 @@ export function VisibilityStep({ slug, listingId, value, onChange, live }: { slu
   const maxDays = data.config.maxDays;
   const days = value.days ?? data.config.defaultDays;
   const q = quoteBoost(data.priceInput, days, data.config);
-  const card = (on: boolean) => `block cursor-pointer rounded-2xl border p-5 ${on ? "border-primary bg-primary/5 ring-2 ring-primary" : "border-border"}`;
+  const card = (on: boolean) => `block cursor-pointer rounded-2xl border p-5 ${on ? "border-foreground/60 bg-foreground/5 ring-2 ring-foreground/60" : "border-border"}`;
   return (
     <div className="space-y-4">
       {(data.boostUntil || data.premiumUntil) && (
-        <p role="note" className="rounded-2xl bg-primary/10 p-4 text-sm">
+        <p role="note" className="rounded-2xl bg-foreground/10 p-4 text-sm">
           {data.premiumUntil ? <>This listing is <strong>Premium</strong> until {new Date(data.premiumUntil).toLocaleDateString("en-KE", { dateStyle: "long" })}.</> : <>This listing is <strong>boosted</strong> until {new Date(data.boostUntil!).toLocaleDateString("en-KE", { dateStyle: "long" })}.</>}
         </p>
       )}
@@ -43,7 +43,7 @@ export function VisibilityStep({ slug, listingId, value, onChange, live }: { slu
           {value.plan === "boost" && (
             <span className="mt-4 block space-y-3">
               <span className="flex flex-wrap gap-2">
-                {BOOST_PRESETS.filter((d) => d <= maxDays).map((d) => <button key={d} type="button" aria-pressed={days === d} onClick={() => onChange({ plan: "boost", days: d, packageId: null })} className={`rounded-full border px-4 py-1.5 text-sm font-bold ${days === d ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{d} days</button>)}
+                {BOOST_PRESETS.filter((d) => d <= maxDays).map((d) => <button key={d} type="button" aria-pressed={days === d} onClick={() => onChange({ plan: "boost", days: d, packageId: null })} className={`rounded-full border px-4 py-1.5 text-sm font-bold ${days === d ? "border-foreground bg-foreground text-background" : "border-border"}`}>{d} days</button>)}
               </span>
               <span className="block"><span className="mb-1 block text-sm font-semibold">Or any number of days (up to {maxDays})</span>
                 <input aria-label="Number of days" type="number" inputMode="numeric" min={1} max={maxDays} value={days} onChange={(e) => onChange({ plan: "boost", days: Math.max(0, Math.round(Number(e.target.value))), packageId: null })} className={`${inputCls} w-28`} /></span>

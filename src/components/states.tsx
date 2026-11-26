@@ -34,7 +34,7 @@ export function NotFoundPage() {
 export function EmptyState({ icon, title, children, action }: { icon?: React.ReactNode; title: string; children?: React.ReactNode; action?: React.ReactNode }) {
   return (
     <div className="empty-card mx-auto w-full max-w-md px-6 py-12">
-      {icon && <span className="mb-1 grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary [&>svg]:h-6 [&>svg]:w-6" aria-hidden>{icon}</span>}
+      {icon && <span className="mb-1 grid h-12 w-12 place-items-center rounded-full bg-foreground/10 text-primary [&>svg]:h-6 [&>svg]:w-6" aria-hidden>{icon}</span>}
       <p className="text-base font-extrabold">{title}</p>
       {children && <p className="text-sm text-muted-foreground">{children}</p>}
       {action && <div className="mt-3">{action}</div>}
@@ -45,5 +45,5 @@ export function EmptyState({ icon, title, children, action }: { icon?: React.Rea
 const CARD_ICONS: Record<string, React.ReactNode> = { search: <SearchIcon />, "search-x": <SearchX />, inbox: <Inbox />, news: <Newspaper /> };
 /** A small empty card with a named icon and one line of text. */
 export function EmptyCard({ text, icon, className = "" }: { text: string; icon?: string; className?: string }) {
-  return <div className={`empty-card mx-auto w-full max-w-md px-6 py-12 ${className}`}>{icon && CARD_ICONS[icon] && <span className="mb-1 grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary [&>svg]:h-6 [&>svg]:w-6" aria-hidden>{CARD_ICONS[icon]}</span>}<p className="text-sm text-muted-foreground">{text}</p></div>;
+  return <div className={`empty-card mx-auto w-full max-w-md px-6 py-12 ${className}`}>{icon && CARD_ICONS[icon] && <span className="mb-1 grid h-12 w-12 place-items-center rounded-full bg-foreground/10 text-primary [&>svg]:h-6 [&>svg]:w-6" aria-hidden>{CARD_ICONS[icon]}</span>}<p className="text-sm text-muted-foreground">{text}</p></div>;
 }

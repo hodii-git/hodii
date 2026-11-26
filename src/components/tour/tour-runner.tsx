@@ -167,7 +167,7 @@ export function TourRunner() {
   const below = box ? box.top + box.height + 12 : undefined;
   return (
     <div className="fixed inset-0 z-[70]" onMouseDown={(e) => { if (!stepCard.current?.contains(e.target as Node)) update(pause(state)); }} role="dialog" aria-modal="false" aria-label={`Tour step ${state.step + 1} of ${steps.length}`}>
-      {box ? <div className="pointer-events-none fixed rounded-xl ring-2 ring-primary transition-all" style={{ top: box.top, left: box.left, width: box.width, height: box.height, boxShadow: "0 0 0 9999px rgba(15,23,42,0.28), 0 0 0 6px rgba(255,255,255,0.7)" }} /> : <div className="fixed inset-0" />}
+      {box ? <div className="pointer-events-none fixed rounded-xl ring-2 ring-foreground/60 transition-all" style={{ top: box.top, left: box.left, width: box.width, height: box.height, boxShadow: "0 0 0 9999px rgba(15,23,42,0.28), 0 0 0 6px rgba(255,255,255,0.7)" }} /> : <div className="fixed inset-0" />}
       <div ref={stepCard} className="glass-menu popup-clean fixed w-[min(24rem,calc(100vw-1.5rem))] rounded-3xl p-5 pb-6" style={box ? { top: (below ?? 0) + 340 > window.innerHeight ? Math.max(12, box!.top - 340) : (below ?? 0), left: Math.max(12, Math.min(box.left, window.innerWidth - Math.min(384, window.innerWidth - 24) - 12)) } : { top: "30%", left: "50%", transform: "translateX(-50%)" }}>
         <div className="flex items-center gap-3"><ToneIcon icon={Compass} tone="other" /><div className="min-w-0"><p className="text-xs text-muted-foreground">Step {state.step + 1} of {steps.length}</p>
         <h2 className="text-lg font-bold">{step.title}</h2></div></div>

@@ -47,7 +47,7 @@ export function FeedbackForm({ onDone, from }: { onDone?: () => void; from?: str
 
   if (sent) {
     return (
-      <div role="status" className="rounded-2xl bg-primary/10 p-6 text-center">
+      <div role="status" className="rounded-2xl bg-foreground/10 p-6 text-center">
         <p className="text-lg font-extrabold">Thank you!</p>
         <p className="mt-1 text-sm text-muted-foreground">Every message is read by the team. {contactOk ? "We may get back to you." : ""}</p>
         <div className="mt-4 flex justify-center gap-2">
@@ -69,7 +69,7 @@ export function FeedbackForm({ onDone, from }: { onDone?: () => void; from?: str
         <legend className="mb-2 text-sm font-bold">What is it about?</legend>
         <div className="grid gap-2 sm:grid-cols-2">
           {KINDS.map(({ key, label, hint, icon: Icon }) => (
-            <label key={key} className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-3 text-sm transition focus-within:ring-2 focus-within:ring-ring ${kind === key ? "border-primary bg-primary/10" : "border-border hover:bg-muted/50"}`}>
+            <label key={key} className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-3 text-sm transition focus-within:ring-2 focus-within:ring-ring ${kind === key ? "border-foreground/60 bg-foreground/10" : "border-border hover:bg-muted/50"}`}>
               <input type="radio" name="fb-kind" value={key} checked={kind === key} onChange={() => setKind(key)} className="sr-only" />
               <img src={Icon} alt="" width={32} height={32} className="size-8 shrink-0 rounded-lg" />
               <span><span className="block font-bold">{label}</span><span className="text-xs text-muted-foreground">{hint}</span></span>

@@ -49,7 +49,7 @@ export function MobileListingTopBar({ p }: { p: PropertyDetail }) {
       </div>
       <button type="button" data-menu-trigger aria-label="Open menu" onClick={() => window.dispatchEvent(new CustomEvent("hodii:toggle-menu"))} className="relative grid size-10 shrink-0 place-items-center text-white active:scale-95">
         <svg viewBox="0 0 24 24" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>
-        {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-[var(--ld-pink)]" aria-hidden />}
+        {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-foreground" aria-hidden />}
       </button>
     </div></div>
   );

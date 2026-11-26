@@ -35,7 +35,7 @@ function Detail() {
       <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground"><Link to="/developments" className="hover:underline">New developments</Link> / <span>{d.name}</span></nav>
       <header className="mt-3 mb-6 flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2 text-xs font-bold"><span className="rounded-full bg-foreground px-3 py-1 text-background">{STATUS_LABEL[d.status] ?? d.status}</span>{d.agency?.verified && <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-primary"><BadgeCheck className="size-3.5" aria-hidden />Verified agency</span>}</div>
+          <div className="flex flex-wrap items-center gap-2 text-xs font-bold"><span className="rounded-full bg-foreground px-3 py-1 text-background">{STATUS_LABEL[d.status] ?? d.status}</span>{d.agency?.verified && <span className="inline-flex items-center gap-1 rounded-full bg-foreground/10 px-3 py-1 text-primary"><BadgeCheck className="size-3.5" aria-hidden />Verified agency</span>}</div>
           <h1 className="mt-3 text-2xl font-extrabold leading-tight md:text-4xl">{d.name}</h1>
           <p className="mt-2 flex items-center gap-1.5 text-muted-foreground"><MapPin className="size-4" aria-hidden />{[d.areaName, d.county].filter(Boolean).join(", ")}</p>
         </div>

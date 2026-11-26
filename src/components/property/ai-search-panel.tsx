@@ -101,7 +101,7 @@ export function useAiSearch({ value, onApply, result }: Props) {
   return { open, pending: run.isPending, send, reset, close, panel, dialog, remaining, show: () => setOpen(true) };
 }
 
-const tone = { added: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300", changed: "bg-amber-500/15 text-amber-700 dark:text-amber-300", removed: "bg-rose-500/15 text-rose-700 line-through dark:text-rose-300" } as const;
+const tone = { added: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300", changed: "bg-amber-500/15 text-amber-700 dark:text-amber-300", removed: "bg-red-500/15 text-red-400 line-through dark:text-rose-300" } as const;
 const KindIcon = { added: Plus, changed: RefreshCw, removed: Minus } as const;
 
 function ResultLine({ r, final }: { r: NonNullable<AiResult> | { total: number; nearest?: string[]; loading?: false }; final?: boolean }) {

@@ -139,7 +139,7 @@ function HomePage() {
       ))}
       {!wide && <div className="mx-auto mt-14 h-[26rem] max-w-[112rem]">{mapEl}</div>}
       <div className="glass-white fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 rounded-full p-1 text-[0.95rem] font-semibold">
-        <Link to="/properties" search={geoSearch} aria-current="page" className="cta rounded-full px-5 py-2">List</Link>
+        <Link to="/properties" search={geoSearch} aria-current="page" className="rounded-full bg-foreground px-5 py-2 font-semibold text-background">List</Link>
         <Link to="/properties" search={{ ...geoSearch, view: "map" }} className="rounded-full px-5 py-2 text-foreground">Map</Link>
       </div>
     </main>

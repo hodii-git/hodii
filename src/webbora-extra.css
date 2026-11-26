@@ -29,7 +29,7 @@
 
 /* ---- Public header: the hamburger and menu stay on every screen size ---- */
 @media (min-width: 1024px) { .wb.wb-site .menu-btn { display: inline-grid; } .wb.wb-site .menu-panel { display: block; } }
-.wb.wb-site .menu-panel { max-height: min(80dvh, 40rem); overflow-y: auto; overscroll-behavior: contain; background: #fff; box-shadow: 0 0 0 1px rgb(24 24 27 / .07), 0 30px 60px -28px rgb(24 24 27 / .45); }
+.wb.wb-site .menu-panel { max-height: min(80dvh, 40rem); overflow-y: auto; overscroll-behavior: contain; background: #141416; box-shadow: 0 0 0 1px rgb(255 255 255 / .12), 0 30px 60px -28px rgb(0 0 0 / .8); }
 .wb .menu-title { padding: .75rem 1rem .25rem; font-size: .72rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase; opacity: .5; }
 /* Bell and account buttons match the hamburger */
 .wb.wb-site .hdr-circle, .wb.wb-site .header-circle { background: color-mix(in oklab, var(--foreground) 5%, transparent) !important; box-shadow: none !important; border: 0 !important; width: 2.75rem; height: 2.75rem; border-radius: 999px !important; }

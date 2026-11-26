@@ -20,7 +20,7 @@ export function Feedback() {
   if (isPending) return <LoaderBlock />;
   if (isError) return <p role="alert" className="text-sm text-destructive">Could not load feedback.</p>;
   const pages = Math.max(1, Math.ceil(data.total / data.pageSize));
-  const chip = (active: boolean) => `rounded-full border px-3 py-1.5 text-sm font-semibold ${active ? "border-primary bg-primary/10" : "border-border"}`;
+  const chip = (active: boolean) => `rounded-full border px-3 py-1.5 text-sm font-semibold ${active ? "border-foreground/60 bg-foreground/10" : "border-border"}`;
   return (
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-3">

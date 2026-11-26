@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, ShieldCheck, Star } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
+import { searchHeading } from "@/lib/search-title";
 import { LocationBar, scopeText, useNearbyHome } from "@/components/property/near-you";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { LayoutPill } from "@/components/property/layout-pill";
-import { HomeSearch } from "@/components/home/home-search";
+import { ViewPill } from "@/components/property/view-pill";
 import { InfiniteResults } from "@/components/property/infinite-results";
 import { ClientOnly } from "@tanstack/react-router";
 import { PropertyGrid, PropertyGridSkeleton } from "@/components/property/property-card";
@@ -54,6 +55,7 @@ function HomePage() {
   const featuredNote = nearby && nearby.featured.length > 0 ? scopeText(nearby.featuredScopes) : "";
   const latestNote = nearby && nearby.latest.length > 0 ? scopeText(nearby.latestScopes) : "";
   const saved = useSavedSet([...featured, ...latest]);
+  const heading = searchHeading(params);
   // The map sits beside the search on wide screens and after all listings otherwise.
   const [wide, setWide] = useState(true);
   useEffect(() => { const mq = window.matchMedia("(min-width: 1024px)"); const f = () => setWide(mq.matches); f(); mq.addEventListener("change", f); return () => mq.removeEventListener("change", f); }, []);
@@ -67,22 +69,13 @@ function HomePage() {
 
   return (
     <main className="pt-24 pb-20 max-sm:px-4 md:pt-32">
-      <div className="mx-auto grid max-w-[112rem] gap-5 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-x-8 lg:gap-y-0">
+      <div className="mx-auto grid max-w-[112rem] gap-5">
         <div className="min-w-0">
-          <div className="glass-white trust-badge inline-flex items-center gap-2 rounded-full py-1 pl-1.5 pr-3 md:gap-3 md:py-1.5 md:pl-2 md:pr-5">
-            <div className="flex -space-x-2.5">
-              {["A", "W", "K", "M"].map((l, i) => <span key={l} aria-hidden className={`grid h-6 w-6 place-items-center rounded-full border-2 border-card text-[0.6rem] font-bold text-white md:h-10 md:w-10 md:text-xs ${["bg-sky-500", "bg-emerald-500", "bg-amber-500", "bg-violet-500"][i]}`}>{l}</span>)}
-            </div>
-            <div className="hidden items-center gap-0.5 sm:flex" aria-label="Rated 5 stars">{Array.from({ length: 5 }, (_, i) => <Star key={i} className="h-4 w-4 fill-star text-star" aria-hidden />)}</div>
-            <span className="trust-text text-xs md:text-base">Trusted by 2,000+ agents</span>
+          <div className="mb-4">
+            <h1 title={heading.title} className="line-clamp-2 font-display text-2xl font-extrabold leading-tight sm:line-clamp-1 sm:text-3xl">{heading.title}</h1>
+            {heading.subtitle && <p className="mt-1 text-sm text-muted-foreground sm:text-base">{heading.subtitle}</p>}
           </div>
-          <h1 className="mt-5 font-display text-[2.75rem] font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl xl:text-[4.5rem]">Find your next home,<br />faster.</h1>
-          <p className="mt-4 text-lg text-muted-foreground lg:text-xl lg:leading-snug">Search homes, neighbourhoods, and agents across Kenya.</p>
-
-          <HomeSearch deferred value={params} onChange={change} result={q.data && !q.data.unavailable ? { total: q.data.nearest ? 0 : q.data.total, ...(q.data.nearest ? { nearest: q.data.nearest } : {}), loading: q.isPlaceholderData || q.isFetching } : undefined} />
         </div>
-
-        {wide && <div className="hidden h-auto min-h-[22rem] min-w-0 lg:block">{mapEl}</div>}
 
         <div className={`min-w-0 lg:col-span-2 ${filtering ? "" : "hidden"}`}>
           <div className="mt-10 md:mt-14">
@@ -137,11 +130,7 @@ function HomePage() {
           </section>
         </div>
       ))}
-      {!wide && <div className="mx-auto mt-14 h-[26rem] max-w-[112rem]">{mapEl}</div>}
-      <div className="seg-pill fixed bottom-6 left-1/2 z-40 -translate-x-1/2">
-        <Link to="/properties" search={geoSearch} aria-current="page" className="seg is-on">List</Link>
-        <Link to="/properties" search={{ ...geoSearch, view: "map" }} className="seg">Map</Link>
-      </div>
+      <ViewPill map={false} onChange={(v) => navigate({ to: "/properties", search: v === "map" ? { ...geoSearch, view: "map" } : geoSearch })} />
     </main>
   );
 }

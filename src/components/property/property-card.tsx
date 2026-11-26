@@ -64,7 +64,9 @@ export function PropertyCard({ p, saved, priority = false }: { p: Card; saved?: 
         <div className="ph-actions absolute right-2 top-2 flex items-center gap-0.5 sm:right-3 sm:top-3 sm:gap-1"><CompareButton propertyId={p.id} /><SaveButton propertyId={p.id} saved={saved} /></div>
       </div>
       <div className="flex flex-1 flex-col gap-1 p-2.5 sm:gap-1.5 sm:p-3.5">
-        <p className="text-[0.95rem] font-bold sm:text-base">{formatPrice(p.price)}</p>
+        {(() => { const [amt, per] = formatPrice(p.price).split(" / "); return (
+          <p className="text-[0.8rem] font-bold leading-tight sm:text-base">{amt}{per && <span className="ml-0.5 text-[0.62rem] font-medium text-muted-foreground sm:text-xs"> / {per}</span>}</p>
+        ); })()}
         <h3 className="line-clamp-2 text-[0.8125rem] font-normal leading-snug text-muted-foreground sm:text-sm">
           <Link to="/property/$slug" params={{ slug: p.slug }} className="after:absolute after:inset-0 after:content-['']">{describeListing(p)}</Link>
         </h3>

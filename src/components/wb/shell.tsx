@@ -147,6 +147,7 @@ export function WbFooter() {
               <button type="button" className="foot-link ml-2 items-center gap-1.5" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
                 <Bold t="Back to top" /><ArrowUp className="h-4 w-4" />
               </button>
+              <Link to="/admin" aria-label="Admin" title="Admin" className="foot-link grid size-6 place-items-center rounded-full text-[0.7rem] font-bold opacity-50 ring-1 ring-current transition hover:opacity-100" style={{ padding: 0 }}>A</Link>
             </div>
           </div>
           <div aria-hidden="true" className="footer-word relative mt-6 select-none whitespace-nowrap text-center font-display">{BRAND.name}</div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Compass, Heart, Home, MessageCircle, UserRound } from "lucide-react";
@@ -8,18 +8,16 @@ import { useAuth } from "@/hooks/use-auth";
 import { isSearchPage, setSheet, toggleSheet, useSheetOpen } from "@/lib/search-sheet";
 
 /**
- * Phone-only bottom bar used across the whole app: Home, Explore, Saved, Inquiries, Profile. It slides away when you scroll down
- * and comes back as soon as you scroll up (it stays put on listing pages, where the action dock sits above it).
+ * Phone-only bottom bar used across the whole app: Home, Explore, Saved, Inquiries, Profile. It stays fixed at the bottom
+ * the whole time, like the one in the dashboards.
  */
 export function MobileTabBar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useAuth();
   const signedIn = !!user;
-  const [hidden, setHidden] = useState(false);
   const sheet = useSheetOpen();
   const back = useAuthReturn();
   useEffect(() => { if (!isSearchPage(path)) setSheet(false); }, [path]);
-  const last = useRef(0);
   const nav = useRef<HTMLElement>(null);
   /** The keyboard covers the page instead of pushing the bar up; --kb tells the search sheet how high the keyboard is so it can rest on top of it. */
   useEffect(() => {
@@ -30,22 +28,7 @@ export function MobileTabBar() {
     return () => { vv.removeEventListener("resize", f); vv.removeEventListener("scroll", f); root.style.removeProperty("--kb"); };
   }, []);
   useEffect(() => {
-    last.current = window.scrollY;
-    const on = () => {
-      const y = window.scrollY;
-      const d = y - last.current;
-      if (Math.abs(d) < 8) return;
-      setHidden(d > 0 && y > 80);
-      last.current = y;
-    };
-    window.addEventListener("scroll", on, { passive: true });
-    return () => window.removeEventListener("scroll", on);
-  }, []);
-  useEffect(() => { setHidden(false); }, [path]);
-  const isListing = path.startsWith("/property/");
-  const hide = hidden && !sheet && !isListing;
-  useEffect(() => {
-    const shown = !hide;
+    const shown = true;
     const root = document.documentElement;
     root.dataset["tabbar"] = shown ? "shown" : "hidden";
     // The real height of the bar (it differs by phone and by safe area), so nothing floats behind it or leaves a gap above it.
@@ -54,7 +37,7 @@ export function MobileTabBar() {
     const ro = typeof ResizeObserver !== "undefined" && nav.current ? new ResizeObserver(set) : null;
     if (ro && nav.current) ro.observe(nav.current);
     return () => { ro?.disconnect(); root.style.removeProperty("--tab-h"); delete root.dataset["tabbar"]; };
-  }, [hide]);
+  }, []);
 
   const isPropertyPage = path.startsWith("/property/");
   const badges = useQuery({ queryKey: ["saved", "tab-badges", user?.id ?? null], queryFn: () => getTabBadges(), enabled: signedIn, refetchInterval: 30_000, refetchOnWindowFocus: true, staleTime: 10_000 }).data;
@@ -83,7 +66,7 @@ export function MobileTabBar() {
   );
 
   return (
-    <nav ref={nav} aria-label="Main" data-floating className={`mobile-tabbar mobile-tabbar-dark fixed inset-x-0 bottom-0 z-[45] flex items-center justify-around border-t border-white/10 bg-black px-1 pb-[env(safe-area-inset-bottom)] transition-transform duration-300 md:hidden ${hide ? "translate-y-full" : "translate-y-0"}`}>
+    <nav ref={nav} aria-label="Main" data-floating className="mobile-tabbar mobile-tabbar-dark fixed inset-x-0 bottom-0 z-[45] flex items-center justify-around border-t border-white/10 bg-black px-1 pb-[env(safe-area-inset-bottom)] md:hidden">
       <Link to="/" className={item(on.home)} aria-current={current(on.home)}>
         <Home {...ico(on.home)} className={`size-[22px] fill-current ${on.home ? "text-primary" : ""}`} />Home
       </Link>

@@ -1,4 +1,4 @@
-import { useEffect, useState, type ComponentType, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, Menu, X, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { HodiiLogo } from "@/components/brand-logo";
@@ -8,7 +8,7 @@ import { BRAND } from "@/lib/brand";
 const L = Link as unknown as ComponentType<Record<string, unknown>>;
 
 export type SideItem = {
-  key: string; label: string; icon: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  key: string; label: string; icon: ComponentType<{ className?: string; strokeWidth?: number; "aria-hidden"?: boolean }>;
   to?: string; params?: Record<string, string>; exact?: boolean; active?: boolean; onClick?: () => void;
   badge?: number; tour?: string; danger?: boolean;
   /** A filled button-style row, for the main action such as Add listing. */
@@ -48,9 +48,32 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
   const hiddenAll = mobile;
   const wide = open;
 
-  // Phone bottom bar: the first four real pages from the menu, then Menu on the far right which opens the full list.
-  const barItems = groups.flatMap((g) => g.items).filter((it) => !it.sub && !it.danger && (it.to || it.onClick)).slice(0, 4);
-  const barBtn = "relative flex flex-1 flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[0.7rem] font-medium transition-colors";
+  // Phone bottom bar: Menu on the far left (opens the full list), then the first four real pages from the menu with the first one on the far right.
+  const pages = groups.flatMap((g) => g.items).filter((it) => !it.sub && !it.danger && (it.to || it.onClick)).slice(0, 4);
+  const barItems = pages.length > 1 ? [...pages.slice(1), pages[0]!] : pages;
+  // Exactly the look of the main phone tab bar on the other pages.
+  const barBtn = "flex flex-1 flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[0.7rem] font-medium transition-colors";
+  const barOn = `${barBtn} text-primary`;
+  const barOff = `${barBtn} text-zinc-400 hover:text-zinc-200`;
+  const ico = (active: boolean) => ({ className: `size-[22px] ${active ? "text-primary" : ""}`, strokeWidth: active ? 2.2 : 1.8, "aria-hidden": true as const });
+  const bar_ = useRef<HTMLElement>(null);
+  // The real height of the bar goes into --tab-h so the tour pill, compare strip and feedback button float above it and the footer leaves room for it.
+  useEffect(() => {
+    if (!mobile) return;
+    const root = document.documentElement;
+    const set = () => root.style.setProperty("--tab-h", `${bar_.current?.offsetHeight ?? 58}px`);
+    set();
+    const ro = typeof ResizeObserver !== "undefined" && bar_.current ? new ResizeObserver(set) : null;
+    if (ro && bar_.current) ro.observe(bar_.current);
+    return () => { ro?.disconnect(); root.style.removeProperty("--tab-h"); };
+  }, [mobile]);
+  // Desktop: tell the floating guide how wide the menu is so it sits beside it, not on top of it.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute("data-dash", "");
+    root.style.setProperty("--dash-side-w", mobile ? "0px" : open ? "16.5rem" : "4.5rem");
+    return () => { root.removeAttribute("data-dash"); root.style.removeProperty("--dash-side-w"); };
+  }, [mobile, open]);
 
   const row = (it: SideItem) => {
     if (it.sub) {
@@ -110,9 +133,9 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
             ))}
             {extra && wide && <div className="space-y-2 pt-1">{extra}</div>}
           </nav>
-          <div className="shrink-0 space-y-1 border-t border-border p-2.5">
+          <div className="shrink-0 space-y-1 p-2.5">
             {mobile && <button type="button" onClick={() => setOpen(false)} aria-label="Close menu"
-              className={`flex h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-semibold text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground ${wide ? "" : "justify-center px-0"}`}>
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-foreground/[0.08] px-5 text-sm font-bold text-foreground transition hover:bg-foreground/15">
               <X className="size-[19px] shrink-0" aria-hidden />{wide && <span>Close menu</span>}
             </button>}
             <button type="button" onClick={toggle} aria-expanded={open} aria-label={open ? "Collapse menu" : "Expand menu"}
@@ -123,7 +146,7 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
           </div>
         </aside>
       </div>
-      <div className="flex min-w-0 flex-1 flex-col" style={{ ["--site-w" as string]: "100%" }}>
+      <div className="flex min-w-0 flex-1 flex-col" style={{ ["--site-w" as string]: "100%", ...(mobile ? { paddingBottom: "var(--tab-h, 0px)" } : {}) }}>
         {bar}
         <main id="main" className="mx-auto w-full max-w-[96rem] flex-1 px-4 pb-16 pt-6 max-lg:pb-24 md:px-8">
           {children}
@@ -133,14 +156,14 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
           : <footer className="px-4 pb-6 text-center text-xs text-muted-foreground md:px-8">© {new Date().getFullYear()} {BRAND.legalName}</footer>}
       </div>
       {mobile && (
-        <nav aria-label={`${label} quick links`} data-floating className="dash-bottombar fixed inset-x-0 bottom-0 z-[45] flex items-center justify-around border-t border-white/10 bg-black px-1 pb-[env(safe-area-inset-bottom)]">
+        <nav ref={bar_} aria-label={`${label} quick links`} data-floating className="dash-bottombar mobile-tabbar mobile-tabbar-dark fixed inset-x-0 bottom-0 z-[45] flex items-center justify-around border-t border-white/10 bg-black px-1 pb-[env(safe-area-inset-bottom)]">
+          <button type="button" onClick={() => setOpen(true)} aria-expanded={open} aria-label="Open menu" className={open ? barOn : barOff}><Menu {...ico(open)} />Menu</button>
           {barItems.map((it) => {
-            const inner = (<><span className="relative"><it.icon className="size-[22px]" aria-hidden />{!!it.badge && it.badge > 0 && <span aria-hidden className="absolute -right-1 -top-0.5 size-2 rounded-full bg-foreground" />}</span><span className="max-w-full truncate px-1">{it.label}</span></>);
+            const inner = (active: boolean) => (<><span className="relative"><it.icon {...ico(active)} />{!!it.badge && it.badge > 0 && <span className="absolute -right-3 -top-2 grid min-w-[1.15rem] place-items-center rounded-full bg-[#fbbf24] px-1 text-[0.6rem] font-extrabold leading-[1.1rem] text-black" aria-label={`${it.badge > 99 ? "More than 99" : it.badge} new`}>{it.badge > 99 ? "99+" : it.badge}</span>}</span><span className="max-w-full truncate px-1">{it.label}</span></>);
             return it.to
-              ? <L key={it.key} to={it.to} {...(it.params ? { params: it.params } : {})} activeOptions={{ exact: !!it.exact }} className={`${barBtn} text-zinc-400 hover:text-zinc-200`} activeProps={{ className: `${barBtn} !text-white`, "aria-current": "page" }}>{inner}</L>
-              : <button key={it.key} type="button" onClick={it.onClick} aria-current={it.active ? "page" : undefined} className={`${barBtn} ${it.active ? "!text-white" : "text-zinc-400 hover:text-zinc-200"}`}>{inner}</button>;
+              ? <L key={it.key} to={it.to} {...(it.params ? { params: it.params } : {})} activeOptions={{ exact: !!it.exact }} className={barOff} activeProps={{ className: barOn, "aria-current": "page" }}>{({ isActive }: { isActive: boolean }) => inner(isActive)}</L>
+              : <button key={it.key} type="button" onClick={it.onClick} aria-current={it.active ? "page" : undefined} className={it.active ? barOn : barOff}>{inner(!!it.active)}</button>;
           })}
-          <button type="button" onClick={() => setOpen(true)} aria-expanded={open} aria-label="Open menu" className={`${barBtn} text-zinc-400 hover:text-zinc-200`}><Menu className="size-[22px]" aria-hidden />Menu</button>
         </nav>
       )}
     </div>

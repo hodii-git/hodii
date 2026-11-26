@@ -795,7 +795,7 @@ h3, h4, legend { font-weight: 700; }
 .tone-confusing { --tone-a: #71717a; --tone-b: #0f0f10; }
 .tone-bug { --tone-a: #a1a1aa; --tone-b: #52525b; }
 .tone-down { --tone-a: #a1a1aa; --tone-b: #52525b; }
-.tone-other { --tone-a: #a1a1aa; --tone-b: #52525b; }
+.tone-other { --tone-a: #000000; --tone-b: #000000; }
 /* The ink tile must stay visible on a dark menu, so it lifts to charcoal. */
 .tone-icon { display: inline-grid; place-items: center; flex-shrink: 0; border-radius: 0.6rem; background: linear-gradient(135deg, var(--tone-a), var(--tone-b)); color: oklch(1 0 0); box-shadow: 0 4px 10px -4px color-mix(in oklab, var(--tone-b) 60%, transparent); }
 .tone-icon svg { width: 58%; height: 58%; }
@@ -915,7 +915,7 @@ body:has([role="menu"][data-state="open"], [role="listbox"][data-state="open"], 
 /* Floating stack, bottom to top: tab bar -> compare strip -> pill / feedback / guide. Heights come from variables so nothing overlaps. */
 html[data-compare] { --cmp-h: 3.6rem; }
 @media (max-width: 767px) {
-  html[data-tabbar] body { padding-bottom: 3.9rem; }
+  html[data-tabbar] body { padding-bottom: var(--tab-h, 3.9rem); }
   html[data-tabbar="shown"] { --tab-h: calc(3.9rem + env(safe-area-inset-bottom)); }
   html[data-tabbar="hidden"] { --tab-h: 0px; }
 }
@@ -1654,3 +1654,45 @@ input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color:
 /* Listing cards: nothing inside the image is bold; the description under the price is regular weight in the muted grey. */
 .card-grid .ph-pill, .card-ph .ph-pill, .card-ph .ph-tags span { font-weight: 500 !important; }
 .card-grid article h3, html[data-listing-dark="1"] .listing-page .surface h3 { font-weight: 400 !important; color: var(--muted-foreground) !important; }
+
+/* Map popup cards: Leaflet paints links blue, so the title and body text are set explicitly to black. */
+.leaflet-container .hodii-pop, .hodii-popup .hodii-pop-title { color: #09090b !important; }
+.hodii-popup .hodii-pop-place { color: #52525b !important; }
+
+/* Tour card: the note uses the same neutral tint as the other popups, not amber. The compass icon sits on pure black. */
+.tour-prompt .popup-note, html:root[data-listing-dark="1"] .tour-prompt .popup-note { background: color-mix(in oklab, var(--foreground) 6%, transparent) !important; border: 0 !important; box-shadow: none !important; color: var(--muted-foreground) !important; }
+.tour-prompt .tone-icon.tone-other, html:root[data-listing-dark="1"] .tour-prompt .tone-icon.tone-other { background: #000 !important; color: #fff !important; box-shadow: none !important; }
+
+/* ===== One floating stack on every page and screen size (last word, replaces the scattered per-page offsets) =====
+   Bottom to top: tab bar (when shown) -> compare strip (when picks exist) -> List/Map pill.
+   When the tab bar slides away, --tab-h becomes 0 and both drop down together. Nothing rides up the page any more. */
+html { --stack-gap: .6rem; }
+html:root[data-compare] { --cmp-h: 3.6rem !important; }
+html:root:not([data-compare]) { --cmp-h: 0px !important; }
+html:root:not([data-listing-dark="1"]) .compare-tray { bottom: calc(var(--tab-h, 0px) + var(--stack-gap)) !important; transform-origin: bottom center; }
+html:root .view-pill { bottom: calc(var(--tab-h, 0px) + var(--cmp-h, 0px) + var(--stack-gap)) !important; transform: none !important; transition: bottom .3s ease, opacity .2s; }
+html:root .fb-fab { transform: none !important; }
+html:root .tour-prompt[role="dialog"] { bottom: calc(var(--tab-h, 0px) + var(--cmp-h, 0px) + 4.4rem) !important; }
+html:root:has(.view-pill) .tour-prompt[role="dialog"], html:root:has(.view-pill) .tour-paused { bottom: calc(var(--tab-h, 0px) + var(--cmp-h, 0px) + 8rem) !important; }
+.compare-tray { z-index: 41 !important; }
+.view-pill { z-index: 42 !important; }
+
+/* For sale / For rent and the other pills on image cards: regular-medium weight and the same small size on every screen. */
+.ph-pill, .card-ph .ph-pill, .card-grid .ph-pill { font-weight: 500 !important; font-size: clamp(.62rem, 3.6cqw, .75rem) !important; }
+
+/* ===== Tour strip, dashboard stack and footer word (last word) ===== */
+/* The paused-tour strip: the yellow pause icon is a white tile with a black icon, and the strip is taller with more space above and below. Text and buttons keep their size. */
+.tour-prompt .tone-icon.tone-idea, html:root[data-listing-dark="1"] .tour-prompt .tone-icon.tone-idea { background: #fff !important; background-image: none !important; color: #000 !important; box-shadow: none !important; }
+html:root .tour-paused { padding-block: .85rem !important; min-height: 3.9rem; align-items: center; }
+/* On phones the strip sits above the bottom row exactly like the guide card does, clear of the compare strip and the List / Map pill. */
+@media (max-width: 767px) {
+  html:root .tour-paused { bottom: calc(var(--tab-h, 0px) + var(--cmp-h, 0px) + 4.4rem) !important; }
+  html:root:has(.view-pill) .tour-paused { bottom: calc(var(--tab-h, 0px) + var(--cmp-h, 0px) + 8rem) !important; }
+}
+/* Dashboards on desktop: the guide button, card and strip sit beside the side menu, not on top of it. */
+@media (min-width: 1024px) {
+  html[data-dash] .tour-prompt { left: calc(var(--dash-side-w, 0px) + 1.25rem) !important; }
+}
+
+/* The big word at the bottom of the footer uses the brand gradient. */
+html:root .wb .footer-word { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; opacity: .9; }

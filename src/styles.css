@@ -87,7 +87,7 @@
   --card-foreground: #18181b;
   --popover: #ffffff;
   --popover-foreground: #18181b;
-  --primary: #18181b;
+  --primary: #fd267a;
   --primary-foreground: #ffffff;
   --secondary: #f7f7f7;
   --secondary-foreground: #222222;
@@ -102,7 +102,7 @@
   --destructive-foreground: oklch(0.99 0 0);
   --border: #e4e4e7;
   --input: #b0b0b0;
-  --ring: #222222;
+  --ring: #fd267a;
   --chart-1: oklch(0.55 0.2 262); --chart-2: oklch(0.6 0.15 260); --chart-3: oklch(0.7 0.15 160); --chart-4: oklch(0.8 0.15 80); --chart-5: oklch(0.6 0.2 300);
   --sidebar: #ffffff; --sidebar-foreground: #222222; --sidebar-primary: #2563eb; --sidebar-primary-foreground: #ffffff; --sidebar-accent: #f7f7f7; --sidebar-accent-foreground: #222222; --sidebar-border: #dddddd; --sidebar-ring: #222222;
   --glass: #ffffff;
@@ -130,10 +130,10 @@
   --field-focus-ring: rgb(150 130 230 / 18%);
   --switch-off: #b0b0b0;
   --switch-off-border: #8a8a8a;
-  --brand-a: #27272a;
-  --brand-b: #18181b;
+  --brand-a: #fd267a;
+  --brand-b: #ff6036;
   --like: #ff385c;
-  --brand-gradient: linear-gradient(120deg, var(--brand-a), var(--brand-b));
+  --brand-gradient: linear-gradient(135deg, #fd267a 0%, #ff6036 100%);
   /* Mobile dark listing theme tokens */
   --ld-bg: #000000;
   --ld-surface: #141416;
@@ -146,7 +146,7 @@
   --ld-green: #22c55e;
   --ld-wa: #25d366;
   --ld-blue: #2997ff;
-  --ld-theme: #ff385c;
+  --ld-theme: #fd267a;
 }
 
 @layer base {
@@ -279,7 +279,7 @@ header:hover .animate-nav-strip { animation-play-state: paused; }
   color: var(--primary-foreground);
   background:
     linear-gradient(120deg, color-mix(in oklab, var(--blob-pink) 22%, transparent), color-mix(in oklab, var(--blob-blue) 22%, transparent)),
-    linear-gradient(180deg, color-mix(in oklab, var(--primary) 88%, oklch(1 0 0 / 14%)), var(--primary));
+    var(--brand-gradient);
   border: 1px solid oklch(1 0 0 / 28%);
   box-shadow: var(--shadow-glass), inset 0 1px 0 oklch(1 0 0 / 30%);
   backdrop-filter: blur(12px) saturate(160%);
@@ -305,7 +305,7 @@ header:hover .animate-nav-strip { animation-play-state: paused; }
   transform: translateY(-1px);
   background: color-mix(in oklab, var(--navigation-highlight) 70%, var(--foreground) 6%);
 }
-.pill-filter[aria-pressed="true"] { background: var(--primary); color: var(--primary-foreground); border-color: transparent; }
+.pill-filter[aria-pressed="true"] { background: var(--brand-gradient); color: var(--primary-foreground); border-color: transparent; }
 .pill-filter, .pill-filter:focus, .pill-filter:focus-visible { outline: none; }
 /* Hero crossfade: new story settles in from a soft zoom and blur while the old one dissolves beneath */
 @keyframes hero-enter { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
@@ -699,7 +699,7 @@ textarea.admin-input { line-height: 1.6; resize: vertical; }
 .app-toast-description { color: var(--muted-foreground) !important; }
 .app-toast-success [data-icon] { color: var(--success); }
 .app-toast-error [data-icon] { color: var(--destructive); }
-.app-toast-action { background: var(--primary) !important; color: var(--primary-foreground) !important; border-radius: 999px !important; font-weight: 700; }
+.app-toast-action { background: var(--brand-gradient) !important; color: var(--primary-foreground) !important; border-radius: 999px !important; font-weight: 700; }
 .app-toast-cancel { background: var(--muted) !important; color: var(--foreground) !important; border-radius: 999px !important; }
 .app-toast-close { background: var(--popover) !important; color: var(--foreground) !important; border-color: var(--border) !important; }
 
@@ -757,7 +757,7 @@ html { font-size: 93.75%; }
 /* Every blue button is the brand gradient, never a flat fill. */
 .bg-primary { background-image: var(--brand-gradient); }
 .bg-primary:hover:not(:disabled) { filter: brightness(1.06); }
-@keyframes ping-soft { 0% { box-shadow: 0 0 0 0 rgb(37 99 235 / 55%); } 70% { box-shadow: 0 0 0 7px rgb(37 99 235 / 0%); } 100% { box-shadow: 0 0 0 0 rgb(37 99 235 / 0%); } }
+@keyframes ping-soft { 0% { box-shadow: 0 0 0 0 rgb(253 38 122 / 55%); } 70% { box-shadow: 0 0 0 7px rgb(253 38 122 / 0%); } 100% { box-shadow: 0 0 0 0 rgb(253 38 122 / 0%); } }
 .dot-pulse { animation: ping-soft 1.6s ease-out infinite; }
 @keyframes flow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 .pill-flow { background-image: linear-gradient(100deg, #1d4ed8, #3b82f6, #60a5fa, #3b82f6, #1d4ed8); background-size: 200% 100%; animation: flow 3s linear infinite; }
@@ -770,11 +770,11 @@ html { font-size: 93.75%; }
 @media (prefers-reduced-motion: reduce) { .upload-tile, .upload-ring { animation: none; } }
 
 /* Landing look: soft blue-grey page wash, white floating surfaces, navy pill buttons. */
-:root { --page-wash: linear-gradient(to bottom, oklch(0.945 0.035 250 / 0.95) 0, oklch(0.968 0.02 250 / 0.7) 9rem, oklch(0.985 0.008 250 / 0.35) 24rem, transparent 46rem), radial-gradient(75rem 70rem at 100% 0%, oklch(0.925 0.05 252 / 0.85), oklch(0.955 0.03 250 / 0.45) 45%, transparent 72%), radial-gradient(55rem 40rem at 55% 0%, oklch(0.95 0.03 245 / 0.6), transparent 70%), #ffffff; --surface-shadow: 0 1px 2px rgb(24 24 27 / 4%), 0 8px 24px -12px rgb(24 24 27 / 12%); --cta-shadow: 0 10px 24px -12px rgb(24 24 27 / 55%); --star: #f5a623; }
+:root { --page-wash: linear-gradient(to bottom, oklch(0.945 0.035 250 / 0.95) 0, oklch(0.968 0.02 250 / 0.7) 9rem, oklch(0.985 0.008 250 / 0.35) 24rem, transparent 46rem), radial-gradient(75rem 70rem at 100% 0%, oklch(0.925 0.05 252 / 0.85), oklch(0.955 0.03 250 / 0.45) 45%, transparent 72%), radial-gradient(55rem 40rem at 55% 0%, oklch(0.95 0.03 245 / 0.6), transparent 70%), #ffffff; --surface-shadow: 0 1px 2px rgb(24 24 27 / 4%), 0 8px 24px -12px rgb(24 24 27 / 12%); --cta-shadow: 0 10px 24px -12px rgb(253 38 122 / 55%); --star: #f5a623; }
 @theme inline { --color-cream: var(--cream); --color-ink: var(--ink); --color-night: var(--night); --color-mist: var(--mist); --color-paper: var(--paper); --color-violet: var(--violet); --color-star: var(--star); --shadow-surface: var(--surface-shadow); --shadow-cta: var(--cta-shadow); --font-display: "Geist", ui-sans-serif, system-ui, sans-serif; }
 .aurora { background: var(--page-wash); background-repeat: no-repeat; background-attachment: fixed; }
 @utility surface { background: var(--card); box-shadow: var(--surface-shadow); border: 1px solid oklch(1 0 0 / 70%); }
-@utility cta { background: var(--primary); color: var(--primary-foreground); box-shadow: var(--cta-shadow); }
+@utility cta { background: var(--brand-gradient); color: var(--primary-foreground); box-shadow: var(--cta-shadow); }
 .home-map .leaflet-container { background: #e9eef3; font-family: var(--font-sans); }
 .price-pin { background: var(--primary); color: var(--primary-foreground); font-weight: 700; font-size: 0.8rem; padding: 0.35rem 0.7rem; border-radius: 999px; white-space: nowrap; box-shadow: 0 6px 14px -6px rgb(24 24 27 / 60%); position: relative; transform: translate(-50%, -120%); display: inline-block; }
 .price-pin::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: var(--primary); transform: translateX(-50%) rotate(45deg); border-radius: 2px; z-index: -1; }
@@ -804,7 +804,7 @@ html { font-size: 93.75%; }
 :root { --menu-glass: linear-gradient(160deg, oklch(1 0 0 / 74%), oklch(1 0 0 / 56%)); --menu-glass-border: oklch(1 0 0 / 80%); --menu-glass-shadow: 0 2px 6px rgb(24 24 27 / 5%), 0 28px 56px -22px rgb(24 24 27 / 32%), inset 0 1px 0 oklch(1 0 0 / 92%); --input-glass: linear-gradient(180deg, oklch(0.97 0.006 250 / 70%), oklch(1 0 0 / 50%)); }
 @utility glass-menu { background: var(--menu-glass) !important; backdrop-filter: blur(28px) saturate(190%); border: 1px solid var(--menu-glass-border) !important; box-shadow: var(--menu-glass-shadow) !important; }
 @utility input-glass { background: var(--input-glass); backdrop-filter: blur(16px) saturate(170%); border: 1px solid var(--menu-glass-border); box-shadow: inset 0 1px 2px rgb(24 24 27 / 6%), inset 0 1px 0 oklch(1 0 0 / 90%); }
-@utility cta-ink { background: var(--foreground); color: var(--background); box-shadow: var(--cta-shadow); }
+@utility cta-ink { background: var(--brand-gradient); color: #fff; box-shadow: var(--cta-shadow); }
 @utility pill-lift { transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease; &:hover { transform: translateY(-1px); box-shadow: var(--menu-glass-shadow); } }
 
 /* Header controls: neutral grey glass hover, never tinted. */
@@ -817,7 +817,7 @@ html { font-size: 93.75%; }
 /* Header icon circles after sign-in match the avatar (2rem). */
 
 /* An active (selected) filter keeps its dark fill on hover instead of turning white. */
-.cta:hover, .cta:focus-visible, .pill-filter[aria-pressed="true"]:hover { background: var(--primary); color: var(--primary-foreground); }
+.cta:hover, .cta:focus-visible, .pill-filter[aria-pressed="true"]:hover { background: var(--brand-gradient); color: var(--primary-foreground); }
 
 /* No leftover focus ring after a click or tap; keyboard focus still shows. */
 :focus:not(:focus-visible) { outline: none !important; box-shadow: none; }
@@ -1013,7 +1013,7 @@ html[data-sheet] .fb-fab, html[data-sheet] .view-pill, html[data-sheet] .tour-pr
 
 /* Popups are fully solid: the glass gradient image is switched off so nothing shows through */
 /* important rules in an earlier layer beat important rules in the utilities layer */
-@layer base { .glass-menu, .popup-clean, .tour-prompt { background-image: none !important; background-color: #fff !important; } }
+@layer base { .glass-menu, .popup-clean, .tour-prompt { background-image: none !important; background-color: var(--popup-bg, #fff) !important; } }
 .leaflet-container { position: relative; z-index: 0; isolation: isolate; }
 
 /* Popup frame: header fixed, body scrolls, padding stays top and bottom */
@@ -1032,6 +1032,10 @@ html[data-sheet] .fb-fab, html[data-sheet] .view-pill, html[data-sheet] .tour-pr
 /* Padding that stays even while the content scrolls: the border is outside the scrolling area, so content is clipped at it */
 .pad-fixed { padding-block: 0 !important; border-block: 0.5rem solid transparent; }
 .dash-nav.pad-fixed { border-block-width: 0.75rem; }
+.dash-nav.pad-fixed { border-block-width: 0; padding-block: 0.9rem !important; }
+/* Menus and dropdowns: content never touches the top or bottom edge while scrolling. */
+[data-radix-popper-content-wrapper] > [role="menu"], [role="listbox"], .glass-menu { scroll-padding-block: 0.5rem; }
+[role="menu"], [role="listbox"] { padding-block: 0.5rem; }
 
 /* Phone search sheet: slides up from the bottom, rests on the bottom bar, square bottom corners */
 .m-sheet-bar, .m-sheet-scrim { display: none; }
@@ -1266,8 +1270,8 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
     --card-foreground: #f4f4f5;
     --popover: var(--ld-surface);
     --popover-foreground: #f4f4f5;
-    --primary: #ffffff;
-    --primary-foreground: #09090b;
+    --primary: #fd267a;
+    --primary-foreground: #ffffff;
     --secondary: var(--ld-surface-2);
     --secondary-foreground: #f4f4f5;
     --muted: var(--ld-surface-2);
@@ -1357,13 +1361,6 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
     color: #ffffff;
   }
   /* Primary buttons: the global .bg-primary paints a dark brand gradient, which hid the dark label on the white primary. Here they are solid white with dark text. */
-  html[data-listing-dark="1"] .bg-primary,
-  html[data-listing-dark="1"] [role="alertdialog"] .bg-primary {
-    background-image: none !important;
-    background-color: #fff !important;
-    color: #09090b !important;
-  }
-  html[data-listing-dark="1"] .bg-primary:hover:not(:disabled) { background-color: #fff !important; filter: none; }
   /* Comments */
   html[data-listing-dark="1"] .listing-page .discussion-card .glass { background-color: var(--ld-surface-2) !important; }
   html[data-listing-dark="1"] .listing-page .comment-card .comment-card { background-color: #232327 !important; }
@@ -1644,3 +1641,40 @@ html[data-listing-dark="1"] .wb.wb-site .site-menu-panel > :last-child { padding
   html[data-listing-dark="1"] .ai-chat .text-primary { color: var(--ld-theme); }
 }
 }
+
+/* Final word: every primary action is the brand gradient on the dark theme, wherever it appears. */
+html[data-listing-dark="1"] :is(.bg-primary, .cta, .cta-ink, .btn-dark, .take-btn):not(:disabled) { background-color: transparent !important; background-image: var(--brand-gradient) !important; color: #fff !important; }
+
+/* Dark theme, global: every shared surface reads from the dark tokens (no white left over from the light design). */
+html[data-listing-dark="1"] {
+  --menu-glass: linear-gradient(160deg, rgb(32 32 36 / 92%), rgb(24 24 27 / 88%));
+  --menu-glass-border: rgb(255 255 255 / 0.12);
+  --menu-glass-shadow: 0 2px 6px rgb(0 0 0 / .4), 0 28px 56px -22px rgb(0 0 0 / .8), inset 0 1px 0 rgb(255 255 255 / .06);
+  --input-glass: linear-gradient(180deg, rgb(255 255 255 / .07), rgb(255 255 255 / .04));
+  --glass-white-border: rgb(255 255 255 / .12);
+  --header-circle: #26262a;
+}
+html[data-listing-dark="1"] :is(.tool-btn, .pill-soft, .auth-input, .input-glass, .view-pill, .glass-menu, .glass-solid, .popup-clean, .tour-prompt, .close-circle, .agent-card):not(.cta):not(.cta-ink) { background: var(--ld-surface-2) !important; color: #f4f4f5; }
+html[data-listing-dark="1"] :is(.popup-clean, .tour-prompt, .glass-solid) { background: var(--ld-surface) !important; box-shadow: 0 0 0 1px rgb(255 255 255 / .1), 0 40px 80px -30px rgb(0 0 0 / .9) !important; }
+html[data-listing-dark="1"] .auth-input { border-color: rgb(255 255 255 / .14); color: #f4f4f5; }
+html[data-listing-dark="1"] .auth-input:focus { background: #26262a !important; }
+html[data-listing-dark="1"] .tour-prompt .popup-note { background: rgb(250 204 21 / .12) !important; border-color: rgb(250 204 21 / .45) !important; color: #fde68a; }
+html[data-listing-dark="1"] .tour-prompt button.border { background: #26262a !important; border-color: rgb(255 255 255 / .2) !important; color: #f4f4f5; }
+html[data-listing-dark="1"] form[role="search"].bg-\[\#f4f4f5\], html[data-listing-dark="1"] .bg-background { background-color: var(--ld-surface-2) !important; color: #f4f4f5; }
+html[data-listing-dark="1"] :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([data-bare]) { color: #f4f4f5; }
+html:root[data-listing-dark="1"] :is(.solid-head, .solid-head.glass-nav) { background: #0b0b0c !important; color: #f4f4f5; border-color: rgb(255 255 255 / .08); }
+html:root[data-listing-dark="1"] .solid-head * { --foreground: #f4f4f5; }
+html:root[data-listing-dark="1"] :is(.tour-prompt, .popup-clean.keep-tones, .view-pill, .view-pill.glass-menu) { background: var(--ld-surface) !important; color: #f4f4f5; }
+html:root[data-listing-dark="1"] .tour-prompt :is(h2, h3, p, span, button) { color: inherit; }
+html:root[data-listing-dark="1"] .view-pill button { color: #f4f4f5; }
+html:root[data-listing-dark="1"] .view-pill button[aria-pressed="true"], html:root[data-listing-dark="1"] .view-pill [data-active="true"] { background: var(--brand-gradient) !important; color: #fff; }
+html[data-listing-dark="1"] { --popup-bg: #141416; }
+
+/* Info / marketing pages (Webbora) follow the dark theme too. */
+html[data-listing-dark="1"] .wb {
+  --surface: #000; --surface-deep: #0b0b0c; --mist: #0b0b0c; --mist-deep: #141416; --paper: #141416; --lilac-soft: #1c1c1f;
+}
+html[data-listing-dark="1"] .wb .glass-nav, html[data-listing-dark="1"] .wb.wb-site header.glass-nav { background: rgb(20 20 22 / .88) !important; color: #f4f4f5; }
+html[data-listing-dark="1"] .wb .glass-nav a:not(.btn-dark):not(.btn-light) { color: #e4e4e7; }
+html[data-listing-dark="1"] :is(input[type="search"], input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], textarea):not([data-bare]) { background-color: var(--ld-surface-2) !important; color: #f4f4f5; }
+html[data-listing-dark="1"] input::placeholder, html[data-listing-dark="1"] textarea::placeholder { color: #8b8b93; }

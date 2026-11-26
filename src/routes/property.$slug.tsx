@@ -84,7 +84,6 @@ function PropertyPage() {
   }, [p.id]);
   useEffect(() => {
     const root = document.documentElement;
-    root.dataset["listingDark"] = "1";
     const onScroll = () => {
       if (window.scrollY > 140) root.dataset["listingScrolled"] = "1";
       else delete root.dataset["listingScrolled"];
@@ -93,7 +92,6 @@ function PropertyPage() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
-      delete root.dataset["listingDark"];
       delete root.dataset["listingScrolled"];
     };
   }, []);

@@ -24,6 +24,8 @@ export function SearchSheet({ children, ai = false, pinned = false }: { children
   }, [risen]);
   const [h, setH] = useState<number | null>(null);
   const drag = useRef<{ y: number; h: number } | null>(null);
+  // Every reopen (and every switch into or out of Ask AI) starts from the default height; the user can stretch again.
+  useEffect(() => { setH(null); }, [open, ai]);
   /** Drag the handle: pull down to shrink the sheet and see more listings, pull up to grow it. */
   const limits = () => { const tab = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--tab-h")) || 0; return [140, Math.max(220, Math.round(window.innerHeight * 0.7) - 0 * tab)] as const; };
   useEffect(() => {

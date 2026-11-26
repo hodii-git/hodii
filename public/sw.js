@@ -1,7 +1,7 @@
 /* Hodii service worker. Deliberately small: it makes the site installable, speeds up repeat visits by keeping
  * built assets, and shows a friendly page when there is no network. It never stores pages, accounts or API answers,
  * so nobody can be shown someone else's data or stale listings. Bump VERSION to drop old caches. */
-const VERSION = "v1";
+const VERSION = "v2";
 const ASSETS = `hodii-assets-${VERSION}`;
 const OFFLINE = "/offline.html";
 

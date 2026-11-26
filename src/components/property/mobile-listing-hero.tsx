@@ -203,7 +203,7 @@ export function MobileListingHeroBody({
           </IconHint>
           <IconHint label={isSaved ? "Remove from saved" : "Save this property"} side="top">
             <button type="button" onClick={handleSave} disabled={saving} aria-pressed={isSaved} aria-label={isSaved ? "Remove from saved" : "Save this property"} className="ld-action-btn ld-action-lg">
-              <svg viewBox="0 0 32 32" className="size-[34px]" aria-hidden><path fill={isSaved ? "#ff2d78" : "#ff3d86"} d="M16 28.2S3 20.4 3 11.4A6.9 6.9 0 0 1 9.9 4.5c2.6 0 4.8 1.4 6.1 3.4 1.3-2 3.5-3.4 6.1-3.4A6.9 6.9 0 0 1 29 11.4c0 9-13 16.8-13 16.8Z" /></svg>
+              <svg viewBox="0 0 32 32" className="size-[34px]" aria-hidden><path fill={isSaved ? "url(#hodii-grad)" : "#f4f4f5"} d="M16 28.2S3 20.4 3 11.4A6.9 6.9 0 0 1 9.9 4.5c2.6 0 4.8 1.4 6.1 3.4 1.3-2 3.5-3.4 6.1-3.4A6.9 6.9 0 0 1 29 11.4c0 9-13 16.8-13 16.8Z" /></svg>
             </button>
           </IconHint>
           <IconHint label={shown?.phone ? "Call the agent" : "Show phone number"} side="top">

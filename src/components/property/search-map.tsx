@@ -95,8 +95,8 @@ export function SearchMap({ params, onGeo, variant = "default", overlay }: { par
       if (!active || !start) return;
       const ll = at(e), d = layers.current!.draft;
       d.clearLayers();
-      if (modeRef.current === "pin") Lf.circle(start, { radius: Math.max(500, distanceM({ lat: start.lat, lng: start.lng }, ll)), color: "#2563eb", weight: 2, fillOpacity: 0.12 }).addTo(d);
-      else { path.push([ll.lng, ll.lat]); Lf.polyline(path.map((c) => [c[1], c[0]] as [number, number]), { color: "#2563eb", weight: 3 }).addTo(d); }
+      if (modeRef.current === "pin") Lf.circle(start, { radius: Math.max(500, distanceM({ lat: start.lat, lng: start.lng }, ll)), color: "#ff6036", weight: 2, fillOpacity: 0.12 }).addTo(d);
+      else { path.push([ll.lng, ll.lat]); Lf.polyline(path.map((c) => [c[1], c[0]] as [number, number]), { color: "#ff6036", weight: 3 }).addTo(d); }
     });
     const finish = (e: PointerEvent) => {
       if (!active || !start) return;
@@ -203,7 +203,7 @@ export function SearchMap({ params, onGeo, variant = "default", overlay }: { par
     const Lf = lib.current, m = map.current, ls = layers.current; if (!Lf || !m || !ls || !ready) return;
     ls.shape.clearLayers();
     shapes.current = {};
-    const style = { color: "#2563eb", weight: 2, fillOpacity: editing ? 0.16 : 0.1 };
+    const style = { color: "#ff6036", weight: 2, fillOpacity: editing ? 0.16 : 0.1 };
     const wire = (layer: L.Path) => { layer.on("mouseover", showBar); layer.on("mouseout", hideBarSoon); layer.on("click", () => { showBar(); hideBarSoon(); }); };
     if (params.circle) {
       const { lat, lng, radiusM } = params.circle;

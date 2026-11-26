@@ -58,14 +58,14 @@ export function PropertyCard({ p, saved, priority = false }: { p: Card; saved?: 
       <div onClick={() => navigate({ to: "/property/$slug", params: { slug: p.slug } })} className="card-ph group/ph relative z-[1] aspect-[4/3] cursor-pointer bg-skeleton">
         <CardPhotos p={p} priority={priority} />
         <div className="ph-tags absolute left-2 top-2 flex flex-wrap gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
-          <span className={`ph-pill rounded-full px-2 py-0.5 text-[0.7rem] font-bold shadow-sm sm:px-2.5 sm:py-1 sm:text-xs ${PILL[p.tier]}`}>{listingTypeLabel(p.listingType)}</span>
-          {p.priceDrop && <span className="ph-pill inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white"><TrendingDown className="h-3 w-3" aria-hidden />Price drop</span>}
+          <span className={`ph-pill rounded-full px-2 py-0.5 text-[0.7rem] font-medium shadow-sm sm:px-2.5 sm:py-1 sm:text-xs ${PILL[p.tier]}`}>{listingTypeLabel(p.listingType)}</span>
+          {p.priceDrop && <span className="ph-pill inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white"><TrendingDown className="h-3 w-3" aria-hidden />Price drop</span>}
         </div>
         <div className="ph-actions absolute right-2 top-2 flex items-center gap-0.5 sm:right-3 sm:top-3 sm:gap-1"><CompareButton propertyId={p.id} /><SaveButton propertyId={p.id} saved={saved} /></div>
       </div>
       <div className="flex flex-1 flex-col gap-1 p-2.5 sm:gap-1.5 sm:p-3.5">
         <p className="text-[0.95rem] font-bold sm:text-base">{formatPrice(p.price)}</p>
-        <h3 className="line-clamp-2 text-[0.8125rem] font-normal leading-snug text-[#6a6a6a] sm:text-sm">
+        <h3 className="line-clamp-2 text-[0.8125rem] font-normal leading-snug text-muted-foreground sm:text-sm">
           <Link to="/property/$slug" params={{ slug: p.slug }} className="after:absolute after:inset-0 after:content-['']">{describeListing(p)}</Link>
         </h3>
       </div>

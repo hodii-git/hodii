@@ -648,19 +648,19 @@ textarea.admin-input { line-height: 1.6; resize: vertical; }
 
 /* Map pins and their photo card. */
 .hodii-pin-wrap { background: none; border: 0; }
-.hodii-pin { display: inline-block; transform: translate(-50%, -50%); background: linear-gradient(120deg, #3b82f6, #1d4ed8); color: #fff; border: 2px solid #fff; border-radius: 999px; padding: 3px 10px; font: 700 12px/1.3 system-ui, sans-serif; white-space: nowrap; box-shadow: 0 3px 10px rgb(29 78 216 / 45%); transition: transform 120ms, background 120ms, box-shadow 120ms; }
-.hodii-pin.on, .leaflet-marker-icon:hover .hodii-pin { transform: translate(-50%, -50%) scale(1.14); background: linear-gradient(120deg, #1d4ed8, #1e3a8a); box-shadow: 0 6px 16px rgb(29 78 216 / 55%); }
+.hodii-pin { display: inline-block; transform: translate(-50%, -50%); background: var(--brand-gradient); color: #fff; border: 2px solid #fff; border-radius: 999px; padding: 3px 10px; font: 700 12px/1.3 system-ui, sans-serif; white-space: nowrap; box-shadow: 0 3px 10px rgb(0 0 0 / 45%); transition: transform 120ms, background 120ms, box-shadow 120ms; }
+.hodii-pin.on, .leaflet-marker-icon:hover .hodii-pin { transform: translate(-50%, -50%) scale(1.14); background: var(--brand-gradient); filter: brightness(1.1); box-shadow: 0 6px 16px rgb(0 0 0 / 55%); }
 .hodii-popup .leaflet-popup-content-wrapper { padding: 0; overflow: hidden; border-radius: 18px; border: 1px solid rgb(0 0 0 / 8%); box-shadow: 0 14px 34px rgb(0 0 0 / 22%); }
 .hodii-popup .leaflet-popup-content { margin: 0; width: 240px !important; }
 .hodii-popup .leaflet-popup-tip { box-shadow: 0 6px 12px rgb(0 0 0 / 14%); }
 .hodii-pop { display: block; color: #222; text-decoration: none; }
-.hodii-pop-media { position: relative; display: block; aspect-ratio: 16 / 10; background: linear-gradient(135deg, #93c5fd, #3b82f6); }
+.hodii-pop-media { position: relative; display: block; aspect-ratio: 16 / 10; background: var(--brand-gradient); }
 .hodii-pop img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.hodii-pop-price { position: absolute; left: 10px; bottom: 10px; background: #fff; color: #1d4ed8; font: 800 13px/1 system-ui, sans-serif; padding: 6px 10px; border-radius: 999px; box-shadow: 0 2px 8px rgb(0 0 0 / 25%); }
+.hodii-pop-price { position: absolute; left: 10px; bottom: 10px; background: #fff; color: #09090b; font: 700 13px/1 system-ui, sans-serif; padding: 6px 10px; border-radius: 999px; box-shadow: 0 2px 8px rgb(0 0 0 / 25%); }
 .hodii-pop-body { display: flex; flex-direction: column; gap: 3px; padding: 11px 13px 13px; }
 .hodii-pop-title { font-size: 13px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .hodii-pop-place { font-size: 12px; color: #6a6a6a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hodii-pop-cta { margin-top: 4px; font-size: 12px; font-weight: 700; color: #2563eb; }
+.hodii-pop-cta { margin-top: 4px; font-size: 12px; font-weight: 700; color: #ff6036; }
 
 /* Very large screens and TVs: everything is sized in rem, so raising the root size scales the whole site. */
 html { font-size: 93.75%; }
@@ -671,8 +671,8 @@ html { font-size: 93.75%; }
 
 /* Map area editing handles */
 .hodii-handle-wrap { background: none; border: 0; }
-.hodii-handle { display: block; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 999px; background: #fff; border: 3px solid #2563eb; box-shadow: 0 1px 6px rgb(0 0 0 / 35%); cursor: grab; }
-.hodii-handle.centre { background: #2563eb; border-color: #fff; }
+.hodii-handle { display: block; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 999px; background: #fff; border: 3px solid #ff6036; box-shadow: 0 1px 6px rgb(0 0 0 / 35%); cursor: grab; }
+.hodii-handle.centre { background: #ff6036; border-color: #fff; }
 
 /* One side gutter for header, pages and footer at every width: 16px, 24px from tablet, 32px on large screens. */
 @media (min-width: 768px) { .app-shell > main { padding-inline: 1.5rem; } }
@@ -684,7 +684,7 @@ html { font-size: 93.75%; }
 @keyframes ping-soft { 0% { box-shadow: 0 0 0 0 rgb(255 255 255 / 25%); } 70% { box-shadow: 0 0 0 7px rgb(255 255 255 / 0%); } 100% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0%); } }
 .dot-pulse { animation: ping-soft 1.6s ease-out infinite; }
 @keyframes flow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-.pill-flow { background-image: linear-gradient(100deg, #1d4ed8, #3b82f6, #60a5fa, #3b82f6, #1d4ed8); background-size: 200% 100%; animation: flow 3s linear infinite; }
+.pill-flow { background-image: linear-gradient(100deg, #fd267a, #ff6036, #fd267a); background-size: 200% 100%; animation: flow 3s linear infinite; }
 @media (prefers-reduced-motion: reduce) { .dot-pulse, .pill-flow { animation: none; } }
 
 /* Photo upload tile: a warm orange shimmer and a ring, so waiting looks deliberate. */
@@ -1371,7 +1371,6 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
 /* "Take me there" wears the theme colour of the active tab in the bottom bar. */
 @media screen {
   html[data-listing-dark="1"] .bg-primary.take-btn { background: var(--brand-gradient) !important; color: #ffffff !important; }
-  html[data-listing-dark="1"] .bg-primary.take-btn:hover:not(:disabled) { background-color: #ff4d6d !important; }
 }
 
 /* Wider screens: the sidebar menu is a little wider, the hero photo taller, and the action dock sits in the page instead of floating. */
@@ -1467,7 +1466,7 @@ html[data-listing-dark="1"] .wb.wb-site header[data-tour="search"] .btn-dark::be
 /* ---- Footer: four link groups in a 2 x 2 grid on every screen; the List button wears the theme colour (the active Home tab). ---- */
 .footer-group { background: color-mix(in oklab, var(--foreground) 4%, transparent); }
 .footer-list-btn { background: var(--brand-gradient) !important; color: #fff !important; }
-.footer-list-btn:hover { background: #ff4d6d !important; }
+.footer-list-btn:hover { background: var(--brand-gradient) !important; filter: brightness(1.08); }
 html[data-listing-dark="1"] .footer-group { background: rgb(255 255 255 / .04); }
 
 /* ---- Listing hero icons: white outline by default; Compare turns black (on a white chip so it reads on any photo) when picked. ---- */
@@ -1645,3 +1644,13 @@ input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color:
 /* Primary popup / tour buttons (Next, Finish, Start tour, Resume) always keep the brand gradient with white text. */
 .tour-cta, html:root[data-listing-dark="1"] .tour-prompt button.tour-cta { background-color: transparent !important; background-image: var(--brand-gradient) !important; color: #fff !important; border-color: transparent !important; }
 .tour-cta:hover:not(:disabled) { filter: brightness(1.08); }
+
+/* Send = icon only, like the mic. Ask AI = neutral pill. No flat or gradient fill. */
+.send-icon, html:root[data-listing-dark="1"] .send-icon, html:root[data-listing-dark="1"] .m-sheet .send-icon { background: transparent !important; background-image: none !important; box-shadow: none !important; color: var(--muted-foreground) !important; }
+.send-icon:hover { color: var(--foreground) !important; background: color-mix(in oklab, var(--foreground) 8%, transparent) !important; }
+.ask-ai-btn, html:root[data-listing-dark="1"] .ask-ai-btn, html:root[data-listing-dark="1"] :is(.m-sheet, .ls-card) .ask-ai-btn { background: rgb(255 255 255 / .1) !important; background-image: none !important; color: var(--foreground) !important; box-shadow: 0 0 0 1px rgb(255 255 255 / .18) !important; }
+.ask-ai-btn:hover { background: rgb(255 255 255 / .16) !important; }
+
+/* Listing cards: nothing inside the image is bold; the description under the price is regular weight in the muted grey. */
+.card-grid .ph-pill, .card-ph .ph-pill, .card-ph .ph-tags span { font-weight: 500 !important; }
+.card-grid article h3, html[data-listing-dark="1"] .listing-page .surface h3 { font-weight: 400 !important; color: var(--muted-foreground) !important; }

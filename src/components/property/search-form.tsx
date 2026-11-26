@@ -106,7 +106,7 @@ function SearchFormInner({ value, onChange, side = false, result }: Props & { re
         <div className="flex flex-wrap gap-2">
           <button type="submit" className={`h-12 flex-1 rounded-xl bg-primary px-5 text-[0.95rem] font-bold text-primary-foreground md:flex-none`}>Search</button>
           <button type="button" disabled={ai.pending} onClick={() => { const t = q; setQ(""); ai.send(t); }} title={ai.open ? "Send your message to the AI" : "Describe what you want in your own words"}
-            className="inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-xl border border-foreground/30 bg-foreground/10 px-5 text-[0.95rem] font-bold text-primary disabled:opacity-50">
+            className="inline-flex h-12 items-center gap-2 whitespace-nowrap ask-ai-btn rounded-xl border border-foreground/20 bg-foreground/10 px-5 text-[0.95rem] font-bold text-foreground disabled:opacity-50">
             {ai.pending ? <Loader size="xs" /> : <Sparkles className="h-4 w-4" aria-hidden />}{ai.open ? "Refine" : "Ask AI"}
           </button>
           {(hasFilters(value) || q.length > 0 || ai.open) && <button type="button" onClick={clearAll} className="inline-flex h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-4 text-[0.95rem] font-semibold text-muted-foreground hover:bg-muted hover:text-foreground"><X className="size-4" aria-hidden />Clear all</button>}

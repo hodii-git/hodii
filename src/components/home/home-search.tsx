@@ -144,7 +144,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
             className={`min-h-6 min-w-0 flex-1 resize-none bg-transparent ${text.length > 0 && !ai.open ? "pr-[7.4rem]" : "pr-[5.4rem]"} text-base leading-6 md:text-[1.05rem] outline-hidden placeholder:text-muted-foreground ${typing ? "max-h-[30dvh] overflow-y-auto overscroll-contain" : "h-6 overflow-hidden whitespace-nowrap placeholder:truncate"}`} />
           {text.length > 0 && !ai.open && <button type="button" onClick={clearBox} aria-label={ai.open ? "Close chat and clear everything" : "Clear what I typed"} title={ai.open ? "Close chat and clear" : "Clear"} className="close-circle absolute right-[5.25rem] top-1/2 -translate-y-1/2"><X className="size-4" /></button>}
           <span data-tour="voice" className="ai-mic inline-flex"><VoiceButton onText={(t) => { if (ai.open) ai.send(t); else { setText(t); search(t); } }} /></span>
-          <button type="submit" aria-label={ai.open ? "Send message" : "Search"} disabled={ai.pending} className="cta-ink absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full disabled:opacity-60">{ai.pending ? <Loader size="xs" /> : <Send className="size-5" aria-hidden />}</button>
+          <button type="submit" aria-label={ai.open ? "Send message" : "Search"} disabled={ai.pending} className="send-icon absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:text-foreground disabled:opacity-60">{ai.pending ? <Loader size="xs" /> : <Send className="size-5" aria-hidden />}</button>
         </div>
         {!ai.open && placeWords(text).length >= 3 && <PlaceSuggest text={text} onPick={pickPlace} />}
         <div className={`flex min-w-0 flex-row flex-nowrap items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:justify-between sm:gap-3 ${typing ? "w-full" : "2xl:shrink-0"}`}>
@@ -164,7 +164,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
         </div>
         <div className="ml-auto flex shrink-0 items-center justify-end gap-1">
           {(hasFilters(value) || text.length > 0 || ai.open) && <button type="button" data-tour="clear-all" onClick={clearAll} className="inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-xl 2xl:h-14 2xl:rounded-2xl border border-border bg-card px-2.5 text-sm font-bold text-foreground shadow-sm transition hover:bg-muted"><X className="size-3.5" aria-hidden />Clear all</button>}
-          <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`cta-ink inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 2xl:h-14 2xl:rounded-2xl 2xl:px-5 text-sm font-bold ${ai.open ? "max-md:hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
+          <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`ask-ai-btn inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 2xl:h-14 2xl:rounded-2xl 2xl:px-5 text-sm font-bold ${ai.open ? "max-md:hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
             {ai.pending ? <Loader size="xs" /> : <Sparkles className="h-4 w-4" aria-hidden />}{ai.open ? "Refine" : "Ask AI"}
           </Button>
         </div>

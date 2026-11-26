@@ -46,7 +46,7 @@ export function InstallPrompt() {
         <p className="text-sm font-semibold leading-snug">{help ? "Tap Share, then Add to Home Screen." : "Get Hodii as a mobile app in one click."}</p>
         {!help && <button type="button" onClick={() => void install()} className="mt-1.5 inline-flex h-8 items-center gap-1.5 rounded-full bg-primary px-3.5 text-sm font-semibold text-primary-foreground"><Download className="size-4" aria-hidden />Download now</button>}
       </div>
-      <button type="button" onClick={close} aria-label="Close" className="grid size-8 shrink-0 place-items-center rounded-full hover:bg-foreground/5"><X className="size-4" aria-hidden /></button>
+      <button type="button" onClick={close} aria-label="Close" className="grid size-8 shrink-0 place-items-center rounded-full bg-white/12 text-foreground hover:bg-white/20"><X className="size-4" aria-hidden /></button>
     </div>
   );
 }

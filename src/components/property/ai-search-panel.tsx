@@ -123,7 +123,7 @@ function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs:
   return (
     <section aria-label="Chat with AI search" className="ai-chat mt-4 rounded-3xl bg-card p-3 shadow-[0_0_0_1px_rgb(15_23_42/0.08),0_30px_60px_-30px_rgb(15_23_42/0.45)] sm:p-5">
       <div className="mb-3 flex items-center gap-2">
-        <Sparkles className="size-4 text-primary" aria-hidden />
+        <Sparkles className="size-4 text-foreground" aria-hidden />
         <h3 className="text-sm font-extrabold">Chat search</h3>
         <button type="button" onClick={onNew} className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold text-muted-foreground hover:bg-muted hover:text-foreground"><RotateCcw className="size-3.5" aria-hidden />New search</button>
         <button type="button" aria-label="Close chat" onClick={onClose} className="close-circle shrink-0"><X className="size-4" /></button>
@@ -131,10 +131,10 @@ function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs:
       <div className="ai-log pad-fixed max-h-[22rem] space-y-3 overflow-y-auto overscroll-contain pr-1" role="log" aria-live="polite">
         {msgs.length === 0 && !pending && <p className="rounded-xl bg-muted p-3 text-sm text-muted-foreground">Tell me what you want in your own words, like “4 bedroom in Ruiru with a balcony”. Then keep going: “make it Kiambu”, “balcony is not a must”, or “forget that, new search”.</p>}
         {msgs.map((m) => m.role === "user" ? (
-          <div key={m.id} className="flex justify-end"><p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-sm text-primary-foreground">{m.text}</p></div>
+          <div key={m.id} className="flex justify-end"><p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-white/15 px-3.5 py-2 text-sm text-foreground">{m.text}</p></div>
         ) : (
           <div key={m.id} className="rounded-2xl rounded-bl-md bg-muted p-3.5 text-sm">
-            <p className="flex items-start gap-2"><Sparkles className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden /><span>{m.text}</span></p>
+            <p className="flex items-start gap-2"><Sparkles className="mt-0.5 size-4 shrink-0 text-foreground" aria-hidden /><span>{m.text}</span></p>
             {m.changes.length > 0 ? (
               <div className="mt-3"><p className="mb-1.5 text-xs font-bold uppercase text-muted-foreground">What I changed</p>
                 <ul className="flex flex-wrap gap-1.5">{m.changes.map((c) => { const I = KindIcon[c.kind]; return (

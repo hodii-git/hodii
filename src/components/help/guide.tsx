@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { VoiceButton } from "@/components/property/voice-button";
 import { Link } from "@tanstack/react-router";
 import { BookOpen, Search } from "lucide-react";
 import { ToneIcon } from "@/components/ui/tone-icon";
@@ -36,7 +37,8 @@ export function GuideIndex({ initial = "user" }: { initial?: "user" | "agency" }
       <label className="relative mt-4 block">
         <span className="sr-only">Search the guide</span>
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
-        <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search the guide, e.g. frozen, verified, alerts" className="h-12 w-full rounded-2xl pl-10 pr-4 text-[0.95rem]" />
+        <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search the guide, e.g. frozen, verified, alerts" className="h-12 w-full rounded-2xl pl-10 pr-14 text-[0.95rem]" />
+        <VoiceButton onText={setQ} />
       </label>
       <div className="mt-6" aria-live="polite">
         {q.trim() ? (

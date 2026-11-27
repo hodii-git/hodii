@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SlidersHorizontal, Sparkles } from "lucide-react";
 import { HeaderPills } from "@/components/header-search";
 import { HomeSearch } from "@/components/home/home-search";
@@ -19,10 +19,16 @@ const btn = "relative inline-flex h-[3.25rem] shrink-0 items-center gap-2 rounde
 export function ExploreBar({ value, onChange, result, deferred = false }: { value: SearchParams; onChange: (next: Partial<SearchParams>) => void; result?: AiResult; deferred?: boolean }) {
   const [popup, setPopup] = useState<"ai" | "filters" | null>(null);
   const n = countFilters(value);
+  // The phone header's filters icon and round AI button open the same popups.
+  useEffect(() => {
+    const on = (e: Event) => { const d = (e as CustomEvent<string>).detail; if (d === "ai" || d === "filters") setPopup(d); };
+    window.addEventListener("hodii:open-popup", on);
+    return () => window.removeEventListener("hodii:open-popup", on);
+  }, []);
   return (
     <>
       <div className="hidden items-center gap-4 lg:flex">
-        <div className="min-w-0 flex-1"><HeaderPills /></div>
+        <div className="min-w-0 flex-1"><HeaderPills fade="page" /></div>
         <button type="button" onClick={() => setPopup("filters")} aria-haspopup="dialog" className={btn}>
           <SlidersHorizontal className="size-4" aria-hidden />Filters
           {n > 0 && <span className="cta grid h-[1.15rem] min-w-[1.15rem] place-items-center rounded-full px-1 text-[0.65rem] font-bold leading-none">{n}</span>}

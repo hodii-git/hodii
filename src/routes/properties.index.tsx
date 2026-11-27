@@ -70,12 +70,12 @@ function PropertiesPage() {
   const setGeo = (g: Pick<SearchParams, "circle" | "polygon">) => change({ circle: undefined, polygon: undefined, ...g, page: 1 });
 
   return (
-    <main className="pt-[calc(5rem+var(--pills-h,4rem))] pb-24 transition-[padding] duration-500 ease-out max-sm:px-4 md:pt-[calc(6.5rem+var(--pills-h,4rem))] lg:pt-[calc(4.5rem+var(--pills-h,5rem))]">
+    <main className="pt-[calc(var(--head-h,9.75rem)+1rem)] pb-24 max-sm:px-4 lg:pt-[calc(var(--head-h,11rem)+1.5rem)]">
       {!(map && wide) && <div className="mx-auto max-w-[112rem]">
         <div className="mx-auto mt-4 max-w-4xl lg:hidden"><HomeSearch value={params} onChange={change} result={aiResult} /></div>
       </div>}
       <div className={`mx-auto mt-6 max-w-[112rem] md:mt-8 ${map ? "lg:pr-[35.5rem]" : ""}`}>
-      {map && <aside className="map-aside max-lg:mb-6 lg:fixed lg:bottom-4 lg:right-4 lg:top-[calc(5.25rem+var(--pills-h,4rem))] lg:transition-[top] lg:duration-500 lg:z-30 lg:flex lg:w-[34rem] lg:flex-col lg:gap-3 xl:right-[max(1rem,calc((100vw-112rem)/2+1rem))]">
+      {map && <aside className="map-aside max-lg:mb-6 lg:fixed lg:bottom-4 lg:right-4 lg:top-[calc(var(--head-h,6rem)+0.75rem)] lg:z-30 lg:flex lg:w-[34rem] lg:flex-col lg:gap-3 xl:right-[max(1rem,calc((100vw-112rem)/2+1rem))]">
         <Suspense fallback={<LoaderBlock className="py-10" />}><SearchMap params={params} onGeo={setGeo} /></Suspense>
         {wide && <div className="flex min-h-0 flex-1 flex-col"><HomeSearch pinned value={params} onChange={change} result={aiResult} /></div>}
       </aside>}

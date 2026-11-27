@@ -1,4 +1,5 @@
 import { WaveHand } from "@/components/wave-hand";
+import { VoiceButton } from "@/components/property/voice-button";
 import { PageTitle } from "@/components/dashboard/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -253,6 +254,7 @@ function SearchBox({ value, onChange, placeholder }: { value: string; onChange: 
       <Search className="h-3 w-3 shrink-0 text-muted-foreground" />
       <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} aria-label={placeholder} />
       {value && <button type="button" aria-label="Clear search" onClick={() => onChange("")}><X className="h-4 w-4 text-muted-foreground" /></button>}
+      <VoiceButton inline className="-mr-2" onText={onChange} />
     </label>
   );
 }

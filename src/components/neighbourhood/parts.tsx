@@ -1,4 +1,5 @@
 import { Loader } from "@/components/loader";
+import { VoiceButton } from "@/components/property/voice-button";
 import { LoaderBlock } from "@/components/loader";
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
@@ -89,7 +90,7 @@ export function Reviews({ areaKey }: { areaKey: string }) {
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter reviews">
-        <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search reviews" aria-label="Search reviews" className="h-10 min-w-40 flex-1 rounded-xl border border-input bg-background px-3 text-sm" />
+        <div className="relative min-w-40 flex-1"><input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search reviews" aria-label="Search reviews" className="h-10 w-full rounded-full border border-input bg-background pl-4 pr-12 text-sm" /><VoiceButton onText={setQ} /></div>
         <Pick label="Sort" value={sort} onChange={(v) => setSort(v as ReviewSort)} options={[{ value: "newest", label: "Newest" }, { value: "highest", label: "Highest rated" }, { value: "lowest", label: "Lowest rated" }]} />
         <Pick label="Connection" clearLabel="Everyone" value={relation} onChange={setRelation} options={RELATIONS.map((x) => ({ value: x.key, label: x.label }))} />
         <Pick label="About" clearLabel="Anything" value={aspect} onChange={setAspect} options={ASPECTS.map((a) => ({ value: a.key, label: a.label }))} />

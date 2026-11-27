@@ -1,4 +1,5 @@
 import "@/webbora.css";
+import { VoiceButton } from "@/components/property/voice-button";
 import { primaryCategories, moreCategories } from "@/data/categories";
 import "@/webbora-extra.css";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
@@ -18,7 +19,7 @@ const LogoMark = () => (
 const Logo = () => (
   <Link to="/" className="logo flex min-w-0 items-center gap-2.5 text-foreground" aria-label={`${BRAND.name} home`}>
     <LogoMark />
-    <span className="brand-word truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
+    <span className="brand-word hidden truncate sm:inline font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
   </Link>
 );
 
@@ -68,6 +69,7 @@ export function WbHeader({ cfg, slug }: { cfg: HeaderCfg; slug: string }) {
             <form className="hk-search mx-auto hidden w-full max-w-md lg:flex" role="search" onSubmit={(e) => { e.preventDefault(); void nav({ to: "/info/$slug", params: { slug: "help-centre" }, ...(q ? { hash: `q=${encodeURIComponent(q)}` } : {}) }); }}>
               <Search className="h-4 w-4 opacity-60" />
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search the help centre" aria-label="Search the help centre" />
+              <VoiceButton inline className="-mr-3 !size-8" onText={setQ} />
             </form>
           ) : (
             <nav className="hidden items-center justify-center gap-4 text-[0.85rem] xl:gap-7 xl:text-[0.875rem] font-medium text-foreground/80 lg:flex" aria-label="Section">{cfg.nav.map((n) => link(n))}</nav>

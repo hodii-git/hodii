@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { VoiceButton } from "@/components/property/voice-button";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { MapPin } from "lucide-react";
@@ -42,7 +43,7 @@ function Page() {
       <h1 className="text-2xl font-extrabold md:text-3xl">Neighbourhoods</h1>
       <p className="mt-2 max-w-2xl text-muted-foreground">Find the right area, not just the right house. Ratings and chat come from people who know the place.</p>
       <form role="search" aria-label="Search neighbourhoods" onSubmit={(e) => { e.preventDefault(); set({ q: String(new FormData(e.currentTarget).get("q") ?? "").trim() || undefined }); }} className="mt-6 flex flex-wrap gap-3">
-        <input name="q" type="search" defaultValue={search.q ?? ""} key={search.q ?? ""} placeholder="Area or county" aria-label="Area or county" className={`${field} min-w-48 flex-1`} />
+        <div className="relative min-w-48 flex-1"><input name="q" type="search" defaultValue={search.q ?? ""} key={search.q ?? ""} placeholder="Area or county" aria-label="Area or county" className={`${field} w-full pr-12`} /><VoiceButton onText={(t) => set({ q: t.trim() || undefined })} /></div>
         <Pick label="County" clearLabel="All counties" value={search.county ? String(search.county) : ""} onChange={(v) => set({ county: v ? Number(v) : undefined })} options={COUNTY_OPTIONS} searchable />
         <Pick label="Rating" value={search.min ? String(search.min) : ""} onChange={(v) => set({ min: v ? Number(v) : undefined })} options={MINS} />
         <Pick label="Strong in" clearLabel="Anything" value={search.aspect ?? ""} onChange={(v) => set({ aspect: (v || undefined) as AspectKey | undefined, amin: v ? search.amin ?? 4 : undefined })} options={ASPECTS.map((a) => ({ value: a.key, label: a.label }))} />

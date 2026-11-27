@@ -135,13 +135,13 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
               </div>
             </div>
   );
-  const filtersOpen = isPopup ? popup === "filters" : moreOpen && !sheetLike;
-  const closeFilters = () => { setMoreOpen(false); if (isPopup) onPopupClose?.(); };
+  const filtersOpen = isPopup && popup === "filters" ? true : moreOpen;
+  const closeFilters = () => { setMoreOpen(false); if (isPopup && popup === "filters") onPopupClose?.(); };
   const filtersDialog = (
     <>
-          {filtersOpen && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[55]" onClick={closeFilters} />, document.body)}
+          {filtersOpen && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[90]" onClick={closeFilters} />, document.body)}
           <Dialog open={filtersOpen} onOpenChange={(o) => { if (!o) closeFilters(); else setMoreOpen(true); }} modal={false}>
-          <DialogContent onInteractOutside={(e) => { if ((e.target as Element | null)?.closest?.("[data-floating-panel]")) e.preventDefault(); }} className={`${POPUP_CARD} z-[81] sm:max-w-xl md:max-w-2xl [&>*]:min-w-0`}>
+          <DialogContent data-filters-popup onInteractOutside={(e) => { if ((e.target as Element | null)?.closest?.("[data-floating-panel]")) e.preventDefault(); }} className={`${POPUP_CARD} z-[91] sm:max-w-xl md:max-w-2xl [&>*]:min-w-0`}>
             <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><ToneIcon icon={SlidersHorizontal} tone="other" />More filters</DialogTitle><DialogDescription className="popup-note mt-3 text-left">Results update as you choose. Pick only what matters to you.</DialogDescription></DialogHeader>
             {filtersBody}
           </DialogContent>
@@ -150,22 +150,22 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
   );
   const sheetBody = (
     <>
-      <form role="search" aria-label="Search properties" data-tour="hero-search" onSubmit={(e) => { e.preventDefault(); submit(); }} className={`home-search ${sheetLike && moreOpen ? "hidden" : ""} glass-solid ${popup === "ai" ? "mt-1" : ai.open ? "mt-4 lg:mt-5" : "mt-8 lg:mt-12"} flex w-full min-w-0 flex-col gap-3 rounded-[2rem] p-3 sm:p-4 ${typing || sheetLike ? "" : "2xl:flex-row 2xl:items-center"}`}>
-        <div className={`input-glass relative flex min-w-0 items-start gap-3 rounded-[1.5rem] px-5 py-4 ${typing ? "w-full" : "flex-1"}`}>
+      <form role="search" aria-label="Search properties" data-tour="hero-search" onSubmit={(e) => { e.preventDefault(); submit(); }} className={`home-search glass-solid ${popup === "ai" ? "mt-1" : ai.open ? "mt-4 lg:mt-5" : "mt-8 lg:mt-12"} flex w-full min-w-0 flex-col gap-3 rounded-[2rem] p-3 sm:p-4 ${typing || sheetLike ? "" : "2xl:flex-row 2xl:items-center"}`}>
+        <div className={`input-glass relative flex min-w-0 items-start gap-3 rounded-[1.75rem] px-5 py-4 ${typing ? "w-full" : "flex-1"}`}>
           <Search className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={1.7} aria-hidden />
           <label htmlFor="home-q" className="sr-only">Describe the place you want</label>
           <textarea id="home-q" ref={box} rows={1} maxLength={300} value={text}
             onChange={(e) => { const v = e.target.value; setText(v); clearTimeout(timer.current); if (!ai.open && !deferred) { if (v.trim() === "") search(""); else timer.current = setTimeout(() => search(v), 800); } }}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
             placeholder={ai.open ? "Reply to refine: “make it Kiambu”…" : "Try “2 bedroom in Kilimani under 80k”"}
-            className={`min-h-6 min-w-0 flex-1 resize-none bg-transparent ${text.length > 0 && !ai.open ? "pr-[7.4rem]" : "pr-[5.4rem]"} text-base leading-6 md:text-[1.05rem] outline-hidden placeholder:text-muted-foreground ${typing ? "max-h-[30dvh] overflow-y-auto overscroll-contain" : "h-6 overflow-hidden whitespace-nowrap placeholder:truncate"}`} />
+            className={`min-h-6 min-w-0 flex-1 resize-none bg-transparent ${text.length > 0 && !ai.open ? "pr-[7.4rem]" : "pr-[5.4rem]"} text-base leading-6 md:text-[1.05rem] outline-hidden placeholder:text-muted-foreground md:placeholder:text-[0.9rem] ${typing ? "max-h-[30dvh] overflow-y-auto overscroll-contain" : "h-6 overflow-hidden whitespace-nowrap placeholder:truncate"}`} />
           {text.length > 0 && !ai.open && <button type="button" onClick={clearBox} aria-label={ai.open ? "Close chat and clear everything" : "Clear what I typed"} title={ai.open ? "Close chat and clear" : "Clear"} className="close-circle absolute right-[5.25rem] top-1/2 -translate-y-1/2"><X className="size-4" /></button>}
           <span data-tour="voice" className="ai-mic inline-flex"><VoiceButton onText={(t) => { if (ai.open) ai.send(t); else { setText(t); search(t); } }} /></span>
           <button type="submit" aria-label={ai.open ? "Send message" : "Search"} disabled={ai.pending} className="send-icon absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:text-foreground disabled:opacity-60">{ai.pending ? <Loader size="xs" /> : <Send className="size-5" aria-hidden />}</button>
         </div>
         {!ai.open && placeWords(text).length >= 3 && <PlaceSuggest text={text} onPick={pickPlace} />}
         <div className={`flex min-w-0 flex-row flex-nowrap items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:justify-between sm:gap-3 ${typing || sheetLike ? "w-full" : "2xl:shrink-0"}`}>
-        <div ref={moreRef} className={`input-glass flex w-auto shrink-0 items-center rounded-xl px-3 ${typing || sheetLike ? "" : "2xl:h-14 2xl:rounded-2xl 2xl:px-4"}`}>
+        <div ref={moreRef} className={`input-glass flex w-auto shrink-0 items-center rounded-full px-4 ${typing || sheetLike ? "" : "2xl:h-14 2xl:px-5"}`}>
           <Button variant="ghost" type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen((o) => !o)} className={`flex h-10 w-full justify-start gap-2 ${sheetLike ? "" : "2xl:h-full"} bg-transparent p-0 text-left text-sm hover:bg-transparent`}>
             <SlidersHorizontal className="h-4 w-4 shrink-0 text-foreground" strokeWidth={2} aria-hidden />
             <span className="relative shrink-0 whitespace-nowrap pr-2 font-semibold text-foreground">More filters
@@ -174,22 +174,13 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
           {!isPopup && filtersDialog}
         </div>
         <div className="ml-auto flex shrink-0 items-center justify-end gap-1">
-          {(hasFilters(value) || text.length > 0 || ai.open) && <button type="button" data-tour="clear-all" onClick={clearAll} className={`inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-xl ${sheetLike ? "" : "2xl:h-14 2xl:rounded-2xl"} border border-border bg-card px-2.5 text-sm font-bold text-foreground shadow-sm transition hover:bg-muted`}><X className="size-3.5" aria-hidden />Clear all</button>}
-          <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`ask-ai-btn inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 ${sheetLike ? "" : "2xl:h-14 2xl:rounded-2xl 2xl:px-5"} text-sm font-bold ${ai.open ? "max-md:hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
+          {(hasFilters(value) || text.length > 0 || ai.open) && <button type="button" data-tour="clear-all" onClick={clearAll} className={`inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-full ${sheetLike ? "" : "2xl:h-14"} px-3.5 text-sm font-bold text-foreground shadow-sm transition hover:bg-muted`}><X className="size-3.5" aria-hidden />Clear all</button>}
+          <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`ask-ai-btn inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 ${sheetLike ? "" : "2xl:h-14 2xl:px-6"} text-sm font-bold ${ai.open ? "max-md:hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
             {ai.pending ? <Loader size="xs" /> : <Sparkles className="h-4 w-4" aria-hidden />}{ai.open ? "Refine" : "Ask AI"}
           </Button>
         </div>
         </div>
       </form>
-      {sheetLike && moreOpen && (
-        <div className="filters-plain pb-2">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <p className="flex items-center gap-2 text-base font-extrabold"><ToneIcon icon={SlidersHorizontal} tone="other" />More filters</p>
-            <button type="button" onClick={() => setMoreOpen(false)} className="cta-ink h-9 rounded-xl px-4 text-sm font-bold">Done</button>
-          </div>
-          {filtersBody}
-        </div>
-      )}
       {notes.length > 0 && <p className="mt-3 px-2 text-sm text-muted-foreground">Understood: {notes.join(" · ")}</p>}
       {ai.panel}
       {ai.dialog}
@@ -198,10 +189,10 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
   if (isPopup) {
     return (
       <>
-        {popup === "filters" && filtersDialog}
+        {filtersDialog}
         <Dialog open={popup === "ai"} onOpenChange={(o) => { if (!o) onPopupClose?.(); }} modal={false}>
-          {popup === "ai" && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[55]" onClick={() => onPopupClose?.()} />, document.body)}
-          <DialogContent onInteractOutside={(e) => { if ((e.target as Element | null)?.closest?.("[data-floating-panel]")) e.preventDefault(); }} className={`${POPUP_CARD} z-[81] sm:max-w-[28rem] [&>*]:min-w-0`}>
+          {popup === "ai" && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[80]" onClick={() => onPopupClose?.()} />, document.body)}
+          <DialogContent onInteractOutside={(e) => { if (moreOpen || (e.target as Element | null)?.closest?.("[data-floating-panel], [data-filters-popup]")) e.preventDefault(); }} onEscapeKeyDown={(e) => { if (moreOpen) e.preventDefault(); }} className={`${POPUP_CARD} z-[81] sm:max-w-xl md:max-w-2xl [&>*]:min-w-0`}>
             <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><ToneIcon icon={Search} tone="other" />Search</DialogTitle><DialogDescription className="sr-only">Describe the place you want, set filters or ask AI.</DialogDescription></DialogHeader>
             {sheetBody}
           </DialogContent>

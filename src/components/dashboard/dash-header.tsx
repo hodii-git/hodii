@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ComponentType, ReactNode } from "react";
-import { BadgeCheck, BellRing, ExternalLink, Globe, Home, Inbox, Plus, Search, ShieldCheck, Users } from "lucide-react";
+import { BadgeCheck, BellRing, ExternalLink, Globe, Inbox, Plus, Search, ShieldCheck, Users } from "lucide-react";
 import { HodiiLogo } from "@/components/brand-logo";
 import { NotificationBell } from "@/components/notification-bell";
 import { AccountButton } from "@/components/account-button";
@@ -29,11 +29,16 @@ const Action = ({ to, params, search, icon: I, children, primary }: { to: string
   </L>
 );
 
-/** A button on every dashboard header that goes back to the public homepage. */
+/** A plain house (no door), drawn here because the stock icon has one. */
+function PlainHouse({ className }: { className?: string }) {
+  return <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M3.5 11 12 3.75 20.5 11" /><path d="M5.5 9.5V19a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V9.5" /></svg>;
+}
+
+/** A button on every dashboard header that goes back to the public homepage. Same circle as the bell. */
 function HomeButton({ hideFromMd = false }: { hideFromMd?: boolean }) {
   return (
-    <L to="/" aria-label="Back to homepage" title="Back to homepage" className={`inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border border-border bg-background/70 px-3 text-sm font-semibold hover:bg-muted sm:px-4 ${hideFromMd ? "md:hidden" : ""}`}>
-      <Home className="size-4" aria-hidden /><span className="hidden sm:inline">Home</span>
+    <L to="/" aria-label="Back to homepage" title="Back to homepage" className={`inline-flex shrink-0 items-center justify-center rounded-full hdr-circle header-circle header-size ${hideFromMd ? "md:hidden" : ""}`}>
+      <PlainHouse className="size-[1.1rem]" />
     </L>
   );
 }
@@ -120,7 +125,7 @@ export function DashHeader({ framed = false }: { framed?: boolean } = {}) {
         {!framed && (
           <>
             <L to="/" className="flex shrink-0 items-center gap-2 pl-1 font-extrabold" aria-label={`${BRAND.name} home`}>
-              {isAdmin ? <ShieldCheck className="size-6" /> : <HodiiLogo />}
+              {isAdmin ? <ShieldCheck className="size-6" /> : <HodiiLogo outline />}
               {!isAdmin && <span className="brand-word hidden text-xl lg:inline">{BRAND.name}</span>}
             </L>
             <span aria-hidden className="hidden h-6 w-px bg-current opacity-15 sm:block" />

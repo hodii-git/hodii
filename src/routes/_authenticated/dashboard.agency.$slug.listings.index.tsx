@@ -1,4 +1,5 @@
 import { LoaderBlock } from "@/components/loader";
+import { VoiceButton } from "@/components/property/voice-button";
 import { createFileRoute, getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { Sel } from "@/components/ui/sel";
 import { Pick } from "@/components/ui/pick";
@@ -94,7 +95,7 @@ function Listings() {
       )}
       <div className="mb-5 flex flex-wrap items-center gap-3">
         <form className="flex flex-1 gap-2" role="search" onSubmit={(e) => { e.preventDefault(); const q = String(new FormData(e.currentTarget).get("q") ?? "").trim(); navigate({ search: (p) => ({ ...p, q: q || undefined, page: undefined }) }); }}>
-          <input name="q" defaultValue={search.q ?? ""} aria-label="Search your listings" placeholder="Search title, reference or area" className={`${inputCls} max-w-sm`} />
+          <div className="relative w-full max-w-sm"><input name="q" key={search.q ?? ""} defaultValue={search.q ?? ""} aria-label="Search your listings" placeholder="Search title, reference or area" className={`${inputCls} w-full pr-12`} /><VoiceButton onText={(t) => navigate({ search: (p) => ({ ...p, q: t.trim() || undefined, page: undefined }) })} /></div>
           <div className="w-44"><Pick label="Status" clearLabel="All statuses" value={search.status ?? ""} onChange={(v) => navigate({ search: (p) => ({ ...p, status: (v || undefined) as Status | undefined, page: undefined }) })} options={STATUSES.map((s) => ({ value: s, label: s === "pending_review" ? "In review" : s[0]!.toUpperCase() + s.slice(1) }))} className="h-10" /></div>
         </form>
         <button type="button" onClick={download} className={`${btnGhost} h-10 px-3`}><Download className="h-4 w-4" aria-hidden />Export CSV</button>

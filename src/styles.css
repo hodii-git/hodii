@@ -1142,8 +1142,6 @@ html[data-hide~="fb"] .fb-fab, html[data-hide~="view"] .view-pill, html[data-hid
 @media (min-width: 1024px) { html[data-mapside] .fb-fab { right: 36rem !important; } }
 input.bg-transparent, textarea.bg-transparent, input[class*="!bg-transparent"] { background: transparent !important; box-shadow: none !important; }
 input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !important; }
-.pills-row { display: grid; grid-template-rows: 1fr; opacity: 1; transition: grid-template-rows .5s ease, opacity .5s ease; }
-.pills-row[data-hidden] { grid-template-rows: 0fr; opacity: 0; }
 @media (max-width: 639px) {
   .trust-badge span.trust-text { font-size: 0.95rem; }
   .card-grid[data-layout=single] h3 { font-size: 0.95rem; }
@@ -1380,7 +1378,8 @@ input.bg-transparent:focus, textarea.bg-transparent:focus { box-shadow: none !im
 }
 
 /* Sidebar menu on the listing page sits above everything, including the bottom bar (which is z-45, same as the site wrapper by default). */
-html[data-listing-dark="1"] .wb.wb-site { z-index: 90; }
+/* The header only rises above the bottom bar while its side menu is open; otherwise every overlay (filters, Ask AI, voice, dialogs) covers it. */
+html[data-listing-dark="1"] .wb.wb-site:has(.site-menu-panel[data-open="true"]) { z-index: 90; }
 html[data-listing-dark="1"] .wb.wb-site .menu-title-row { display: flex; align-items: center; justify-content: space-between; margin-top: .2rem; }
 html[data-listing-dark="1"] .wb.wb-site .menu-title-row .menu-close { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 9999px; background: #26262a; color: #fff; border: 1px solid rgb(255 255 255 / .12); }
 html[data-sheet] .listing-dock { display: none; }
@@ -1717,13 +1716,13 @@ html:root .tour-paused .resume-x:hover { background: rgb(255 255 255 / .08); col
 @media (min-width: 1024px) { html[data-dash] .tour-paused { left: calc(var(--dash-side-w, 0px) + 1.25rem) !important; } }
 
 /* Guide card note: the old soft amber tint (12% fill, 45% edge), now in the brand pink-to-orange, subtle and glassy. */
-html:root .tour-prompt .popup-note, html:root[data-listing-dark="1"] .tour-prompt .popup-note {
-  background: linear-gradient(135deg, rgb(253 38 122 / .12), rgb(255 96 54 / .12)) !important;
-  border: 1px solid rgb(253 38 122 / .38) !important;
+html:root .tour-prompt .popup-note, html:root[data-listing-dark="1"] .tour-prompt .popup-note, html:root .popup-note.tour-note {
+  background: var(--brand-gradient) !important;
+  border: 0 !important;
   border-image: none !important;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / .06) !important;
-  backdrop-filter: blur(10px) saturate(140%);
-  color: #ffd9cf !important;
+  box-shadow: none !important;
+  backdrop-filter: none;
+  color: #fff !important;
 }
 
 /* ===== One dark overlay behind every header menu, the same as behind the dashboard side menus ===== */
@@ -1740,4 +1739,110 @@ html:root[data-listing-dark="1"] .wb.wb-site .solid-head, html:root[data-listing
   backdrop-filter: blur(20px) saturate(170%) !important; -webkit-backdrop-filter: blur(20px) saturate(170%) !important;
   border: 0 !important; border-bottom: 1px solid rgb(255 255 255 / .1) !important;
   box-shadow: 0 10px 28px -14px rgb(0 0 0 / .75), inset 0 -1px 0 rgb(255 255 255 / .03) !important;
+}
+
+
+/* =====================================================================================================
+   Header, search bar, chips, popups (latest pass)
+   ===================================================================================================== */
+
+/* ---- Overlays cover the whole app, header included ---- */
+html:root[data-listing-dark="1"] .m-sheet-scrim { z-index: 60 !important; background: var(--popup-scrim) !important; }
+html:root .m-sheet[data-open] { z-index: 61 !important; }
+html:root .popup-scrim { z-index: 80; }
+
+/* ---- Popups: the body always spaces its children (cards, buttons) and keeps a gap under the title ---- */
+.popup-scroll { display: grid; gap: 1rem; align-content: start; }
+.popup-inner > .popup-head { margin-bottom: .75rem; }
+.popup-frame .popup-head { margin-bottom: 0; }
+
+/* ---- Ask AI on tablets and desktops: a centred popup sized like the filters popup, never a strip glued to the bottom ---- */
+@media (min-width: 768px) {
+  html:root .m-sheet[data-open][data-ai]:not([data-pinned]) {
+    top: 50%; left: 50%; right: auto; bottom: auto; transform: translate(-50%, -50%);
+    width: min(42rem, calc(100vw - 2rem)); height: min(46rem, 88dvh); max-height: 88dvh;
+    border-radius: 1.75rem; padding: 0 1.25rem 1.25rem;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / .1), 0 40px 80px -30px rgb(0 0 0 / .85);
+    animation: sheet-pop .25s cubic-bezier(.2, .8, .2, 1);
+  }
+  html:root .m-sheet[data-open][data-ai]:not([data-pinned]) .m-grab { display: none; }
+  html:root .m-sheet[data-open][data-ai]:not([data-pinned]) .m-sheet-bar { padding: 1.25rem .25rem .75rem; }
+}
+@keyframes sheet-pop { from { opacity: 0; transform: translate(-50%, -48%) scale(.97); } to { opacity: 1; transform: translate(-50%, -50%); } }
+/* Phones: the Ask AI sheet leaves room under the header so it never reaches it. */
+@media (max-width: 767px) { html:root .m-sheet[data-open][data-ai] { height: min(72dvh, calc(100dvh - var(--kb, 0px) - 6rem)); } }
+
+/* ---- Header: roomier on every screen; the search bar and the chips follow the scroll ---- */
+.solid-head { --bar0: 3.75rem; --bar1: 2.75rem; --dock-pt: .5rem; --dock-pb: 1.75rem; --hdr-row: 5rem; --chips-h: 5.5rem; }
+.hdr-nav { opacity: calc(1 - var(--sp, 0) * 2); }
+.solid-head[data-collapsed] .hdr-nav { pointer-events: none; }
+/* Phones and tablets: the chips fold away as you scroll down and unfold as you scroll up. */
+.pills-row { height: calc(var(--chips-h) * (1 - var(--sp, 0))); overflow: hidden; opacity: calc(1 - var(--sp, 0) * 1.4); }
+.pills-in { height: var(--chips-h); padding: .75rem .75rem 1rem; }
+/* Large screens: the search row gets shorter while the bar rides up into the header row (where the menu links sit, which fade out), keeping most of its width. */
+.search-dock { position: relative; z-index: 2; height: calc((var(--bar0) + var(--dock-pt) + var(--dock-pb)) * (1 - var(--sp, 0))); pointer-events: none; }
+.search-dock-in { pointer-events: auto; padding: var(--dock-pt) 1.5rem 0; transform: translateY(calc(var(--sp, 0) * -1 * (var(--hdr-row) / 2 + var(--dock-pt) + var(--bar1) / 2))); }
+.hdr-search { --bar-h: calc(var(--bar0) - var(--sp, 0) * (var(--bar0) - var(--bar1))); height: var(--bar-h); max-width: calc(52rem - var(--sp, 0) * (52rem - min(34rem, 100vw - 38rem))); }
+.hdr-search-go { width: calc(var(--bar-h) - .75rem); height: calc(var(--bar-h) - .75rem); }
+.hdr-search-go svg { width: 1.25rem; height: 1.25rem; }
+@media (max-width: 1023px) { .wb.wb-site .solid-head .menu-btn-lg, .wb.wb-site .menu-btn.menu-btn-lg { width: 3rem; height: 3rem; } }
+
+/* ---- Type chips: the sides melt into the surface (dark, blurred fade) instead of ending in a hard line ---- */
+.pill-edge { position: absolute; top: 0; bottom: 0; z-index: 10; display: flex; align-items: center; width: 3.75rem; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
+.pill-edge[data-show] { opacity: 1; }
+.pill-edge::before { content: ""; position: absolute; inset: 0; pointer-events: none; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+.pill-edge-l { left: 0; justify-content: flex-start; padding-left: .25rem; }
+.pill-edge-r { right: 0; justify-content: flex-end; padding-right: .25rem; }
+.pill-edge-l::before { background: linear-gradient(to right, var(--fade-bg, var(--card)) 20%, transparent); -webkit-mask-image: linear-gradient(to right, #000 35%, transparent); mask-image: linear-gradient(to right, #000 35%, transparent); }
+.pill-edge-r::before { background: linear-gradient(to left, var(--fade-bg, var(--card)) 20%, transparent); -webkit-mask-image: linear-gradient(to left, #000 35%, transparent); mask-image: linear-gradient(to left, #000 35%, transparent); }
+.pill-edge > button { position: relative; }
+
+/* ---- Site menu: the list scrolls inside a frame, so it never touches the top or bottom edge (padding stays put while scrolling) ---- */
+.wb.wb-site .site-menu-panel { display: flex; flex-direction: column; overflow: hidden !important; padding: 0 !important; }
+.wb.wb-site .site-menu-panel > .menu-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; margin-block: 1rem; padding-inline: 1rem; scrollbar-width: none; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 .75rem, #000 calc(100% - .75rem), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 .75rem, #000 calc(100% - .75rem), transparent 100%); }
+.wb.wb-site .site-menu-panel > .menu-scroll::-webkit-scrollbar { display: none; }
+.wb.wb-site .site-menu-panel > .menu-scroll > :first-child { padding-top: .5rem; }
+.wb.wb-site .site-menu-panel > .menu-scroll > :last-child { padding-bottom: .5rem; }
+
+/* ---- Search bars: one calm pill; the focus edge is a soft hairline, not a loud ring ---- */
+.voice-btn-inline { --lvl: 0; }
+.hdr-search:focus-within { box-shadow: 0 10px 30px -14px rgb(0 0 0 / .8), 0 0 0 1px rgb(255 255 255 / .2); }
+html:root :is(.home-search .input-glass):focus-within { box-shadow: none !important; }
+
+/* The typing area inside every search bar is the pill itself: no filled rectangle, border or ring on the text box.
+   Lives in @layer base because the dark field rules it replaces are !important in that layer. */
+@layer base {
+  html:root[data-listing-dark="1"] :is(.m-sheet, .ls-card, .popup-frame, .glass-solid, [role=dialog], [role=search], .hk-search, .admin-search) :is(.home-search, .input-glass, form, label, .hk-search, .admin-search) :is(textarea, input:not([type=checkbox]):not([type=radio])):not(.keep-field),
+  html:root[data-listing-dark="1"] :is(.hk-search, .admin-search, .home-search, .input-glass, .hdr-search) :is(textarea, input:not([type=checkbox]):not([type=radio])) { background: transparent !important; background-color: transparent !important; border-color: transparent !important; box-shadow: none !important; border-radius: 0 !important; }
+}
+
+/* Phone header, second row (filters icon, search, AI button): fixed height, stays put while scrolling. */
+@media (max-width: 767px) {
+  .solid-head { --chips-h: 4.75rem; }
+  .pills-row { height: var(--chips-h); opacity: 1; }
+  .pills-in { padding: .5rem .875rem .75rem .5rem; }
+}
+
+/* Popup contents never push past the popup's edge on narrow screens. */
+.popup-scroll { min-width: 0; overflow-x: clip; }
+.popup-scroll > * { min-width: 0; max-width: 100%; }
+
+/* ===== Top pills: pure black like the site; the active one is told apart by a brighter edge and white text ===== */
+html:root .ld-pill, html:root[data-listing-dark="1"] .ld-pill { background: #000 !important; }
+html:root .ld-pill-on, html:root[data-listing-dark="1"] .ld-pill-on { background: #000 !important; border-color: rgb(255 255 255 / .55) !important; color: #fff !important; }
+
+/* ===== Guide card note: glassy, still clearly the pink-to-orange gradient: a see-through gradient fill with a gradient edge ===== */
+html:root .tour-prompt .popup-note, html:root[data-listing-dark="1"] .tour-prompt .popup-note, html:root .popup-note.tour-note {
+  position: relative;
+  background: linear-gradient(135deg, rgb(253 38 122 / .34), rgb(255 96 54 / .34)) !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 0 transparent, inset 0 1px 0 rgb(255 255 255 / .10) !important;
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  color: #fff !important;
+}
+html:root .tour-prompt .popup-note::before, html:root .popup-note.tour-note::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: var(--brand-gradient); opacity: .75;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }

@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, Minus, Plus, RefreshCw, RotateCcw, SearchX, Sparkles, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { POPUP_CARD, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { aiSearch } from "@/lib/ai-search.functions";
 import { useAuth } from "@/hooks/use-auth";
 import type { SearchParams } from "@/lib/listing-search";
@@ -83,8 +83,8 @@ export function useAiSearch({ value, onApply, result }: Props) {
 
   const dialog = (
     <Dialog open={out !== null} onOpenChange={(o) => { if (!o) setOut(null); }}>
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className={`${POPUP_CARD} sm:max-w-md [&>*]:min-w-0`}>
+        <DialogHeader className="text-left">
           <DialogTitle>You have used your AI searches</DialogTitle>
           <DialogDescription>
             {user ? "Your AI searches are used up for now." : "Visitors get a few AI searches. Sign in for more."} Normal search with filters is still free and unlimited, and your last filters are still on the page.
@@ -122,13 +122,13 @@ function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs:
   const lastAi = [...msgs].reverse().find((m) => m.role === "ai")?.id;
   return (
     <section aria-label="Chat with AI search" className="ai-chat mt-4 rounded-3xl bg-card p-3 shadow-[0_0_0_1px_rgb(15_23_42/0.08),0_30px_60px_-30px_rgb(15_23_42/0.45)] sm:p-5">
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-3 flex items-center gap-2 pl-2">
         <Sparkles className="size-4 text-foreground" aria-hidden />
         <h3 className="text-sm font-extrabold">Chat search</h3>
         <button type="button" onClick={onNew} className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold text-muted-foreground hover:bg-muted hover:text-foreground"><RotateCcw className="size-3.5" aria-hidden />New search</button>
         <button type="button" aria-label="Close chat" onClick={onClose} className="close-circle shrink-0"><X className="size-4" /></button>
       </div>
-      <div className="ai-log pad-fixed max-h-[22rem] space-y-3 overflow-y-auto overscroll-contain pr-1" role="log" aria-live="polite">
+      <div className="ai-log max-h-[clamp(13rem,40dvh,28rem)] space-y-3 py-1 overflow-y-auto overscroll-contain pr-1" role="log" aria-live="polite">
         {msgs.length === 0 && !pending && <p className="rounded-xl bg-muted p-3 text-sm text-muted-foreground">Tell me what you want in your own words, like “4 bedroom in Ruiru with a balcony”. Then keep going: “make it Kiambu”, “balcony is not a must”, or “forget that, new search”.</p>}
         {msgs.map((m) => m.role === "user" ? (
           <div key={m.id} className="flex justify-end"><p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-white/15 px-3.5 py-2 text-sm text-foreground">{m.text}</p></div>

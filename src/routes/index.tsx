@@ -55,7 +55,7 @@ function HomePage() {
   const heading = searchHeading(params);
   const homeResult = q.data && !q.data.unavailable ? { total: q.data.nearest ? 0 : q.data.total, ...(q.data.nearest ? { nearest: q.data.nearest } : {}), loading: q.isPlaceholderData || q.isFetching } : undefined;
   return (
-    <main className="pt-[calc(5rem+var(--pills-h,4rem))] pb-24 transition-[padding] duration-500 ease-out max-sm:px-4 md:pt-[calc(6.5rem+var(--pills-h,4rem))] lg:pt-[calc(4.5rem+var(--pills-h,5rem))]">
+    <main className="pt-[calc(var(--head-h,9.75rem)+1rem)] pb-24 max-sm:px-4 lg:pt-[calc(var(--head-h,11rem)+1.5rem)]">
       {/* Kept for search engines and screen readers only; nothing is shown to visitors. */}
       <div className="sr-only"><h1>{heading.title}</h1>{heading.subtitle && <p>{heading.subtitle}</p>}</div>
       {/* Phone: the search sheet (opened from the header bar or the Explore tab). Hidden on large screens, where the header carries the search. */}

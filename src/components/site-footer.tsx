@@ -26,7 +26,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[1fr_1.8fr] lg:gap-14">
           <div>
             <Link to="/" className="flex items-center gap-2 text-2xl font-extrabold text-primary">
-              <HodiiLogo size="h-8 w-8" />
+              <HodiiLogo outline size="h-8 w-8" />
               <span className="brand-word">{BRAND.wordmark}</span>
             </Link>
             <p className="mt-4 max-w-xs text-muted-foreground">

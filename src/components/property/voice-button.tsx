@@ -4,13 +4,13 @@ import { Loader2, Mic, Square } from "lucide-react";
 import { toast } from "sonner";
 import { transcribeVoice, voiceStatusQuery } from "@/lib/voice.functions";
 import { retry } from "@/lib/retry";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { POPUP_CARD, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const TYPES = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"];
 const toBase64 = (b: Blob) => new Promise<string>((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(",")[1] ?? ""); r.onerror = () => rej(r.error); r.readAsDataURL(b); });
 
 /** A microphone inside the search box: tap, speak, tap again. The words come back as text, so typing always remains the fallback. */
-export function VoiceButton({ onText }: { onText: (text: string) => void }) {
+export function VoiceButton({ onText, inline = false, className = "" }: { onText: (text: string) => void; /** Sits in the flow of a flex row instead of floating over the right edge of the field. */ inline?: boolean; className?: string }) {
   const qc = useQueryClient();
   const { data: status } = useQuery(voiceStatusQuery);
   const [state, setState] = useState<"idle" | "rec" | "busy">("idle");
@@ -136,17 +136,17 @@ export function VoiceButton({ onText }: { onText: (text: string) => void }) {
 
   return (<>
     <button ref={btn} type="button" onClick={state === "rec" ? stop : start} disabled={state === "busy"} aria-label={state === "rec" ? "Stop recording" : "Search by voice"} aria-pressed={state === "rec"} title={state === "rec" ? "Tap to stop" : "Speak your search"}
-      className={`voice-btn absolute right-1.5 top-1/2 inline-grid size-9 -translate-y-1/2 place-items-center rounded-full text-xs font-bold ${state === "rec" ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted"}`}>
+      className={`${inline ? "voice-btn-inline relative isolate size-9" : "voice-btn absolute right-1.5 top-1/2 size-9 -translate-y-1/2"} inline-grid shrink-0 place-items-center rounded-full text-xs font-bold ${state === "rec" ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted"} ${className}`}>
       {state === "busy" ? <Loader2 className="size-4 animate-spin" aria-hidden /> : state === "rec" ? <><span className="voice-ring" aria-hidden /><span className="voice-ring voice-ring-2" aria-hidden /><Mic className="relative size-5" aria-hidden /></> : <Mic className="size-5" aria-hidden />}
     </button>
     <Dialog open={info !== null} onOpenChange={(o) => { if (!o) setInfo(null); }}>
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className={`${POPUP_CARD} sm:max-w-md [&>*]:min-w-0`}>
+        <DialogHeader className="text-left">
           <DialogTitle>Voice search</DialogTitle>
           <DialogDescription className="sr-only">Why voice search did not start</DialogDescription>
         </DialogHeader>
         <div role="note" className="popup-note"><p className="font-bold">Not available right now</p><p className="mt-0.5 text-muted-foreground">{info}</p></div>
-        <button type="button" onClick={() => setInfo(null)} className="rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Got it</button>
+        <button type="button" onClick={() => setInfo(null)} className="mt-1 w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground">Got it</button>
       </DialogContent>
     </Dialog></>
   );

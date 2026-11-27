@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { VoiceButton } from "@/components/property/voice-button";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { COUNTY_OPTIONS } from "@/lib/pick-options";
 import { Pick } from "@/components/ui/pick";
@@ -35,7 +36,7 @@ function Developments() {
       <h1 className="text-2xl font-extrabold md:text-3xl">New developments</h1>
       <p className="mt-2 text-muted-foreground">Projects being planned, sold off-plan, built or just finished.</p>
       <form role="search" aria-label="Search developments" onSubmit={(e) => { e.preventDefault(); set({ q: String(new FormData(e.currentTarget).get("q") ?? "").trim() || undefined }); }} className="mt-6 flex flex-wrap gap-3">
-        <input name="q" type="search" defaultValue={search.q ?? ""} key={search.q ?? ""} placeholder="Project or area" aria-label="Project or area" className={`${field} min-w-48 flex-1`} />
+        <div className="relative min-w-48 flex-1"><input name="q" type="search" defaultValue={search.q ?? ""} key={search.q ?? ""} placeholder="Project or area" aria-label="Project or area" className={`${field} w-full pr-12`} /><VoiceButton onText={(t) => set({ q: t.trim() || undefined })} /></div>
         <Pick label="County" clearLabel="All counties" value={search.county ? String(search.county) : ""} onChange={(v) => set({ county: v ? Number(v) : undefined })} options={COUNTY_OPTIONS} searchable />
         <Pick label="Stage" clearLabel="Any stage" value={search.status ?? ""} onChange={(v) => set({ status: (v || undefined) as Search["status"] })} options={STATUSES.map(([k, l]) => ({ value: k, label: l }))} />
         <button className="h-11 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground">Search</button>

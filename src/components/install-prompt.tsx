@@ -4,8 +4,19 @@ import { Download, X } from "lucide-react";
 type InstallEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> };
 const KEY = "hodii-install-dismissed";
 
+/** Each ✕ hides the card for longer: 1 day, 1 week, 1 month, then 3 months every time after that. */
+const WAIT_DAYS = [1, 7, 30, 90] as const;
+type Dismissal = { t: number; n: number };
+function readDismissal(): Dismissal | null {
+  try {
+    const raw = localStorage.getItem(KEY); if (!raw) return null;
+    if (raw.startsWith("{")) { const d = JSON.parse(raw) as Partial<Dismissal>; return d.t && d.n ? { t: Number(d.t), n: Number(d.n) } : null; }
+    const t = Number(raw); return t > 0 ? { t, n: 1 } : null; // the older single-timestamp format counts as one dismissal
+  } catch { return null; }
+}
 function recentlyDismissed() {
-  try { const t = Number(localStorage.getItem(KEY)); return t > 0 && Date.now() - t < 14 * 864e5; } catch { return false; }
+  const d = readDismissal(); if (!d) return false;
+  return Date.now() - d.t < WAIT_DAYS[Math.min(d.n, WAIT_DAYS.length) - 1]! * 864e5;
 }
 
 /** One-tap "install the app" card. Android/desktop Chrome use the real install prompt; iPhone gets the Share steps. */
@@ -29,7 +40,7 @@ export function InstallPrompt() {
     return () => { window.clearTimeout(t); window.removeEventListener("hodii-install-help", onHelp); window.removeEventListener("beforeinstallprompt", onPrompt); window.removeEventListener("appinstalled", onInstalled); };
   }, []);
 
-  const close = () => { setShow(false); try { localStorage.setItem(KEY, String(Date.now())); } catch { /* private mode */ } };
+  const close = () => { setShow(false); try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), n: (readDismissal()?.n ?? 0) + 1 })); } catch { /* private mode */ } };
   if (!show || (!ev && !ios && !help)) return null;
 
   const install = async () => {

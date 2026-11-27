@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { VoiceButton } from "@/components/property/voice-button";
 import { useState, type ReactNode } from "react";
 import { ArrowRight, BadgeCheck, BookOpen, Building2, Check, FileText, Home, Mail, MapPin, Search, ShieldCheck, Sparkles, UserCog, Users, Wallet } from "lucide-react";
 import type { InfoPage, InfoPageSection } from "@/data/site-content";
@@ -318,7 +319,8 @@ export function SupportView({ slug, page }: { slug: string; page: InfoPage }) {
         {slug === "help-centre" && (
           <div className="rise mx-auto mt-8 flex max-w-xl items-center gap-3 rounded-full px-5 py-3.5 text-left text-foreground" style={{ background: "color-mix(in oklab, var(--paper) 92%, transparent)" }}>
             <Search className="h-5 w-5 opacity-50" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search for an answer" aria-label="Search the help centre" className="flex-1 bg-transparent outline-none" />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search for an answer" aria-label="Search the help centre" className="min-w-0 flex-1 bg-transparent outline-none" />
+            <VoiceButton inline className="-mr-2" onText={setQ} />
           </div>
         )}
       </PageHero>

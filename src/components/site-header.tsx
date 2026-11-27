@@ -209,7 +209,7 @@ export function SiteHeader() {
         <div id="site-menu" data-open={open} className="menu-panel site-menu-panel glass-menu pointer-events-auto mt-3 rounded-[1.75rem] lg:ml-auto lg:w-[34rem]"><div className="menu-scroll">
           {(isPropertyPage || explore) && (
             <div className={isPropertyPage ? "" : "md:hidden"}>
-              {isPropertyPage ? <div className="menu-title menu-title-row"><span>Account</span><button type="button" onClick={close} aria-label="Close menu" className="menu-close"><X className="size-5" aria-hidden /></button></div> : <p className="menu-title">Account</p>}
+              <div className="menu-title menu-title-row"><span>Account</span><button type="button" onClick={close} aria-label="Close menu" className="menu-close"><X className="size-5" aria-hidden /></button></div>
               <Link to={signedIn ? "/profile" : "/auth"} className={row} onClick={close}>{Tile(UserRound)}<span className="mr-auto">{signedIn ? "Your profile" : "Sign in or register"}</span>{Chev}</Link>
               {signedIn && <Link to="/notifications" className={row} onClick={close}>{Tile(Bell)}<span className="mr-auto">Notifications</span>{Chev}</Link>}
             </div>
@@ -222,15 +222,15 @@ export function SiteHeader() {
               : <Link key={n.label} to="/properties" search={n.search} className={row} onClick={close}>{Tile(ICONS[n.label] ?? Home)}<span className="mr-auto">{n.label}</span>{Chev}</Link>)}
           </div>
           <p className="menu-title">Browse by type</p>
-          <div className={isPropertyPage ? "grid" : "grid sm:grid-cols-2 sm:gap-x-2"}>
+          <div className="grid">
             {[...primaryCategories, ...moreCategories].map((c) => { const k = categorySearch(c); return k ? <Link key={c} to="/properties" search={k.search} className={row} onClick={close}>{Tile(ICONS[c] ?? Home)}<span className="mr-auto">{c}</span>{Chev}</Link> : null; })}
           </div>
           <p className="menu-title">More on {BRAND.name}</p>
-          <div className={isPropertyPage ? "grid" : "grid sm:grid-cols-2 sm:gap-x-2"}>
+          <div className="grid">
             <Link to="/agencies" className={row} onClick={close}>{Tile(Users)}<span className="mr-auto">Agents and developers</span>{Chev}</Link>
             <Link to="/tools" className={row} onClick={close}>{Tile(Calculator)}<span className="mr-auto">Calculators</span>{Chev}</Link>
-            <Link to="/compare" className={row} onClick={close}>{Tile(Scale)}<span className="mr-auto">Compare{compareCount ? ` (${compareCount})` : ""}</span>{Chev}</Link>
-            <Link to="/list-property" className={`${row} lg:hidden`} onClick={close}>{Tile(PlusCircle)}<span className="mr-auto">List a property</span>{Chev}</Link>
+            <Link to="/compare" className={`${row} ${compareCount ? "menu-link-active" : ""}`} onClick={close}><span className={`menu-tile ${compareCount ? "menu-tile-on" : ""} relative grid size-8 shrink-0 place-items-center rounded-lg`}><Scale className="size-4" aria-hidden />{compareCount > 0 && <span className="menu-count">{compareCount}</span>}</span><span className="mr-auto">Compare{compareCount ? ` (${compareCount})` : ""}</span>{Chev}</Link>
+            <Link to="/list-property" className="menu-cta lg:hidden" onClick={close}><PlusCircle className="size-5" aria-hidden /><span className="mr-auto">List a property</span><ArrowRight className="size-4" aria-hidden /></Link>
           </div>
         </div></div>
       </div>

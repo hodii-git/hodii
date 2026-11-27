@@ -1846,3 +1846,24 @@ html:root .tour-prompt .popup-note::before, html:root .popup-note.tour-note::bef
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
+
+/* ===== Batch: softer header line, tighter menu, locked background, compare/list-property in the menu ===== */
+html:root[data-listing-dark="1"] .wb.wb-site .solid-head, html:root[data-listing-dark="1"] .wb.wb-site .solid-head.glass-nav, html:root .wb.wb-site .solid-head.glass-nav.is-scrolled { border-bottom-color: rgb(255 255 255 / .045) !important; }
+/* The page behind any open popup or the menu does not scroll. */
+html:has(.site-menu-panel[data-open="true"]), html:has(body > [data-radix-popper-content-wrapper]), html:has([role="dialog"][data-state="open"]), html:has(.m-sheet[data-open="true"]) { overflow: hidden !important; }
+html:has(.site-menu-panel[data-open="true"]) body, html:has([role="dialog"][data-state="open"]) body, html:has(.m-sheet[data-open="true"]) body { overflow: hidden !important; }
+/* Menu: tighter top and bottom, the first line sits high. */
+.wb.wb-site .site-menu-panel > .menu-scroll { margin-block: .4rem !important; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 .35rem, #000 calc(100% - .5rem), transparent 100%) !important; mask-image: linear-gradient(to bottom, transparent 0, #000 .35rem, #000 calc(100% - .5rem), transparent 100%) !important; }
+.wb.wb-site .site-menu-panel > .menu-scroll > :first-child { padding-top: 0 !important; }
+.wb.wb-site .menu-title-row { margin-top: 0 !important; margin-bottom: .15rem !important; }
+.wb.wb-site .menu-title-row .menu-close { display: grid !important; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 9999px; background: rgb(255 255 255 / .09); color: #fff; transition: background .15s, transform .1s; }
+.wb.wb-site .menu-title-row .menu-close:hover { background: var(--brand-gradient); } .wb.wb-site .menu-title-row .menu-close:active { transform: scale(.92); }
+/* Compare in the menu lights up when something is waiting in it. */
+.wb.wb-site .site-menu-panel .menu-tile-on { background: var(--brand-gradient) !important; border-color: transparent !important; box-shadow: 0 0 0 0 rgb(253 38 122 / .5); animation: tile-ping 2s ease-out infinite; }
+.wb.wb-site .site-menu-panel .menu-tile-on svg { color: #fff !important; }
+.menu-count { position: absolute; right: -.35rem; top: -.35rem; display: grid; place-items: center; min-width: 1rem; height: 1rem; padding: 0 .2rem; border-radius: 9999px; background: #fff; color: #111; font-size: .62rem; font-weight: 800; line-height: 1; }
+.wb.wb-site .site-menu-panel .menu-link-active { background: linear-gradient(135deg, rgb(253 38 122 / .16), rgb(255 96 54 / .10)); border-radius: .9rem; }
+@keyframes tile-ping { 0% { box-shadow: 0 0 0 0 rgb(253 38 122 / .55); } 70%, 100% { box-shadow: 0 0 0 .55rem rgb(253 38 122 / 0); } }
+@media (prefers-reduced-motion: reduce) { .wb.wb-site .site-menu-panel .menu-tile-on { animation: none; } }
+.menu-cta { display: flex; align-items: center; gap: .75rem; margin: .5rem .25rem .25rem; padding: .85rem 1rem; border-radius: 9999px; background: var(--brand-gradient); color: #fff !important; font-weight: 700; box-shadow: 0 8px 22px -10px rgb(253 38 122 / .7); transition: transform .12s, filter .15s; }
+.menu-cta:hover { filter: brightness(1.08); } .menu-cta:active { transform: scale(.97); }

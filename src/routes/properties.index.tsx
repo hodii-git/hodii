@@ -1,3 +1,4 @@
+import { PROPERTY_TYPES } from "@/lib/mongodb/taxonomy";
 import { PropertyGridSkeleton } from "@/components/property/property-card";
 import { CLEAR_ALL } from "@/lib/criteria-chips";
 import { LoaderBlock } from "@/components/loader";
@@ -59,6 +60,13 @@ function PropertiesPage() {
   const result = q.data;
   const updating = q.isPlaceholderData || (q.isFetching && !!result);
   const heading = searchHeading(params);
+  // "3 properties in Kenya for rent in Kiambu": the number leads the title once results are in.
+  const total = !result || result.unavailable ? null : result.nearest ? 0 : result.total;
+  const countTitle = total === null ? heading.title : (() => {
+    const t = heading.title; const one = total === 1;
+    const lead = t.replace(/^(\d+\+ bedroom )?(\S+)/, (_m, b: string | undefined, w: string) => `${b ?? ""}${one ? (PROPERTY_TYPES.find((x) => x.plural === w)?.label ?? (w === "Properties" ? "Property" : w)) : w}`);
+    return `${total.toLocaleString("en-KE")} ${lead.charAt(0).toLowerCase()}${lead.slice(1)}`;
+  })();
   const aiResult = result && !result.unavailable ? { total: result.nearest ? 0 : result.total, ...(result.nearest ? { nearest: result.nearest } : {}), loading: updating } : undefined;
   const map = search.view === "map";
   const [wide, setWide] = useState(false);
@@ -81,12 +89,11 @@ function PropertiesPage() {
       </aside>}
       <div className="min-w-0">
       <div className="mb-4 lg:mb-5"><ExploreBar value={params} onChange={change} result={aiResult} /></div>
-      <div className="mb-4">
-        <h1 title={heading.title} className="line-clamp-2 font-display text-2xl font-extrabold leading-tight sm:line-clamp-1 sm:text-3xl">{heading.title}</h1>
-        {heading.subtitle && <p className="mt-1 text-sm text-muted-foreground sm:text-base">{heading.subtitle}</p>}
+      <div className="-mt-1 mb-3">
+        <h1 title={countTitle} className="line-clamp-1 font-display text-xl font-extrabold leading-tight">{countTitle}</h1>
+        {heading.subtitle && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{heading.subtitle}</p>}
       </div>
-      <div className="-mt-7 flex flex-nowrap items-center gap-2 overflow-x-auto pb-2 pt-9 [scrollbar-width:none] sm:gap-3 [&::-webkit-scrollbar]:hidden">
-        <p className="mr-auto shrink-0 whitespace-nowrap text-sm font-semibold text-muted-foreground" aria-live="polite">{!result || result.unavailable ? "" : `${(result.nearest ? 0 : result.total).toLocaleString("en-KE")} ${(result.nearest ? 0 : result.total) === 1 ? "property" : "properties"}`}</p>
+      <div className="flex flex-nowrap items-center justify-end gap-2 overflow-x-auto pb-2 pt-1 [scrollbar-width:none] sm:gap-3 [&::-webkit-scrollbar]:hidden">
         <span data-tour="layout" className="inline-flex"><LayoutPill /></span>
         <SaveSearchButton params={params} />
         <ShareButton title={heading.title} />

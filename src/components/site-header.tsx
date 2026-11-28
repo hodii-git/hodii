@@ -61,6 +61,9 @@ function ExtraRows({ search, phoneRow }: { search: boolean; phoneRow: ReactNode 
  * Drives the solid header. --sp (0 to 1) is how far the header has collapsed: it grows as you scroll down and shrinks as you scroll up,
  * eased so it never jumps. --head-h is the real height of the header, so the page below always starts exactly under it.
  */
+/** Where the remembered header height lives. The same expression runs in the boot script in the document head. */
+const HEAD_KEY = () => `hodii.hh:${location.pathname}:${innerWidth < 768 ? "p" : innerWidth < 1024 ? "m" : "l"}`;
+
 function useHeaderScroll(el: RefObject<HTMLDivElement | null>, on: boolean) {
   useEffect(() => {
     const node = el.current;
@@ -81,7 +84,12 @@ function useHeaderScroll(el: RefObject<HTMLDivElement | null>, on: boolean) {
       target = y < 24 ? 0 : Math.min(1, Math.max(0, target + dy / (phone.matches ? 130 : 240)));
       kick();
     };
-    const size = () => document.documentElement.style.setProperty("--head-h", `${node.getBoundingClientRect().height}px`);
+    const size = () => {
+      const h = node.getBoundingClientRect().height;
+      document.documentElement.style.setProperty("--head-h", `${h}px`);
+      // The expanded height is remembered per page and screen size, so the next load puts the content exactly where it will end up (no jump).
+      try { if (window.scrollY < 24 && h > 0) localStorage.setItem(HEAD_KEY(), String(Math.round(h))); } catch { /* ignore */ }
+    };
     const ro = new ResizeObserver(size); ro.observe(node); size();
     paint();
     window.addEventListener("scroll", onScroll, { passive: true });

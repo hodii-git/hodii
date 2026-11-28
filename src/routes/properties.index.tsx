@@ -65,8 +65,9 @@ function PropertiesPage() {
   const countTitle = total === null ? heading.title : (() => {
     const t = heading.title; const one = total === 1;
     const lead = t.replace(/^(\d+\+ bedroom )?(\S+)/, (_m, b: string | undefined, w: string) => `${b ?? ""}${one ? (PROPERTY_TYPES.find((x) => x.plural === w)?.label ?? (w === "Properties" ? "Property" : w)) : w}`);
-    return `${total.toLocaleString("en-KE")} ${lead.charAt(0).toLowerCase()}${lead.slice(1)}`;
+    return `${lead.charAt(0).toLowerCase()}${lead.slice(1)}`;
   })();
+  const countBadge = total === null ? null : total.toLocaleString("en-KE");
   const aiResult = result && !result.unavailable ? { total: result.nearest ? 0 : result.total, ...(result.nearest ? { nearest: result.nearest } : {}), loading: updating } : undefined;
   const map = search.view === "map";
   const [wide, setWide] = useState(false);
@@ -91,7 +92,7 @@ function PropertiesPage() {
       <div className="mb-4 lg:mb-5"><ExploreBar value={params} onChange={change} result={aiResult} /></div>
       <div className="-mt-1 mb-3 md:flex md:items-end md:justify-between md:gap-4">
         <div className="min-w-0">
-          <h1 title={countTitle} className="line-clamp-1 font-display text-xl font-extrabold leading-tight">{countTitle}</h1>
+          <h1 title={`${countBadge ? countBadge + " " : ""}${countTitle}`} className="flex items-center gap-2.5 font-display text-xl font-extrabold leading-tight">{countBadge && <span className="count-chip" aria-label={`${countBadge} results`}>{countBadge}</span>}<span className="line-clamp-1 min-w-0">{countBadge ? countTitle : heading.title}</span></h1>
           {heading.subtitle && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{heading.subtitle}</p>}
         </div>
         <div className="flex flex-nowrap items-center justify-end gap-2 overflow-x-auto pb-1 pt-3 [scrollbar-width:none] md:shrink-0 md:pt-0 sm:gap-3 [&::-webkit-scrollbar]:hidden">

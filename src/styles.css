@@ -1880,7 +1880,8 @@ html:has(.site-menu-panel[data-open="true"]) body, html:has([role="dialog"][data
   .ph-r1-in { height: var(--r1); }
   .solid-head[data-collapsed] .ph-r1 { pointer-events: none; }
   .ph-menu { position: absolute; right: .5rem; top: .875rem; width: 2.5rem; height: 2.5rem; z-index: 3; }
-  .ph-ai { width: calc(2.75rem * (1 - var(--sp, 0))); margin-left: calc(-.625rem * var(--sp, 0)); opacity: calc(1 - var(--sp, 0) * 2.2); overflow: hidden; pointer-events: auto; }
+  .ph-ai { width: calc(2.75rem * (1 - var(--sp, 0))); height: calc(2.75rem * (1 - var(--sp, 0))); margin-left: calc(-.625rem * var(--sp, 0)); opacity: calc(1 - var(--sp, 0) * 1.6); overflow: visible; pointer-events: auto; }
+  .ph-ai > svg { transform: scale(calc(1 - var(--sp, 0))); }
   .solid-head[data-collapsed] .ph-ai { pointer-events: none; }
   /* On scroll the icon lines (not the button) take the gradient: a second gradient-stroked copy fades in over the white one. */
   .ph-filter > svg { position: relative; }
@@ -2007,3 +2008,18 @@ html:root:has(.props-page) .ld-pill:not(.ld-pill-on) { border-color: transparent
 .ai-chat .chip-quiet::before { content: "+"; font-weight: 800; font-size: 1rem; line-height: 1; background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; flex: none; margin-right: .1rem; }
 .ai-chat .chip-quiet.chip-changed::before { content: "\21BB"; font-size: .9rem; }
 .ai-chat .chip-quiet.chip-removed::before { content: "\2212"; background: none; color: #a1a1aa; -webkit-text-fill-color: #a1a1aa; }
+
+/* Whatever follows a page hero paints above the hero's tall fading picture, so the first lines of a page are never covered by it. */
+.page-hero + * { position: relative; z-index: 1; }
+
+/* The result count sits left of the title as a small gradient badge, so it can never read as part of the title ("1 2+ bedroom..."). */
+.count-chip { display: inline-grid; place-items: center; flex: none; min-width: 1.75rem; height: 1.75rem; padding: 0 .5rem; border-radius: 9999px; background: var(--brand-gradient); color: #fff; font-size: .85rem; font-weight: 800; line-height: 1; }
+
+/* Send and mic: the arrow is solid white on the gradient; the mic glyph carries the gradient. Both react to hover and press. */
+html:root .send-icon.send-icon svg { color: #fff !important; stroke: #fff !important; opacity: 1 !important; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .25)); }
+html:root .ai-mic .voice-btn svg, html:root .voice-btn svg { stroke: url(#hodii-grad) !important; color: transparent; }
+html:root .ai-mic .voice-btn { background: rgb(255 255 255 / .08) !important; transition: background .15s, transform .1s, box-shadow .15s; }
+html:root .ai-mic .voice-btn:hover { background: rgb(255 255 255 / .16) !important; box-shadow: 0 6px 16px -8px rgb(253 38 122 / .8); transform: scale(1.06); }
+html:root .ai-mic .voice-btn:active { transform: scale(.92); }
+html:root .voice-btn[data-state="rec"] { background: var(--brand-gradient) !important; }
+html:root .voice-btn[data-state="rec"] svg { stroke: #fff !important; }

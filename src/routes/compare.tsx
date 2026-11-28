@@ -45,10 +45,10 @@ function Compare() {
         <div className="info-card mt-2"><p className="font-semibold">Nothing to compare yet.</p><p className="mt-1 text-sm text-muted-foreground">Use the Compare button on a listing, then come back here.</p><Link to="/properties" className="mt-4 inline-block rounded-full bg-primary px-5 py-2 font-bold text-primary-foreground">Browse properties</Link></div>
       ) : isPending ? <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-busy="true" aria-label="Loading comparison">{Array.from({ length: Math.max(2, ids.length) }, (_, i) => <div key={i} className="h-64 animate-pulse rounded-2xl bg-muted" />)}</div> : !data?.length ? <p className="mt-8">These listings are no longer available.</p> : (
         <div className="mt-8 w-full max-w-full overflow-x-auto">
-          <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: `${7.5 + data.length * 13}rem` }}>
+          <table className="w-full table-auto border-separate border-spacing-0 text-sm">
             <thead>
-              <tr><th className="w-[7.5rem] p-2" />{data.map((p) => (
-                <th key={p.id} scope="col" className="min-w-[13rem] p-2 text-left align-top font-normal">
+              <tr><th className="w-[5.25rem] p-1 sm:w-[7.5rem] sm:p-2" />{data.map((p) => (
+                <th key={p.id} scope="col" className="min-w-[8.5rem] p-1.5 text-left align-top font-normal sm:min-w-[13rem] sm:p-2">
                   <div className="surface group relative overflow-hidden rounded-2xl transition">
                     <Link to="/property/$slug" params={{ slug: p.slug }} className="absolute inset-0 z-0" aria-label={p.title} />
                     {p.image ? <img src={p.image.thumbUrl ?? p.image.url} alt={p.image.alt || p.title} loading="lazy" className="aspect-[4/3] w-full object-cover" /> : <div className="aspect-[4/3] w-full bg-muted" />}
@@ -60,8 +60,8 @@ function Compare() {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.label} className="odd:bg-[color-mix(in_oklab,var(--ink)_4%,transparent)]">
-                  <th scope="row" className="p-3 pl-2 text-left text-xs font-bold uppercase text-muted-foreground">{r.label}</th>
-                  {data.map((p) => <td key={p.id} className="p-3">{r.value(p)}</td>)}
+                  <th scope="row" className="p-2 pl-2 text-left text-[0.65rem] font-bold uppercase text-muted-foreground sm:p-3 sm:text-xs">{r.label}</th>
+                  {data.map((p) => <td key={p.id} className="p-2 text-[0.85rem] sm:p-3 sm:text-sm">{r.value(p)}</td>)}
                 </tr>))}
             </tbody>
           </table>

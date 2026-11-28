@@ -162,6 +162,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang={BRAND.locale} data-listing-dark="1" style={{ backgroundColor: THEME.background, colorScheme: "dark" }} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+        <script dangerouslySetInnerHTML={{ __html: `try{var h=localStorage.getItem("hodii.hh:"+location.pathname+":"+(innerWidth<768?"p":innerWidth<1024?"m":"l"));if(h)document.documentElement.style.setProperty("--head-h",h+"px")}catch(e){}` }} />
         <HeadContent />
       </head>
       <body>

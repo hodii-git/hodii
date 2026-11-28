@@ -59,7 +59,7 @@ export function scopeText(scopes: Scope[]) {
 type GeoFilters = { countyCodes?: number[] | undefined; circle?: { lat: number; lng: number; radiusM: number } | undefined; polygon?: undefined };
 
 /** "Showing listings near …" with a frosted Change pill. Choices also fill the search filters when onFilters is given. */
-export function LocationBar({ label, onChange, onFilters }: { label: string | null; onChange: (p: HomePlace | null) => void; onFilters?: (f: GeoFilters) => void }) {
+export function LocationBar({ label, onChange, onFilters, withLayout = true, compact = false }: { label: string | null; onChange: (p: HomePlace | null) => void; onFilters?: (f: GeoFilters) => void; /** Show the card layout pill beside it (the default). */ withLayout?: boolean; /** On phones show only the pin, so it fits in a row of icons. */ compact?: boolean }) {
   const [open, setOpen] = useState(false);
   const anchor = useRef<HTMLDivElement>(null);
   const locate = () => {
@@ -74,13 +74,13 @@ export function LocationBar({ label, onChange, onFilters }: { label: string | nu
     );
   };
   return (
-    <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start">
+    <div className={withLayout ? "flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start" : "inline-flex shrink-0"}>
     <div ref={anchor} className="relative min-w-0">
-      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className={`glass-menu pill-lift group inline-flex h-10 items-center gap-2 rounded-full pl-2 pr-4 text-sm ${open ? "ring-2 ring-ring/30" : ""}`}>
+      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-label={`Location: ${label ?? "All of Kenya"}`} className={`glass-menu pill-lift group inline-flex h-10 items-center gap-2 rounded-full pl-2 pr-4 text-sm ${compact ? "max-sm:w-10 max-sm:justify-center max-sm:gap-0 max-sm:p-0" : ""} ${open ? "ring-2 ring-ring/30" : ""}`}>
         <span className="grid size-7 place-items-center rounded-full bg-foreground text-background"><MapPin className="size-3.5" aria-hidden /></span>
-        <span className="text-muted-foreground">Near</span>
-        <strong className="max-w-[12rem] truncate font-semibold">{label ?? "All of Kenya"}</strong>
-        <ChevronDown className={`size-4 text-muted-foreground transition ${open ? "rotate-180" : ""}`} aria-hidden />
+        <span className={`text-muted-foreground ${compact ? "max-sm:hidden" : ""}`}>Near</span>
+        <strong className={`max-w-[12rem] truncate font-semibold ${compact ? "max-sm:hidden" : ""}`}>{label ?? "All of Kenya"}</strong>
+        <ChevronDown className={`size-4 text-muted-foreground transition ${compact ? "max-sm:hidden" : ""} ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
       <FloatingPanel anchor={anchor} open={open} onClose={() => setOpen(false)} minWidth={300} className="!rounded-3xl !p-3">
         <div role="group" aria-label="Choose where to look" className="space-y-2">
@@ -94,7 +94,7 @@ export function LocationBar({ label, onChange, onFilters }: { label: string | nu
         </div>
       </FloatingPanel>
     </div>
-    <LayoutPill />
+    {withLayout && <LayoutPill />}
     </div>
   );
 }

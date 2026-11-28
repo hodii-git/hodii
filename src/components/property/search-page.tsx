@@ -9,6 +9,8 @@ import { ViewPill } from "@/components/property/view-pill";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { searchHeading } from "@/lib/search-title";
 import { Pick } from "@/components/ui/pick";
+import { LocationBar } from "@/components/property/near-you";
+import { COUNTY_LIST } from "@/lib/mongodb/kenya";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { HomeSearch } from "@/components/home/home-search";
 import { ExploreBar } from "@/components/property/explore-bar";
@@ -45,6 +47,9 @@ export function SearchPage({ search, go }: { search: SearchUrl; go: (s: SearchUr
   const setView = (v: "list" | "map") => go({ ...urlFromParams(params), ...(v === "map" ? { view: "map" } : {}) });
   // Drawing a new area replaces the old one; an empty object clears it.
   const setGeo = (g: Pick<SearchParams, "circle" | "polygon">) => change({ circle: undefined, polygon: undefined, ...g, page: 1 });
+  // What the location dropdown says it is looking near.
+  const countyName = params.countyCodes?.[0] ? COUNTY_LIST.find((c) => c.code === params.countyCodes![0])?.name : undefined;
+  const placeLabel = params.circle ? "you" : params.polygon ? "your drawn area" : countyName ?? null;
 
   return (
     <main className="props-page pt-[calc(var(--head-h,9.75rem)+1rem)] pb-24 max-sm:px-4 lg:pt-[calc(var(--head-h,11rem)+1.5rem)]">
@@ -65,11 +70,12 @@ export function SearchPage({ search, go }: { search: SearchUrl; go: (s: SearchUr
           <h1 title={`${countBadge ? countBadge + " " : ""}${countTitle}`} className="flex items-center gap-2.5 font-display text-xl font-extrabold leading-tight">{countBadge && <span className="count-chip" aria-label={`${countBadge} results`}>{countBadge}</span>}<span className="line-clamp-1 min-w-0">{countBadge ? countTitle : heading.title}</span></h1>
           {heading.subtitle && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{heading.subtitle}</p>}
         </div>
-        <div className="flex flex-nowrap items-center justify-end gap-2 overflow-x-auto pb-1 pt-3 [scrollbar-width:none] md:shrink-0 md:pt-0 sm:gap-3 [&::-webkit-scrollbar]:hidden">
+        <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto pb-1 pt-3 [scrollbar-width:none] md:shrink-0 md:justify-end md:pt-0 sm:gap-3 [&::-webkit-scrollbar]:hidden">
           <span data-tour="layout" className="inline-flex"><LayoutPill /></span>
           <SaveSearchButton params={params} />
           <ShareButton title={heading.title} />
-          <div className="w-36 shrink-0 sm:w-44"><Pick label="Sort by" pillText="Sort by" value={params.sort} onChange={(v) => change({ sort: v as SearchParams["sort"], page: 1 })} options={SORTS.map(([k, l]) => ({ value: k, label: l }))} className="h-10" /></div>
+          <LocationBar withLayout={false} compact label={placeLabel} onChange={() => undefined} onFilters={(f) => change({ ...f, page: 1 })} />
+          <div className="w-28 shrink-0 sm:w-44"><Pick label="Sort by" pillText="Sort by" value={params.sort} onChange={(v) => change({ sort: v as SearchParams["sort"], page: 1 })} options={SORTS.map(([k, l]) => ({ value: k, label: l }))} className="h-10" /></div>
         </div>
       </div>
       {!map && (params.circle || params.polygon) && (

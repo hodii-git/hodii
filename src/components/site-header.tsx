@@ -20,7 +20,7 @@ type NavItem =
   | { label: string; to: "/"; search: Record<string, string>; on: (p: string, s: string) => boolean }
   | { label: string; to: "/developments" | "/neighbourhoods"; search?: undefined; on: (p: string, s: string) => boolean };
 /** The pill look shared with the listing page's top bar. */
-const PILL = "ld-pill shrink-0 whitespace-nowrap !h-11 !text-[0.95rem]";
+const PILL = "ld-pill shrink-0 whitespace-nowrap";
 
 const NAV: NavItem[] = [
   { label: "For sale", to: "/", search: { for: "sale" }, on: (p, s) => p.startsWith("/") && s.includes("for=sale") },
@@ -225,7 +225,7 @@ export function SiteHeader() {
         )}
         <header data-tour="search" className={`${solid ? "" : "pointer-events-auto glass-nav hk-co"} ${isPropertyPage ? "max-lg:hidden" : explore ? "max-md:hidden" : ""} grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-4 ${solid ? "px-4 lg:min-h-[var(--hdr-row)]" : "pl-5 pr-2.5"} ${solid ? "lg:grid-cols-[1fr_auto_1fr]" : "lg:grid-cols-[auto_1fr_auto]"} lg:px-6 ${!solid && on ? "is-scrolled" : ""}`}>
           <Link to="/" className="logo flex min-w-0 items-center gap-2.5 text-foreground" aria-label={`${BRAND.name} home`}>
-            <span className="lg:hidden"><HodiiLogo outline size="h-9 w-9" /></span><span className="max-lg:hidden"><HodiiLogo /></span>
+            <HodiiLogo outline size="h-9 w-9 lg:h-10 lg:w-10" />
             <span className="brand-word max-sm:hidden truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
           </Link>
           <nav aria-label="Main" className={`hdr-nav hidden lg:flex items-center justify-center gap-7 text-[0.875rem] font-medium text-foreground/80`}>

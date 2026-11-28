@@ -1,14 +1,15 @@
 import { useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Heart, Home, MessageCircle, UserRound } from "lucide-react";
+import { Heart, Home, MessageCircle, Scale, UserRound } from "lucide-react";
+import { useCompare } from "@/lib/compare";
 import { getTabBadges } from "@/lib/notifications.functions";
 import { useAuthReturn } from "@/lib/auth-return";
 import { useAuth } from "@/hooks/use-auth";
 import { isSearchPage, setSheet, toggleSheet, useSheetOpen } from "@/lib/search-sheet";
 
 /**
- * Phone-only bottom bar used across the whole app: Home, Saved, Inquiries, Profile. It stays fixed at the bottom
+ * Phone-only bottom bar used across the whole app: Home, Compare, Saved, Inquiries, Profile. It stays fixed at the bottom
  * the whole time, like the one in the dashboards.
  */
 export function MobileTabBar() {
@@ -16,6 +17,7 @@ export function MobileTabBar() {
   const { user } = useAuth();
   const signedIn = !!user;
   const sheet = useSheetOpen();
+  const compareCount = useCompare().length;
   const back = useAuthReturn();
   useEffect(() => { if (!isSearchPage(path)) setSheet(false); }, [path]);
   const nav = useRef<HTMLElement>(null);
@@ -47,6 +49,7 @@ export function MobileTabBar() {
   // On a listing page the person is looking at one property, so no tab is lit.
   const on = {
     home: !isPropertyPage && path === "/",
+    compare: !isPropertyPage && path.startsWith("/compare"),
     saved: !isPropertyPage && path.startsWith("/saved"),
     inquiries: !isPropertyPage && path.startsWith("/notifications"),
     profile: !isPropertyPage && (path.startsWith("/profile") || path.startsWith("/auth")),
@@ -68,6 +71,13 @@ export function MobileTabBar() {
     <nav ref={nav} aria-label="Main" data-floating className="mobile-tabbar mobile-tabbar-dark fixed inset-x-0 bottom-0 z-[45] flex items-center justify-around border-t border-white/10 bg-black px-1 pb-[env(safe-area-inset-bottom)] md:hidden">
       <Link to="/" className={item(on.home)} aria-current={current(on.home)}>
         <Home {...ico(on.home)} className={`size-[22px] fill-current ${on.home ? "text-primary" : ""}`} />Home
+      </Link>
+      <Link to="/compare" className={item(on.compare)} aria-current={current(on.compare)}>
+        <span className="relative">
+          <Scale {...ico(on.compare)} />
+          {compareCount > 0 && <span className="absolute -right-3 -top-2 grid min-w-[1.15rem] place-items-center rounded-full bg-[#fbbf24] px-1 text-[0.6rem] font-extrabold leading-[1.1rem] text-black" aria-label={`${compareCount} to compare`}>{compareCount}</span>}
+        </span>
+        Compare
       </Link>
       <Link to="/saved" className={item(on.saved)} aria-current={current(on.saved)}>
         <span className="relative">

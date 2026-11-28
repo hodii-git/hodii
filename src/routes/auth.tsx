@@ -149,7 +149,7 @@ function AuthPage() {
             </button>
           ))}
         </div>}
-        <h1 className="mt-6 text-center text-3xl font-normal">{mode === "signin" ? <>Welcome back <WaveHand /></> : mode === "recover" ? "Reset your password" : <>Join Hodii <WaveHand /></>}</h1>
+        <h1 className="auth-greeting mt-6 text-center text-3xl">{mode === "signin" ? <>Welcome back <WaveHand /></> : mode === "recover" ? "Reset your password" : <>Join Hodii <WaveHand /></>}</h1>
         <p className="mt-2 text-center text-sm text-muted-foreground">{mode === "signin" ? "Pick up where you left off." : mode === "recover" ? "Use one of the recovery codes you saved when you signed up." : "Save properties, send enquiries and list your own."}</p>
         <form onSubmit={submit} noValidate className="mt-6 grid gap-4">
           {mode === "signup" && (

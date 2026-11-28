@@ -1830,9 +1830,6 @@ html:root :is(.home-search .input-glass):focus-within { box-shadow: none !import
 .popup-scroll { min-width: 0; overflow-x: clip; }
 .popup-scroll > * { min-width: 0; max-width: 100%; }
 
-/* ===== Top pills: pure black like the site; the active one is told apart by a brighter edge and white text ===== */
-html:root .ld-pill, html:root[data-listing-dark="1"] .ld-pill { background: #000 !important; }
-html:root .ld-pill-on, html:root[data-listing-dark="1"] .ld-pill-on { background: #000 !important; border-color: rgb(255 255 255 / .55) !important; color: #fff !important; }
 
 /* ===== Guide card note: glassy, still clearly the pink-to-orange gradient: a see-through gradient fill with a gradient edge ===== */
 html:root .tour-prompt .popup-note, html:root[data-listing-dark="1"] .tour-prompt .popup-note, html:root .popup-note.tour-note {
@@ -1892,9 +1889,6 @@ html:has(.site-menu-panel[data-open="true"]) body, html:has([role="dialog"][data
 .hdr-search-go svg { width: calc(var(--bar-h) * .34) !important; height: calc(var(--bar-h) * .34) !important; }
 .hdr-search .voice-btn-inline { width: calc(var(--bar-h) - .9rem); height: calc(var(--bar-h) - .9rem); }
 .hdr-search .voice-btn-inline svg { width: calc(var(--bar-h) * .32); height: calc(var(--bar-h) * .32); }
-/* The top pills: a soft dark surface with a faint edge (pure black read too heavy). */
-html:root .ld-pill, html:root[data-listing-dark="1"] .ld-pill { background: #141417 !important; border: 1px solid rgb(255 255 255 / .09) !important; }
-html:root .ld-pill-on, html:root[data-listing-dark="1"] .ld-pill-on { background: #1d1d22 !important; border-color: rgb(255 255 255 / .5) !important; color: #fff !important; }
 
 /* ===== Life for the popups and every search control: gradient accents, soft glow, real hover and press effects ===== */
 .fbadge { position: absolute; right: -.45rem; top: -.4rem; display: grid; place-items: center; min-width: .95rem; height: .95rem; padding: 0 .22rem; border-radius: 9999px; background: var(--brand-gradient); color: #fff; font-size: .58rem; font-weight: 800; line-height: 1; box-shadow: 0 0 0 1.5px rgb(0 0 0 / .55); pointer-events: none; }
@@ -1947,9 +1941,8 @@ html:root :is(.hdr-search-go, [role="search"] button[type="submit"]):not(.send-i
 html:root [role="search"] button[aria-label^="Clear"]:hover { background: rgb(253 38 122 / .22); }
 /* Every pill, chip and header button reacts: lift on hover, press on click, gradient edge when active. */
 html:root :is(.ld-pill, .xbtn, .ask-ai-btn, .tool-btn, .view-pill, .pill-soft) { transition: transform .12s, border-color .15s, background .15s, box-shadow .15s; }
-html:root :is(.ld-pill, .xbtn):hover { border-color: rgb(253 38 122 / .55) !important; box-shadow: 0 6px 18px -10px rgb(253 38 122 / .8); }
+html:root .xbtn:hover { border-color: rgb(253 38 122 / .55) !important; box-shadow: 0 6px 18px -10px rgb(253 38 122 / .8); }
 html:root :is(.ld-pill, .xbtn, .ask-ai-btn):active { transform: scale(.95); }
-html:root .ld-pill-on { border-color: transparent !important; background: linear-gradient(#1b1b20, #1b1b20) padding-box, var(--brand-gradient) border-box !important; border: 1.5px solid transparent !important; }
 /* Large-screen Filters and Ask AI buttons: a visible hairline, gradient on hover. */
 html:root .xbtn { background: #141417; border-color: rgb(255 255 255 / .16); }
 html:root .ask-ai-btn { transition: transform .12s, filter .15s; } html:root .ask-ai-btn:hover { filter: brightness(1.15); }
@@ -1994,7 +1987,6 @@ html:root .fcard { background-color: color-mix(in oklab, var(--foreground) 4%, t
 /* Properties page: no border lines. The active pill keeps its gradient edge. */
 html:root .props-page :is(.border, [class*="border-"], .seg-pill, .xbtn, .surface, .tool-btn, .pill-soft, .empty-card, .glass-menu, .close-circle):not([class*="border-dashed"]):not([class*="border-primary"]):not(.leaflet-container *) { border-color: transparent !important; }
 html:root:has(.props-page) .solid-head, html:root:has(.props-page) .wb.wb-site .solid-head.glass-nav { border-bottom-color: transparent !important; }
-html:root:has(.props-page) .ld-pill:not(.ld-pill-on) { border-color: transparent !important; }
 
 /* AI sparkles always carry the brand gradient; chat answers are a plain card, with quiet chips (the gradient only marks the symbol). */
 .ai-star, .ai-chat .ai-log svg.ai-star { stroke: url(#hodii-grad) !important; color: transparent; }
@@ -2023,3 +2015,18 @@ html:root .ai-mic .voice-btn:hover { background: rgb(255 255 255 / .16) !importa
 html:root .ai-mic .voice-btn:active { transform: scale(.92); }
 html:root .voice-btn[data-state="rec"] { background: var(--brand-gradient) !important; }
 html:root .voice-btn[data-state="rec"] svg { stroke: #fff !important; }
+
+
+/* ===== Round pills (the sale / rent / type pills in the header and the top bar of a listing page): one look everywhere =====
+   A soft dark surface with a faint edge. The active pill has the same surface and edge: it is told apart only by white, slightly
+   heavier text (no tint, no coloured edge). Inside the header, whose own surface is about as dark, the pills sit a step lighter. */
+html:root .ld-pill { background: #141417 !important; border: 1px solid rgb(255 255 255 / .09) !important; color: #d4d4d8 !important; }
+html:root .ld-pill-on, html:root .ld-pill[aria-pressed="true"] { color: #fff !important; font-weight: 600; }
+html:root .solid-head .ld-pill { background: #27272b !important; }
+@media (hover: hover) { html:root .ld-pill:hover { border-color: rgb(255 255 255 / .22) !important; box-shadow: none; } }
+
+/* Sign-in and sign-up greetings ("Welcome back", "Join ...") are light, not heavy. */
+.auth-greeting { font-weight: 500; letter-spacing: -0.01em; }
+
+/* Phone: listing cards get a little more room at the screen edges so nothing on the first and last column touches or is cut by the edge. */
+@media (max-width: 639px) { .card-cq { padding-inline: 5px; } }

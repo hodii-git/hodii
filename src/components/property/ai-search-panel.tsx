@@ -19,6 +19,9 @@ export const pickCriteria = (p: Partial<SearchParams>) => Object.fromEntries(CRI
 export const replaceCriteria = (c: Record<string, unknown>): Partial<SearchParams> => ({ ...Object.fromEntries(CRITERIA_KEYS.map((k) => [k, undefined])), ...c, page: 1 }) as Partial<SearchParams>;
 
 /** What the page found for the latest message, so the chat can say it in words. */
+const CHAT_KEY = "hodii.ai-chat.v1";
+const sameCriteria = (a: Record<string, unknown> | undefined, b: Record<string, unknown>) => JSON.stringify(a ?? {}, Object.keys(a ?? {}).sort()) === JSON.stringify(b, Object.keys(b).sort());
+
 export type AiResult = { total: number; nearest?: string[]; loading: boolean } | undefined;
 
 type Msg =
@@ -69,6 +72,29 @@ export function useAiSearch({ value, onApply, result }: Props) {
   });
   const resultRef = useRef(result); resultRef.current = result;
 
+  // The last conversation is kept on this device for as long as its filters are still the active ones, so leaving the page,
+  // closing the popup or reloading never loses it. Clearing the filters (or "New search") forgets it.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(CHAT_KEY); if (!raw) return;
+      const s = JSON.parse(raw) as { msgs: Msg[]; history: Turn[]; criteria: Record<string, unknown> };
+      if (!s.msgs?.length || sameCriteria(s.criteria, pickCriteria(latest.current))) {
+        if (!s.msgs?.length) return;
+        history.current = s.history ?? []; mine.current = s.criteria ?? {}; fresh.current = false;
+        id.current = Math.max(0, ...s.msgs.map((m) => m.id));
+        setMsgs(s.msgs);
+      } else localStorage.removeItem(CHAT_KEY);
+    } catch { /* storage unavailable: the chat just starts empty */ }
+  }, []);
+  useEffect(() => {
+    try {
+      if (!msgs.length) { localStorage.removeItem(CHAT_KEY); return; }
+      localStorage.setItem(CHAT_KEY, JSON.stringify({ msgs: msgs.slice(-12), history: history.current, criteria: mine.current }));
+    } catch { /* ignore */ }
+  }, [msgs]);
+  // Filters cleared by hand elsewhere: the old conversation no longer describes anything, so it goes.
+  useEffect(() => { if (msgs.length && Object.keys(mine.current).length && !Object.keys(pickCriteria(value)).length && !run.isPending) { setMsgs([]); history.current = []; mine.current = {}; fresh.current = true; } }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const send = (t: string) => {
     const text = t.trim();
     if (run.isPending) return;
@@ -79,7 +105,8 @@ export function useAiSearch({ value, onApply, result }: Props) {
   };
   /** A new chat: forgets the conversation. The caller decides what happens to the filters. */
   const reset = () => { setMsgs([]); history.current = []; mine.current = {}; fresh.current = true; setRemaining(null); };
-  const close = () => { setOpen(false); reset(); };
+  /** Closing the popup hides the chat; the conversation itself stays (it is only forgotten by New search or clearing the filters). */
+  const close = () => { setOpen(false); };
 
   const dialog = (
     <Dialog open={out !== null} onOpenChange={(o) => { if (!o) setOut(null); }}>
@@ -97,23 +124,23 @@ export function useAiSearch({ value, onApply, result }: Props) {
     </Dialog>
   );
 
-  const panel = open ? <ChatPanel msgs={msgs} pending={run.isPending} result={result} remaining={remaining} onNew={() => { reset(); onApply({ ...CLEAR_ALL }); }} onClose={() => { close(); onApply({ ...CLEAR_ALL }); }} /> : null;
+  const panel = open ? <ChatPanel msgs={msgs} pending={run.isPending} result={result} remaining={remaining} onNew={() => { reset(); onApply({ ...CLEAR_ALL }); }} onClose={() => { close(); }} /> : null;
   return { open, pending: run.isPending, send, reset, close, panel, dialog, remaining, show: () => setOpen(true) };
 }
 
-const tone = { added: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300", changed: "bg-amber-500/15 text-amber-700 dark:text-amber-300", removed: "bg-red-500/15 text-red-400 line-through dark:text-rose-300" } as const;
+const tone = { added: "chip-quiet", changed: "chip-quiet", removed: "chip-quiet chip-removed" } as const;
 const KindIcon = { added: Plus, changed: RefreshCw, removed: Minus } as const;
 
 function ResultLine({ r, final }: { r: NonNullable<AiResult> | { total: number; nearest?: string[]; loading?: false }; final?: boolean }) {
   if ("loading" in r && r.loading) return <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground" role="status"><Loader size="xs" />Searching{final ? "" : "…"}</p>;
   if (r.nearest) return (
-    <div className="mt-3 rounded-xl bg-amber-500/10 p-3 text-sm" role="status">
+    <div className="note-quiet mt-3 rounded-xl p-3 text-sm" role="status">
       <p className="flex items-center gap-2 font-bold"><SearchX className="size-4 shrink-0" aria-hidden />No exact match</p>
       <p className="mt-1 text-muted-foreground">Nothing matches all of that. What did not match: {r.nearest.join(", ")}. The closest matches are shown below the results.</p>
     </div>
   );
   if (r.total === 0) return <p className="mt-3 flex items-center gap-2 text-sm font-semibold" role="status"><SearchX className="size-4" aria-hidden />No properties found</p>;
-  return <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300" role="status"><CheckCircle2 className="size-4" aria-hidden />Found {r.total.toLocaleString("en-KE")} {r.total === 1 ? "property" : "properties"} that match</p>;
+  return <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-foreground" role="status"><CheckCircle2 className="size-4" aria-hidden />Found {r.total.toLocaleString("en-KE")} {r.total === 1 ? "property" : "properties"} that match</p>;
 }
 
 function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs: Msg[]; pending: boolean; result: AiResult; remaining: number | null; onNew: () => void; onClose: () => void }) {
@@ -123,7 +150,7 @@ function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs:
   return (
     <section aria-label="Chat with AI search" className="ai-chat order-1 mt-4 rounded-3xl bg-card p-3 shadow-[0_0_0_1px_rgb(15_23_42/0.08),0_30px_60px_-30px_rgb(15_23_42/0.45)] sm:p-5">
       <div className="mb-3 flex items-center gap-2 pl-2">
-        <Sparkles className="ml-1.5 size-4 text-foreground" aria-hidden />
+        <Sparkles className="ai-star ml-1.5 size-4" aria-hidden />
         <h3 className="text-sm font-extrabold">Chat search</h3>
         <button type="button" onClick={onNew} className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold text-muted-foreground hover:bg-muted hover:text-foreground"><RotateCcw className="size-3.5" aria-hidden />New search</button>
         <button type="button" aria-label="Close chat" onClick={onClose} className="close-circle shrink-0"><X className="size-4" /></button>
@@ -134,7 +161,7 @@ function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs:
           <div key={m.id} className="flex justify-end"><p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-white/15 px-3.5 py-2 text-sm text-foreground">{m.text}</p></div>
         ) : (
           <div key={m.id} className="rounded-2xl rounded-bl-md bg-muted p-3.5 text-sm">
-            <p className="flex items-start gap-2"><Sparkles className="ml-1.5 mt-0.5 size-4 shrink-0 text-foreground" aria-hidden /><span>{m.text}</span></p>
+            <p className="flex items-start gap-2"><Sparkles className="ai-star ml-1.5 mt-0.5 size-4 shrink-0" aria-hidden /><span>{m.text}</span></p>
             {m.changes.length > 0 ? (
               <div className="mt-3"><p className="mb-1.5 text-xs font-bold uppercase text-muted-foreground">What I changed</p>
                 <ul className="flex flex-wrap gap-1.5">{m.changes.map((c) => { const I = KindIcon[c.kind]; return (

@@ -71,7 +71,7 @@ function SearchFormInner({ value, onChange, side = false, result }: Props & { re
     onChange(replaceCriteria({ ...base, ...u.criteria, q: u.criteria.q }));
   };
   const searchText = (s: string) => search(false, s);
-  const clearAll = () => { clearTimeout(timers.current.get("q")); ai.close(); setQ(""); setUnderstood([]); fromText.current = []; applied.current = ""; onChange({ ...CLEAR_ALL }); };
+  const clearAll = () => { clearTimeout(timers.current.get("q")); ai.close(); ai.reset(); setQ(""); setUnderstood([]); fromText.current = []; applied.current = ""; onChange({ ...CLEAR_ALL }); };
   const clearBox = () => { clearTimeout(timers.current.get("q")); if (!ai.open) setSheet(false); if (ai.open) { clearAll(); return; } setQ(""); search(false, ""); };
   const pickPlace = (h: import("@/lib/places.server").PlaceHit) => {
     const base = Object.fromEntries(Object.entries(pickCriteria(latest.current)).filter(([k]) => k !== "q" && k !== "countyCodes"));

@@ -44,17 +44,16 @@ function Compare() {
       {ids.length === 0 ? (
         <div className="info-card mt-2"><p className="font-semibold">Nothing to compare yet.</p><p className="mt-1 text-sm text-muted-foreground">Use the Compare button on a listing, then come back here.</p><Link to="/properties" className="mt-4 inline-block rounded-full bg-primary px-5 py-2 font-bold text-primary-foreground">Browse properties</Link></div>
       ) : isPending ? <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-busy="true" aria-label="Loading comparison">{Array.from({ length: Math.max(2, ids.length) }, (_, i) => <div key={i} className="h-64 animate-pulse rounded-2xl bg-muted" />)}</div> : !data?.length ? <p className="mt-8">These listings are no longer available.</p> : (
-        <div className="mx-auto mt-8 max-w-full overflow-x-auto" style={{ width: `${9 + data.length * 16}rem` }}>
-          <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: `${9 + data.length * 16}rem` }}>
+        <div className="mt-8 w-full max-w-full overflow-x-auto">
+          <table className="w-full table-fixed border-separate border-spacing-0 text-sm" style={{ minWidth: `${7.5 + data.length * 13}rem` }}>
             <thead>
-              <tr><th className="w-36 p-2" />{data.map((p) => (
-                <th key={p.id} scope="col" className="w-64 p-2 text-left align-top font-normal">
-                  <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:shadow-md">
+              <tr><th className="w-[7.5rem] p-2" />{data.map((p) => (
+                <th key={p.id} scope="col" className="min-w-[13rem] p-2 text-left align-top font-normal">
+                  <div className="surface group relative overflow-hidden rounded-2xl transition">
                     <Link to="/property/$slug" params={{ slug: p.slug }} className="absolute inset-0 z-0" aria-label={p.title} />
-                    {p.image ? <img src={p.image.thumbUrl ?? p.image.url} alt={p.image.alt || p.title} loading="lazy" className="aspect-[4/3] w-full object-cover" /> : <div className="aspect-[4/3] bg-muted" />}
-                    <div className="p-3"><span className="line-clamp-2 text-sm font-bold">{p.title}</span>
-                      {!raw && <button type="button" onClick={() => toggleCompare(p.id)} className="relative z-10 mt-2 inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground"><X className="h-3 w-3" aria-hidden />Remove</button>}
-                    </div>
+                    {p.image ? <img src={p.image.thumbUrl ?? p.image.url} alt={p.image.alt || p.title} loading="lazy" className="aspect-[4/3] w-full object-cover" /> : <div className="aspect-[4/3] w-full bg-muted" />}
+                    {!raw && <button type="button" onClick={() => toggleCompare(p.id)} aria-label={`Remove ${p.title} from compare`} className="close-circle absolute right-2 top-2 z-10"><X className="size-4" aria-hidden /></button>}
+                    <div className="px-3 py-2.5"><span className="line-clamp-2 text-sm font-bold leading-snug">{p.title}</span></div>
                   </div>
                 </th>))}</tr>
             </thead>

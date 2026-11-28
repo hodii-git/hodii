@@ -72,7 +72,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
   // Pinned (map page on wide screens): the chat is open from the start.
   useEffect(() => { if (pinned && !phone) ai.show(); }, [pinned, phone]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (popup === "ai") ai.show(); }, [popup]); // eslint-disable-line react-hooks/exhaustive-deps
-  const clearAll = () => { clearTimeout(timer.current); ai.close(); setText(""); setNotes([]); fromText.current = []; applied.current = ""; onChange({ ...CLEAR_ALL }); };
+  const clearAll = () => { clearTimeout(timer.current); ai.close(); ai.reset(); setText(""); setNotes([]); fromText.current = []; applied.current = ""; onChange({ ...CLEAR_ALL }); };
   /** The X: closes the chat and clears the box. Words typed without chat only lose what they set. */
   const clearBox = () => { clearTimeout(timer.current); if (ai.open) { clearAll(); return; } setText(""); search(""); };
   const submitAi = () => { clearTimeout(timer.current); const t = text; setText(""); ai.send(t); };
@@ -159,7 +159,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
           <textarea id="home-q" ref={box} rows={1} maxLength={300} value={text}
             onChange={(e) => { const v = e.target.value; setText(v); clearTimeout(timer.current); if (!ai.open && !deferred) { if (v.trim() === "") search(""); else timer.current = setTimeout(() => search(v), 800); } }}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
-            placeholder={ai.open ? "Describe the place, or reply to refine…" : "Try “2 bedroom in Kilimani under 80k”"}
+            placeholder={ai.open ? "Describe the place…" : "Search homes, places…"}
             className={`min-h-6 min-w-0 flex-1 resize-none bg-transparent ${text.length > 0 && !ai.open ? "pr-[8.6rem]" : "pr-[6.4rem]"} text-base leading-6 md:text-[1.05rem] outline-hidden placeholder:text-muted-foreground md:placeholder:text-[0.9rem] ${typing ? "max-h-[30dvh] overflow-y-auto overscroll-contain" : "h-6 overflow-hidden whitespace-nowrap placeholder:truncate"}`} />
           {text.length > 0 && !ai.open && <button type="button" onClick={clearBox} aria-label={ai.open ? "Close chat and clear everything" : "Clear what I typed"} title={ai.open ? "Close chat and clear" : "Clear"} className="close-circle absolute right-[5.9rem] top-1/2 -translate-y-1/2"><X className="size-4" /></button>}
           <span data-tour="voice" className="ai-mic inline-flex"><VoiceButton onText={(t) => { if (ai.open) ai.send(t); else { setText(t); search(t); } }} /></span>

@@ -4,7 +4,7 @@ import { installApp, updateApp, usePwa } from "@/lib/pwa";
 import { FilterBadge, countFilters } from "@/components/ui/filters-icon";
 import { paramsFromUrl, type SearchUrl } from "@/lib/search-url";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Bell, Download, RefreshCw, Tag, KeyRound, BedDouble, Construction, MapPinned, LandPlot, Landmark, HardHat, DoorOpen, Building, Building2, BedSingle, GraduationCap, ConciergeBell, Briefcase, Store, Warehouse, Tractor, Palmtree, ArrowRight, Calculator, ChevronRight, Home, PlusCircle, Scale, Search, Sparkles, UserRound, Users, X } from "lucide-react";
+import { BadgeDollarSign, BookOpen, Cookie, Flag, FileText, ListChecks, LifeBuoy, Mail, ShieldCheck, Bell, Download, RefreshCw, Tag, KeyRound, BedDouble, Construction, MapPinned, LandPlot, Landmark, HardHat, DoorOpen, Building, Building2, BedSingle, GraduationCap, ConciergeBell, Briefcase, Store, Warehouse, Tractor, Palmtree, ArrowRight, Calculator, ChevronRight, Home, PlusCircle, Scale, Search, Sparkles, UserRound, Users, X } from "lucide-react";
 import { useCompare } from "@/lib/compare";
 import { NotificationBell } from "@/components/notification-bell";
 import { AccountButton } from "@/components/account-button";
@@ -95,12 +95,17 @@ export function SiteHeader() {
   const rawSearch = useRouterState({ select: (s) => s.location.search }) as SearchUrl;
   const filterN = countFilters(paramsFromUrl(rawSearch));
   const ctxFor = CONTEXTS.find((c) => c.match(path));
+  const CTX_ICONS: Record<string, typeof Home> = {
+    "Help guide": BookOpen, "Help centre": LifeBuoy, "Pricing and limits": BadgeDollarSign, "Pricing": BadgeDollarSign, "Report a listing": Flag, "Contact us": Mail,
+    "List a property": PlusCircle, "Listing standards": ListChecks, "Privacy policy": ShieldCheck, "Terms of use": FileText, "Cookie policy": Cookie,
+    "Agents and developers": Users, "Calculators": Calculator, "Compare": Scale, "Neighbourhoods": MapPinned, "Developments": Construction,
+  };
   const ctxLink = (l: CtxLink, cls: string, onClick?: () => void, key?: string) => {
     const cur = "slug" in l ? path === slugPath(l.slug) : path === l.to;
     const c = `${cls}${cur ? " is-current" : ""}`;
     return "slug" in l
-      ? <Link key={key ?? l.label} to="/info/$slug" params={{ slug: l.slug }} aria-current={cur ? "page" : undefined} className={c} onClick={onClick}>{cls === row ? <><span className="mr-auto">{l.label}</span>{Chev}</> : l.label}</Link>
-      : <Link key={key ?? l.label} to={l.to} aria-current={cur ? "page" : undefined} className={c} onClick={onClick}>{cls === row ? <><span className="mr-auto">{l.label}</span>{Chev}</> : l.label}</Link>;
+      ? <Link key={key ?? l.label} to="/info/$slug" params={{ slug: l.slug }} aria-current={cur ? "page" : undefined} className={c} onClick={onClick}>{cls === row ? <>{Tile(CTX_ICONS[l.label] ?? BookOpen)}<span className="mr-auto">{l.label}</span>{Chev}</> : l.label}</Link>
+      : <Link key={key ?? l.label} to={l.to} aria-current={cur ? "page" : undefined} className={c} onClick={onClick}>{cls === row ? <>{Tile(CTX_ICONS[l.label] ?? BookOpen)}<span className="mr-auto">{l.label}</span>{Chev}</> : l.label}</Link>;
   };
 
   const signedIn = !!useAuth().user;
@@ -189,7 +194,7 @@ export function SiteHeader() {
             </div>
           </div></div>
           <button type="button" className="ph-menu md:hidden grid place-items-center text-white active:scale-95" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
-              {open ? <X className="size-[26px]" strokeWidth={2.3} /> : <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>}
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>
               {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-primary" aria-hidden />}
             </button>
         </>)}
@@ -200,7 +205,7 @@ export function SiteHeader() {
               <Search className="size-[1.15rem] shrink-0 text-foreground" aria-hidden /><span className="truncate">Search homes, places…</span>
             </button>
             <button type="button" className="relative grid size-10 shrink-0 place-items-center text-white active:scale-95" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
-              {open ? <X className="size-[26px]" strokeWidth={2.3} /> : <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>}
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>
               {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-foreground" aria-hidden />}
             </button>
           </div>
@@ -224,7 +229,7 @@ export function SiteHeader() {
             {signedIn && <span data-tour="bell" className="inline-flex"><NotificationBell /></span>}
             <span data-tour="account" className="inline-flex"><AccountButton /></span>
             <button type="button" className="menu-btn relative" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
-              {open ? <X className="h-5 w-5" /> : <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 5h18M8 12h13M13 19h8" /></svg>}
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 5h18M8 12h13M13 19h8" /></svg>
               {compareCount > 0 && <span className="absolute right-1.5 top-1.5 size-2.5 rounded-full bg-primary" aria-hidden />}
             </button>
           </div>

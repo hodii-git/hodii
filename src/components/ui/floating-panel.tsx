@@ -25,16 +25,16 @@ export function FloatingPanel({ anchor, open, onClose, children, minWidth = 192,
     if (!open) return;
     const again = () => place();
     window.addEventListener("resize", again); window.addEventListener("scroll", again, true);
-    const away = (e: MouseEvent | TouchEvent) => { const t = e.target as Node; if ((t as Element).closest?.("[data-floating-panel]") && !panel.current?.contains(t)) return; if (!panel.current?.contains(t) && !anchor.current?.contains(t)) onClose(); };
-    document.addEventListener("mousedown", away); document.addEventListener("touchstart", away);
-    return () => { window.removeEventListener("resize", again); window.removeEventListener("scroll", again, true); document.removeEventListener("mousedown", away); document.removeEventListener("touchstart", away); };
+    const key = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", key);
+    return () => { window.removeEventListener("resize", again); window.removeEventListener("scroll", again, true); document.removeEventListener("keydown", key); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   if (!open || !box || typeof document === "undefined") return null;
   return createPortal(
     <>
-    <div aria-hidden className="fixed inset-0 z-[99]" onMouseDown={(e) => { e.preventDefault(); onClose(); }} onTouchStart={() => onClose()} />
+    <div aria-hidden className="fixed inset-0 z-[99]" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }} />
     <div ref={panel} data-floating data-floating-panel style={{ position: "fixed", zIndex: 100, left: box.left, width: box.width, top: box.top, bottom: box.bottom, maxHeight: box.maxHeight }}
       className={`flex flex-col overflow-hidden rounded-2xl glass-menu p-1.5 text-popover-foreground ${className}`}>
       {children}

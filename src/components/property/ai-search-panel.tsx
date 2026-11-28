@@ -20,7 +20,8 @@ export const replaceCriteria = (c: Record<string, unknown>): Partial<SearchParam
 
 /** What the page found for the latest message, so the chat can say it in words. */
 const CHAT_KEY = "hodii.ai-chat.v1";
-const sameCriteria = (a: Record<string, unknown> | undefined, b: Record<string, unknown>) => JSON.stringify(a ?? {}, Object.keys(a ?? {}).sort()) === JSON.stringify(b, Object.keys(b).sort());
+/** The saved chat still describes the page when every filter it set is still set to the same thing. */
+const sameCriteria = (saved: Record<string, unknown> | undefined, now: Record<string, unknown>) => Object.entries(saved ?? {}).every(([k, v]) => JSON.stringify(now[k]) === JSON.stringify(v));
 
 export type AiResult = { total: number; nearest?: string[]; loading: boolean } | undefined;
 
@@ -78,8 +79,8 @@ export function useAiSearch({ value, onApply, result }: Props) {
     try {
       const raw = localStorage.getItem(CHAT_KEY); if (!raw) return;
       const s = JSON.parse(raw) as { msgs: Msg[]; history: Turn[]; criteria: Record<string, unknown> };
-      if (!s.msgs?.length || sameCriteria(s.criteria, pickCriteria(latest.current))) {
-        if (!s.msgs?.length) return;
+      if (!s.msgs?.length) return;
+      if (Object.keys(pickCriteria(latest.current)).length && sameCriteria(s.criteria, pickCriteria(latest.current))) {
         history.current = s.history ?? []; mine.current = s.criteria ?? {}; fresh.current = false;
         id.current = Math.max(0, ...s.msgs.map((m) => m.id));
         setMsgs(s.msgs);
@@ -88,12 +89,12 @@ export function useAiSearch({ value, onApply, result }: Props) {
   }, []);
   useEffect(() => {
     try {
-      if (!msgs.length) { localStorage.removeItem(CHAT_KEY); return; }
+      if (!msgs.length) return; // forgetting happens in reset(), never on an empty first render (other chat instances may be holding it)
       localStorage.setItem(CHAT_KEY, JSON.stringify({ msgs: msgs.slice(-12), history: history.current, criteria: mine.current }));
     } catch { /* ignore */ }
   }, [msgs]);
   // Filters cleared by hand elsewhere: the old conversation no longer describes anything, so it goes.
-  useEffect(() => { if (msgs.length && Object.keys(mine.current).length && !Object.keys(pickCriteria(value)).length && !run.isPending) { setMsgs([]); history.current = []; mine.current = {}; fresh.current = true; } }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (msgs.length && Object.keys(mine.current).length && !Object.keys(pickCriteria(value)).length && !run.isPending) { try { localStorage.removeItem(CHAT_KEY); } catch { /* ignore */ } setMsgs([]); history.current = []; mine.current = {}; fresh.current = true; } }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const send = (t: string) => {
     const text = t.trim();
@@ -104,7 +105,7 @@ export function useAiSearch({ value, onApply, result }: Props) {
     run.mutate(text);
   };
   /** A new chat: forgets the conversation. The caller decides what happens to the filters. */
-  const reset = () => { setMsgs([]); history.current = []; mine.current = {}; fresh.current = true; setRemaining(null); };
+  const reset = () => { try { localStorage.removeItem(CHAT_KEY); } catch { /* ignore */ } setMsgs([]); history.current = []; mine.current = {}; fresh.current = true; setRemaining(null); };
   /** Closing the popup hides the chat; the conversation itself stays (it is only forgotten by New search or clearing the filters). */
   const close = () => { setOpen(false); };
 
@@ -125,7 +126,7 @@ export function useAiSearch({ value, onApply, result }: Props) {
   );
 
   const panel = open ? <ChatPanel msgs={msgs} pending={run.isPending} result={result} remaining={remaining} onNew={() => { reset(); onApply({ ...CLEAR_ALL }); }} onClose={() => { close(); }} /> : null;
-  return { open, pending: run.isPending, send, reset, close, panel, dialog, remaining, show: () => setOpen(true) };
+  return { open, hasChat: msgs.length > 0, pending: run.isPending, send, reset, close, panel, dialog, remaining, show: () => setOpen(true) };
 }
 
 const tone = { added: "chip-quiet", changed: "chip-quiet", removed: "chip-quiet chip-removed" } as const;

@@ -11,7 +11,7 @@ export type Understood = { criteria: Criteria; /** Short plain phrases for what 
 
 const WORD_NUMBERS: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
 const NUM = "(\\d{1,3}(?:[, ]\\d{3})+|\\d+(?:\\.\\d+)?)\\s*(k|m|mil|million|thousand)?";
-const STOP = new Set(["said","told","meant","mean","wanted","searching","search","bed","beds","bedroom","bedrooms","bath","baths","bathroom","bathrooms","br","bd","bdrm","am","im","would","like","could","should","will","get","give","where","what","which","there","their","its","not","no","yes","ok","okay","hi","hello","hey","um","uh","also","too","one","a", "an", "the", "in", "at", "for", "to", "with", "near", "around", "and", "of", "me", "i", "want", "looking", "find", "show", "need", "please", "some", "any", "kes", "ksh", "kshs", "on", "my", "is", "are", "that", "has", "have", "under", "over", "make", "it", "change", "set", "add", "now", "instead", "also", "lets", "let", "us", "just", "only", "but", "then", "so", "go", "do", "can", "you", "try", "again"]);
+const STOP = new Set(["said","told","meant","mean","wanted","searching","search","bed","beds","bedroom","bedrooms","bath","baths","bathroom","bathrooms","br","bd","bdrm","am","im","would","like","could","should","will","get","give","where","what","which","there","their","its","not","no","yes","ok","okay","hi","hello","hey","um","uh","also","too","one","a", "an", "the", "in", "at", "for", "to", "with", "near", "around", "and", "of", "me", "i", "want", "looking", "find", "show", "need", "please", "some", "any", "kes", "ksh", "kshs", "on", "my", "is", "are", "that", "has", "have", "under", "over", "make", "it", "change", "set", "add", "now", "instead", "also", "lets", "let", "us", "just", "only", "but", "then", "so", "go", "do", "can", "you", "try", "again", "car", "cars", "full", "fully", "very", "big", "nice", "good", "great", "beautiful", "spacious", "cheap", "affordable", "place", "places", "property", "properties", "home", "homes", "listing", "listings", "something", "somewhere", "located", "preferably", "ideally", "about", "approximately", "roughly", "per", "month", "monthly", "ten", "two", "three", "four", "five", "six", "seven", "eight", "nine", "area", "side", "estate"]);
 
 export const parseMoney = (num: string, unit?: string): number => {
   const n = Number(num.replace(/[, ]/g, ""));
@@ -84,7 +84,7 @@ export function understand(text: string): { understood: Understood; leftover: st
   // Furnishing (longest first).
   if (take(/\bsemi[- ]?furnished\b/, () => { c.furnishing = "semi_furnished"; notes.push("Semi-furnished"); })) { /* done */ }
   else if (take(/\bunfurnished\b/, () => { c.furnishing = "unfurnished"; notes.push("Unfurnished"); })) { /* done */ }
-  else take(/\bfurnished\b/, () => { c.furnishing = "furnished"; notes.push("Furnished"); });
+  else take(/\b(?:fully |well |nicely )?furnished\b/, () => { c.furnishing = "furnished"; notes.push("Furnished"); });
 
   take(/\bverified\b/, () => { c.verifiedOnly = true; notes.push("Verified only"); });
 
@@ -110,7 +110,7 @@ export function understand(text: string): { understood: Understood; leftover: st
 
   // Features named in the text, by label or by what people actually say ("ensuite", "master en-suite", "full ensuite").
   const feats: string[] = [];
-  const SAID: Record<string, string[]> = { en_suite: ["(?:full |master |all )?en[- ]?suite(?: bedrooms?| rooms?)?", "(?:own|private) bathroom"] };
+  const SAID: Record<string, string[]> = { en_suite: ["(?:full |master |all )?en[- ]?suite(?: bedrooms?| rooms?)?", "(?:own|private) bathroom"], parking: ["(?:parking|garage|car park)(?: (?:space|slot)s?)?(?: for (?:\\d+|one|two|three|four|five|six) cars?)?", "(?:\\d+|one|two|three|four|five|six) car (?:parking|garage|park)"], borehole: ["own water", "borehole water"], security: ["(?:24 ?/ ?7|24 hour|round the clock) security", "secure"] };
   for (const f of [...FEATURES].sort((a, b) => b.label.length - a.label.length)) {
     const label = f.label.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
     if (label.length < 3) continue;
@@ -119,7 +119,18 @@ export function understand(text: string): { understood: Understood; leftover: st
   }
   if (feats.length) { c.features = feats.slice(0, 10) as NonNullable<Criteria["features"]>; notes.push(feats.map((k) => FEATURES.find((f) => f.key === k)!.label).join(", ")); }
 
-  const leftover = s.split(/[\s,.;:!?()]+/).map((t) => t.trim()).filter((t) => t.length > 2 && !STOP.has(t) && !/^\d+$/.test(t)).join(" ");
+  // No word said rent or buy: a price like 4k or 80k can only be a monthly rent, and millions can only be a purchase.
+  if (!c.listingType && c.priceMax !== undefined && c.priceMax >= 1000) {
+    if (c.priceMax <= 600_000) { c.listingType = "rent"; notes.push("To rent (that price reads as monthly rent)"); }
+    else if (c.priceMax >= 1_500_000) { c.listingType = "sale"; notes.push("For sale (that price reads as a purchase)"); }
+  }
+
+  const tokens = (x: string) => x.split(/[\s,.;:!?()]+/).map((q) => q.trim()).filter((q) => q.length > 2 && !STOP.has(q) && !/^\d+$/.test(q));
+  const rest = tokens(s);
+  // The place is what follows "in", "at", "near"... so "kilimanjaro, the balcony and parking for four cars" keeps only "kilimanjaro".
+  const after = ` ${text.toLowerCase().replace(/[“”"']/g, " ")} `.match(/\b(?:in|at|near|around|off|along|within|kwa)\s+([a-z][a-z -]{2,40}?)(?=\s+(?:with|and|under|below|over|above|for|that|which|having|has|the|a|an|to|rent|sale|furnished|fully|full)\b|[,.;:!?]|\s*$)/);
+  const near = after ? tokens(after[1]!).filter((w) => rest.includes(w)) : [];
+  const leftover = (near.length ? near : rest).join(" ");
   if (leftover) c.q = leftover.slice(0, 100);
   return { understood: { criteria: c, notes }, leftover };
 }

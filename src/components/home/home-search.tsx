@@ -58,7 +58,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
   const applied = useRef(value.q ?? "");
   const fromText = useRef<string[]>([]);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
-  useEffect(() => { if (!chatOpen.current && (value.q ?? "") !== applied.current) { applied.current = value.q ?? ""; setText(value.q ?? ""); } }, [value.q]);
+  useEffect(() => { if (!chatOpen.current && !ai.hasChat && (value.q ?? "") !== applied.current) { applied.current = value.q ?? ""; setText(value.q ?? ""); } }, [value.q]);
   useEffect(() => () => clearTimeout(timer.current), []);
   // The box grows with what is typed, up to a share of the screen height, then scrolls.
   const typing = text.length > 0;
@@ -160,7 +160,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
             onChange={(e) => { const v = e.target.value; setText(v); clearTimeout(timer.current); if (!ai.open && !deferred) { if (v.trim() === "") search(""); else timer.current = setTimeout(() => search(v), 800); } }}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
             placeholder={ai.open ? "Describe the place…" : "Search homes, places…"}
-            className={`min-h-6 min-w-0 flex-1 resize-none bg-transparent ${text.length > 0 && !ai.open ? "pr-[8.6rem]" : "pr-[6.4rem]"} text-base leading-6 md:text-[1.05rem] outline-hidden placeholder:text-muted-foreground md:placeholder:text-[0.9rem] ${typing ? "max-h-[30dvh] overflow-y-auto overscroll-contain" : "h-6 overflow-hidden whitespace-nowrap placeholder:truncate"}`} />
+            className={`min-h-6 min-w-0 flex-1 resize-none bg-transparent ${text.length > 0 && !ai.open ? "pr-[8.6rem]" : "pr-[5.4rem]"} text-base leading-6 md:text-[1.05rem] outline-hidden placeholder:text-[0.92rem] placeholder:text-muted-foreground md:placeholder:text-[0.9rem] ${typing ? "max-h-[30dvh] overflow-y-auto overscroll-contain" : "h-6 overflow-hidden whitespace-nowrap placeholder:truncate"}`} />
           {text.length > 0 && !ai.open && <button type="button" onClick={clearBox} aria-label={ai.open ? "Close chat and clear everything" : "Clear what I typed"} title={ai.open ? "Close chat and clear" : "Clear"} className="close-circle absolute right-[5.9rem] top-1/2 -translate-y-1/2"><X className="size-4" /></button>}
           <span data-tour="voice" className="ai-mic inline-flex"><VoiceButton onText={(t) => { if (ai.open) ai.send(t); else { setText(t); search(t); } }} /></span>
           <button type="submit" aria-label={ai.open ? "Send message" : "Search"} disabled={ai.pending} className="send-icon absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:text-foreground disabled:opacity-60">{ai.pending ? <Loader size="xs" /> : <Send className="size-5" aria-hidden />}</button>

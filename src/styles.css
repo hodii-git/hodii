@@ -1875,7 +1875,7 @@ html:has(.site-menu-panel[data-open="true"]) body, html:has([role="dialog"][data
 .solid-head { --r1: 4.25rem; }
 @media (max-width: 767px) {
   .pills-row { height: auto !important; opacity: 1 !important; overflow: visible; }
-  .pills-in { height: auto; padding: .125rem .875rem .75rem .5rem; padding-right: calc(.875rem + var(--sp, 0) * 3.4rem); padding-bottom: calc(.75rem - var(--sp, 0) * .72rem); position: relative; top: calc(var(--sp, 0) * -.72rem); }
+  .pills-in { height: auto; padding: .125rem .875rem .75rem .5rem; padding-right: calc(.875rem + var(--sp, 0) * 3.4rem); padding-top: calc(.125rem + var(--sp, 0) * .66rem); }
   .ph-r1 { height: calc(var(--r1) * (1 - var(--sp, 0))); overflow: hidden; opacity: calc(1 - var(--sp, 0) * 1.7); }
   .ph-r1-in { height: var(--r1); }
   .solid-head[data-collapsed] .ph-r1 { pointer-events: none; }
@@ -2002,3 +2002,6 @@ html:root:has(.props-page) .ld-pill:not(.ld-pill-on) { border-color: transparent
 .ai-chat .chip-quiet.chip-removed { color: #a1a1aa !important; text-decoration: line-through !important; }
 .ai-chat .note-quiet { background: rgb(255 255 255 / .05) !important; border: 1px solid rgb(255 255 255 / .08); color: #f4f4f5 !important; }
 .ai-chat .note-quiet svg { stroke: url(#hodii-grad) !important; }
+.ai-chat .chip-quiet svg { display: none; }
+.ai-chat .chip-quiet::before { content: ""; width: .4rem; height: .4rem; border-radius: 9999px; background: var(--brand-gradient); flex: none; }
+.ai-chat .chip-quiet.chip-removed::before { background: #52525b; }

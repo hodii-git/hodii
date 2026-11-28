@@ -137,8 +137,8 @@ export function DashHeader({ framed = false }: { framed?: boolean } = {}) {
           <HomeButton hideFromMd={isAdmin} />
           {!isAdmin && (
             <>
-              <span className="inline-flex rounded-full hdr-circle header-circle header-size [&>button]:!size-full"><NotificationBell /></span>
-              <span className="inline-flex"><AccountButton /></span>
+              <span className="hidden md:inline-flex rounded-full hdr-circle header-circle header-size [&>button]:!size-full"><NotificationBell /></span>
+              <span className="hidden md:inline-flex"><AccountButton /></span>
             </>
           )}
         </div>

@@ -24,6 +24,8 @@ import { FloatLift } from "@/components/float-lift";
 import { FloatDismiss } from "@/components/float-dismiss";
 import { ScrollOnNavigate } from "@/components/scroll-on-navigate";
 import { InstallPrompt } from "@/components/install-prompt";
+import { useKeyboardSafeFocus } from "@/lib/keyboard-focus";
+import { OfflineBanner } from "@/components/offline-banner";
 import { MobileTabBar } from "@/components/mobile-tab-bar";
 import { FeedbackButton } from "@/components/feedback/feedback-button";
 import { InputGuards } from "@/components/input-guards";
@@ -181,6 +183,7 @@ function RootComponent() {
   // Missing or broken photos are swapped for a colour gradient instead of the browser's broken-image mark.
   useEffect(() => installImageFallback(), []);
   // Installable app support: a small service worker (public/sw.js). Production only, and never a reason for the page to fail.
+  useKeyboardSafeFocus();
   useEffect(() => { if (import.meta.env.PROD && "serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {}); }, []);
   const { data: ga } = useQuery(gaIdQuery, queryClient);
   useEffect(() => { if (ga?.gaId) installGoogleAnalytics(ga.gaId); }, [ga?.gaId]);
@@ -190,6 +193,7 @@ function RootComponent() {
       <QueryClientProvider client={queryClient}>
         <Outlet />
         <Toaster position="top-center" className="toaster-center" />
+        <OfflineBanner />
       </QueryClientProvider>
     );
   }

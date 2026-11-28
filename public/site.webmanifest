@@ -36,11 +36,11 @@
   "shortcuts": [
     {
       "name": "Homes for sale",
-      "url": "/properties?for=sale"
+      "url": "/?for=sale"
     },
     {
       "name": "Places to rent",
-      "url": "/properties?for=rent"
+      "url": "/?for=rent"
     },
     {
       "name": "Saved homes",

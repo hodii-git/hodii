@@ -1,0 +1,100 @@
+[
+  {
+    "capability": "code",
+    "source": "hodii-part13ze-frontend.zip",
+    "outcome": "replace app source",
+    "status": "verified",
+    "next_action": "none; new ZIP imported and public pages open"
+  },
+  {
+    "capability": "schema",
+    "source": "MongoDB collections defined in src/lib/mongodb",
+    "outcome": "preserve existing MongoDB",
+    "status": "preserved",
+    "next_action": "no database or account migration requested"
+  },
+  {
+    "capability": "records",
+    "source": "MongoDB (no export attached)",
+    "outcome": "preserve existing MongoDB",
+    "status": "preserved",
+    "next_action": "no database or account migration requested"
+  },
+  {
+    "capability": "auth identities",
+    "source": "custom PBKDF2 users in MongoDB",
+    "outcome": "preserve existing MongoDB",
+    "status": "preserved",
+    "next_action": "no database or account migration requested"
+  },
+  {
+    "capability": "authorization",
+    "source": "agency membership roles + staff roles (src/lib/access.ts), admin 2FA",
+    "outcome": "preserve existing MongoDB",
+    "status": "preserved",
+    "next_action": "no database or account migration requested"
+  },
+  {
+    "capability": "uploaded file bytes",
+    "source": "Cloudinary",
+    "outcome": "preserve",
+    "status": "pending",
+    "next_action": "CLOUDINARY_* secrets"
+  },
+  {
+    "capability": "payments",
+    "source": "M-Pesa Daraja; public callback /api/mpesa/callback/$secret",
+    "outcome": "preserve",
+    "status": "pending",
+    "next_action": "DARAJA_* secrets; update callback URL at cutover"
+  },
+  {
+    "capability": "AI search & voice",
+    "source": "Groq",
+    "outcome": "preserve",
+    "status": "pending",
+    "next_action": "GROQ_API_KEY(S)"
+  },
+  {
+    "capability": "schedules",
+    "source": "/api/cron/promotions",
+    "outcome": "preserve",
+    "status": "pending",
+    "next_action": "CRON_SECRET; re-point external scheduler at cutover"
+  },
+  {
+    "capability": "analytics",
+    "source": "Google Analytics, @vercel/analytics",
+    "outcome": "preserve",
+    "status": "pending",
+    "next_action": "GOOGLE_ANALYTICS_MEASUREMENT_ID"
+  },
+  {
+    "capability": "public endpoints",
+    "source": "sitemap.xml, sitemaps/$name, mpesa callback, cron",
+    "outcome": "preserve",
+    "status": "pending",
+    "next_action": "verify after import"
+  },
+  {
+    "capability": "secrets",
+    "source": "COMMUNITY_ENCRYPTION_KEY, ADMIN_*, ALERT_WEBHOOK_URL, USD_TO_KES, provider keys",
+    "outcome": "request securely",
+    "status": "pending",
+    "next_action": "secret form before verification"
+  },
+  {
+    "capability": "cutover",
+    "source": "-",
+    "outcome": "-",
+    "status": "pending",
+    "next_action": "after records import"
+  },
+  {
+    "capability": "verification",
+    "source": "public preview",
+    "outcome": "home and database-backed listing checked; no test suite run",
+    "status": "verified_public_pages",
+    "next_action": "other provider and signed-in flows not checked for this replacement"
+  }
+]

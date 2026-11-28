@@ -239,8 +239,8 @@ export function SiteHeader() {
           </nav>
           <div className="flex items-center justify-end gap-1.5">
             <span className="hidden lg:inline-flex"><Link to="/list-property" data-tour="list" className="btn-dark btn-compact whitespace-nowrap" onMouseMove={magnet} onMouseLeave={unmagnet}>List a property<ArrowRight className="btn-arrow h-4 w-4" /></Link></span>
-            {signedIn && <span data-tour="bell" className="inline-flex"><NotificationBell /></span>}
-            <span data-tour="account" className="inline-flex"><AccountButton /></span>
+            {signedIn && <span data-tour="bell" className="hidden md:inline-flex"><NotificationBell /></span>}
+            <span data-tour="account" className="hidden md:inline-flex"><AccountButton /></span>
             <button type="button" className={`menu-btn relative ${open ? "invisible" : ""}`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 5h18M8 12h13M13 19h8" /></svg>
               {compareCount > 0 && <span className="brand-dot absolute right-1.5 top-1.5 size-2.5 rounded-full" style={{ background: "var(--brand-gradient)" }} aria-hidden />}

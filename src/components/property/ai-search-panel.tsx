@@ -129,7 +129,7 @@ export function useAiSearch({ value, onApply, result }: Props) {
   return { open, hasChat: msgs.length > 0, pending: run.isPending, send, reset, close, panel, dialog, remaining, show: () => setOpen(true) };
 }
 
-const tone = { added: "chip-quiet", changed: "chip-quiet", removed: "chip-quiet chip-removed" } as const;
+const tone = { added: "chip-quiet chip-added", changed: "chip-quiet chip-changed", removed: "chip-quiet chip-removed" } as const;
 const KindIcon = { added: Plus, changed: RefreshCw, removed: Minus } as const;
 
 function ResultLine({ r, final }: { r: NonNullable<AiResult> | { total: number; nearest?: string[]; loading?: false }; final?: boolean }) {

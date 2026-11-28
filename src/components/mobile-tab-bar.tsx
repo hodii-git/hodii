@@ -1,20 +1,18 @@
 import { useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Compass, Heart, Home, MessageCircle, UserRound } from "lucide-react";
+import { Heart, Home, MessageCircle, UserRound } from "lucide-react";
 import { getTabBadges } from "@/lib/notifications.functions";
 import { useAuthReturn } from "@/lib/auth-return";
 import { useAuth } from "@/hooks/use-auth";
 import { isSearchPage, setSheet, toggleSheet, useSheetOpen } from "@/lib/search-sheet";
 
 /**
- * Phone-only bottom bar used across the whole app: Home, Explore, Saved, Inquiries, Profile. It stays fixed at the bottom
+ * Phone-only bottom bar used across the whole app: Home, Saved, Inquiries, Profile. It stays fixed at the bottom
  * the whole time, like the one in the dashboards.
  */
 export function MobileTabBar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
-  const filtered = path === "/" && searchStr.length > 1;
   const { user } = useAuth();
   const signedIn = !!user;
   const sheet = useSheetOpen();
@@ -48,8 +46,7 @@ export function MobileTabBar() {
 
   // On a listing page the person is looking at one property, so no tab is lit.
   const on = {
-    home: !isPropertyPage && path === "/" && !filtered && !sheet,
-    explore: !isPropertyPage && (filtered || sheet),
+    home: !isPropertyPage && path === "/",
     saved: !isPropertyPage && path.startsWith("/saved"),
     inquiries: !isPropertyPage && path.startsWith("/notifications"),
     profile: !isPropertyPage && (path.startsWith("/profile") || path.startsWith("/auth")),
@@ -71,10 +68,6 @@ export function MobileTabBar() {
     <nav ref={nav} aria-label="Main" data-floating className="mobile-tabbar mobile-tabbar-dark fixed inset-x-0 bottom-0 z-[45] flex items-center justify-around border-t border-white/10 bg-black px-1 pb-[env(safe-area-inset-bottom)] md:hidden">
       <Link to="/" className={item(on.home)} aria-current={current(on.home)}>
         <Home {...ico(on.home)} className={`size-[22px] fill-current ${on.home ? "text-primary" : ""}`} />Home
-      </Link>
-      <Link to="/" className={item(on.explore)} aria-current={current(on.explore)} aria-expanded={sheet}
-        onClick={(e) => { if (path === "/") { e.preventDefault(); toggleSheet(); } else setSheet(true); }}>
-        <Compass {...ico(on.explore)} />Explore
       </Link>
       <Link to="/saved" className={item(on.saved)} aria-current={current(on.saved)}>
         <span className="relative">

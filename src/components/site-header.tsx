@@ -30,6 +30,17 @@ const NAV: NavItem[] = [
   { label: "Neighbourhoods", to: "/neighbourhoods", on: (p) => p.startsWith("/neighbourhoods") },
 ];
 
+/** What the header shows depends on where you are: help pages get help links, tools get tools, and so on. Search pages keep the buying and renting links. */
+type CtxLink = { label: string; to: "/help" | "/agencies" | "/tools" | "/compare" | "/list-property" | "/neighbourhoods" | "/developments"; } | { label: string; slug: string };
+const CONTEXTS: { match: (p: string) => boolean; title: string; links: CtxLink[] }[] = [
+  { match: (p) => p.startsWith("/help"), title: "Help", links: [{ label: "Help guide", to: "/help" }, { label: "Pricing and limits", slug: "pricing" }, { label: "Report a listing", slug: "report-a-listing" }, { label: "Contact us", slug: "contact-us" }] },
+  { match: (p) => p === "/info/pricing" || p.startsWith("/list-property"), title: "Listing", links: [{ label: "List a property", to: "/list-property" }, { label: "Pricing", slug: "pricing" }, { label: "Listing standards", slug: "listing-standards" }, { label: "Help guide", to: "/help" }] },
+  { match: (p) => p.startsWith("/info"), title: "Support", links: [{ label: "Help centre", slug: "help-centre" }, { label: "Privacy policy", slug: "privacy-policy" }, { label: "Terms of use", slug: "terms-of-use" }, { label: "Cookie policy", slug: "cookie-policy" }, { label: "Contact us", slug: "contact-us" }] },
+  { match: (p) => p.startsWith("/agenc"), title: "Agents", links: [{ label: "Agents and developers", to: "/agencies" }, { label: "List a property", to: "/list-property" }, { label: "Pricing", slug: "pricing" }] },
+  { match: (p) => p.startsWith("/tools") || p.startsWith("/compare"), title: "Tools", links: [{ label: "Calculators", to: "/tools" }, { label: "Compare", to: "/compare" }, { label: "Neighbourhoods", to: "/neighbourhoods" }, { label: "Developments", to: "/developments" }] },
+];
+const slugPath = (slug: string) => `/info/${slug}`;
+
 /** The one site header: a copy of the squared header on the pricing page (same logo, bar, hamburger and menu). */
 /**
  * The row under the header bar. On large screens it is the big search bar (the type chips live on the content side there);
@@ -83,6 +94,15 @@ export function SiteHeader() {
   const searchStr = useRouterState({ select: (s) => s.location.searchStr });
   const rawSearch = useRouterState({ select: (s) => s.location.search }) as SearchUrl;
   const filterN = countFilters(paramsFromUrl(rawSearch));
+  const ctxFor = CONTEXTS.find((c) => c.match(path));
+  const ctxLink = (l: CtxLink, cls: string, onClick?: () => void, key?: string) => {
+    const cur = "slug" in l ? path === slugPath(l.slug) : path === l.to;
+    const c = `${cls}${cur ? " is-current" : ""}`;
+    return "slug" in l
+      ? <Link key={key ?? l.label} to="/info/$slug" params={{ slug: l.slug }} aria-current={cur ? "page" : undefined} className={c} onClick={onClick}>{cls === row ? <><span className="mr-auto">{l.label}</span>{Chev}</> : l.label}</Link>
+      : <Link key={key ?? l.label} to={l.to} aria-current={cur ? "page" : undefined} className={c} onClick={onClick}>{cls === row ? <><span className="mr-auto">{l.label}</span>{Chev}</> : l.label}</Link>;
+  };
+
   const signedIn = !!useAuth().user;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -191,7 +211,7 @@ export function SiteHeader() {
             <span className="brand-word max-sm:hidden truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
           </Link>
           <nav aria-label="Main" className={`hdr-nav hidden lg:flex items-center justify-center gap-7 text-[0.875rem] font-medium text-foreground/80`}>
-            {NAV.map((n) => {
+            {ctxFor && !isPropertyPage && !explore ? ctxFor.links.map((l) => ctxLink(l, "nav-link")) : NAV.map((n) => {
               const cur = n.on(path, searchStr);
               const cls = `nav-link${cur ? " is-current" : ""}`;
               return n.to !== "/properties"
@@ -220,7 +240,13 @@ export function SiteHeader() {
             </div>
           )}
           {(pwa.standalone || pwa.canInstall) && <button type="button" className={`${row} w-full text-left`} onClick={() => { close(); void (pwa.standalone ? updateApp() : installApp()); }}>{Tile(pwa.standalone ? RefreshCw : Download)}<span className="mr-auto">{pwa.standalone ? "Update app" : "Install app"}</span>{Chev}</button>}
-          <div className={isPropertyPage ? "" : "lg:hidden"}>
+          {ctxFor && !isPropertyPage && !explore && (
+            <div>
+              <div className="menu-title menu-title-row"><span>{ctxFor.title}</span><button type="button" onClick={close} aria-label="Close menu" className="menu-close"><X className="size-5" aria-hidden /></button></div>
+              {ctxFor.links.map((l) => ctxLink(l, row, close))}
+            </div>
+          )}
+          <div className={isPropertyPage ? "" : ctxFor && !explore ? "" : "lg:hidden"}>
             <p className="menu-title">Go to</p>
             {NAV.map((n) => n.to !== "/properties"
               ? <Link key={n.label} to={n.to} className={row} onClick={close}>{Tile(ICONS[n.label] ?? Home)}<span className="mr-auto">{n.label}</span>{Chev}</Link>

@@ -93,7 +93,7 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
     }
     if (it.cta) {
       return <L key={it.key} to={it.to} {...(it.params ? { params: it.params } : {})} title={it.label} data-tour={it.tour} onClick={() => mobile && setOpen(false)}
-        className={`flex h-11 items-center gap-3 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground transition hover:opacity-90 ${wide ? "" : "justify-center px-0"}`}><it.icon className="size-[19px] shrink-0" aria-hidden />{wide && <span className="truncate">{it.label}</span>}{!wide && <span className="sr-only">{it.label}</span>}</L>;
+        className={`flex h-11 items-center gap-3 rounded-xl border border-white/15 !bg-black px-3 text-sm font-bold !text-white transition hover:border-white/40 active:scale-[.98] ${wide ? "" : "justify-center px-0"}`}><it.icon className="size-[19px] shrink-0" aria-hidden />{wide && <span className="truncate">{it.label}</span>}{!wide && <span className="sr-only">{it.label}</span>}</L>;
     }
     const base = `relative flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition ${wide ? "" : "justify-center px-0"} ${it.danger ? "text-red-600 hover:bg-red-50" : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"}`;
     const on = "bg-foreground/10 !text-primary";
@@ -120,10 +120,12 @@ export function DashFrame({ brand, groups, bar, children, footer = "site", extra
       {/* The spacer keeps the page from jumping when the menu opens over it on a phone. */}
       <div className={`relative shrink-0 transition-[width] duration-300 ${hiddenAll ? "w-0 overflow-hidden" : mobile ? "w-[4.25rem]" : open ? "w-[16.5rem]" : "w-[4.5rem]"}`}>
         <aside aria-label={label} className={`${mobile && !open ? "hidden " : ""}dash-side flex flex-col border-r border-border bg-card/95 backdrop-blur-xl transition-[width] duration-300 ${overlay ? "fixed inset-y-0 left-0 z-[60] w-[17rem] !bg-card shadow-2xl" : "sticky top-0 h-dvh w-full"}`}>
-          <div className={`flex h-16 shrink-0 items-center gap-3 border-b border-border ${wide ? "px-4" : "justify-center"}`}>
+          {!wide && (
+          <div className="flex h-16 shrink-0 items-center justify-center border-b border-border">
             <L to="/" aria-label={`${BRAND.name} home`} className="flex items-center gap-2 font-extrabold"><HodiiLogo outline size="h-9 w-9" />{wide && <span className="brand-word text-xl">{BRAND.name}</span>}</L>
           </div>
-          {wide && <div className="shrink-0 px-3 pt-3">{brand}</div>}
+          )}
+          {wide && <div className="shrink-0 px-3 pb-1 pt-4">{brand}</div>}
           <nav aria-label={label} className="dash-nav min-h-0 flex-1 space-y-4 overflow-y-auto overflow-x-hidden px-2.5 pad-fixed">
             {groups.map((g, i) => g.items.length > 0 && (
               <div key={g.title ?? i} className="space-y-1">

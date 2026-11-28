@@ -23,8 +23,8 @@ const SECTION: Record<string, string> = {
 const ROLE_TONE: Record<string, string> = { owner: "bg-amber-500/15 text-amber-700 dark:text-amber-300", admin: "bg-violet-500/15 text-violet-700 dark:text-violet-300", agent: "bg-sky-500/15 text-sky-700 dark:text-sky-300" };
 
 const Pill = ({ children, cls = "" }: { children: ReactNode; cls?: string }) => <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-bold ${cls}`}>{children}</span>;
-const Action = ({ to, params, search, icon: I, children, primary }: { to: string; params?: Record<string, string>; search?: Record<string, string>; icon: ComponentType<{ className?: string }>; children: ReactNode; primary?: boolean }) => (
-  <L to={to} {...(params ? { params } : {})} {...(search ? { search } : {})} className={`${primary ? "cta" : "border border-border bg-background/70 hover:bg-muted"} hidden h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 text-sm font-semibold md:inline-flex`}>
+const Action = ({ to, params, search, icon: I, children, primary, dark }: { to: string; params?: Record<string, string>; search?: Record<string, string>; icon: ComponentType<{ className?: string }>; children: ReactNode; primary?: boolean; dark?: boolean }) => (
+  <L to={to} {...(params ? { params } : {})} {...(search ? { search } : {})} className={`${dark ? "border border-white/15 bg-black text-white hover:border-white/40" : primary ? "cta" : "border border-border bg-background/70 hover:bg-muted"} hidden h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 text-sm font-semibold md:inline-flex`}>
     <I className="size-4" />{children}
   </L>
 );
@@ -98,7 +98,7 @@ export function DashHeader({ framed = false }: { framed?: boolean } = {}) {
         {can(acc, "team.invite") && <Action to="/dashboard/agency/$slug/team" params={{ slug }} icon={Users}>Team</Action>}
         {manage
           ? <Action primary to="/dashboard/agency/$slug/premium" params={{ slug }} icon={Plus}>Boost or go Premium</Action>
-          : can(acc, "listing.create") ? <Action primary to="/list-property" icon={Plus}>Add listing</Action> : null}
+          : can(acc, "listing.create") ? <Action dark to="/list-property" icon={Plus}>Add listing</Action> : null}
         <L to="/agency/$slug" params={{ slug }} className="hidden h-10 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-muted-foreground hover:text-foreground lg:inline-flex">Public page<ExternalLink className="size-3.5" /></L>
       </>
     );

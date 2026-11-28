@@ -108,12 +108,13 @@ export function understand(text: string): { understood: Understood; leftover: st
   }
   if (found.length) { c.countyCodes = found.slice(0, 10); notes.push(found.map((n) => COUNTY_LIST.find((k) => k.code === n)!.name).join(" or ")); }
 
-  // Features named in the text.
+  // Features named in the text, by label or by what people actually say ("ensuite", "master en-suite", "full ensuite").
   const feats: string[] = [];
+  const SAID: Record<string, string[]> = { en_suite: ["(?:full |master |all )?en[- ]?suite(?: bedrooms?| rooms?)?", "(?:own|private) bathroom"] };
   for (const f of [...FEATURES].sort((a, b) => b.label.length - a.label.length)) {
     const label = f.label.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
     if (label.length < 3) continue;
-    const rx = new RegExp(`\\b${escape(label)}\\b`);
+    const rx = new RegExp(`\\b(?:${[escape(label), ...(SAID[f.key] ?? [])].join("|")})\\b`);
     if (rx.test(s)) { feats.push(f.key); s = s.replace(rx, " "); }
   }
   if (feats.length) { c.features = feats.slice(0, 10) as NonNullable<Criteria["features"]>; notes.push(feats.map((k) => FEATURES.find((f) => f.key === k)!.label).join(", ")); }

@@ -8,14 +8,11 @@ import { ArrowRight, ArrowUp, ChevronRight, Search, X } from "lucide-react";
 import { footerSections, slugify, type FooterColumn } from "@/data/site-content";
 import { categorySearch } from "@/lib/search-url";
 import { BRAND } from "@/lib/brand";
+import { HodiiLogo } from "@/components/brand-logo";
 import { Bold, DarkBtn, WLink, magnet, unmagnet, useReveal } from "@/components/wb/ui";
 import { COMPANY_SPLIT, headerFor, type HeaderCfg } from "@/components/wb/header-config";
 
-const LogoMark = () => (
-  <svg style={{ background: "var(--brand-gradient)", borderRadius: "28%" }} viewBox="0 0 32 32" aria-hidden="true" className="logo-mark h-8 w-8 shrink-0">
-    <path d="M7 15.5 16 8l9 7.5V24a1 1 0 0 1-1 1h-5v-6h-6v6H8a1 1 0 0 1-1-1z" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" stroke="#fff" />
-  </svg>
-);
+const LogoMark = () => <HodiiLogo outline size="h-8 w-8" />;
 const Logo = () => (
   <Link to="/" className="logo flex min-w-0 items-center gap-2.5 text-foreground" aria-label={`${BRAND.name} home`}>
     <LogoMark />
@@ -112,7 +109,7 @@ export function WbFooter() {
       <footer className="mx-auto w-[var(--site-w)] max-w-full pb-6 pt-16">
         <div className="footer-card relative overflow-hidden rounded-[2rem] px-6 pt-12 sm:px-10 lg:px-14 lg:pt-16">
           <div className="footer-ribs pointer-events-none absolute inset-0" />
-          <div className="relative grid gap-12 lg:grid-cols-[1.1fr_2.2fr]">
+          <div className="relative grid gap-10 2xl:grid-cols-[1fr_2.6fr]">
             <div>
               <span className="chip-dark"><span className="status-dot" />Verified agents online</span>
               <h2 className="mt-6 font-display text-[clamp(1.9rem,3.6vw,3rem)] font-semibold leading-tight">Ready to find<br />your place?</h2>
@@ -120,7 +117,7 @@ export function WbFooter() {
               <p className="footer-muted mt-3 text-[0.9rem]">Or email <a href={`mailto:${BRAND.emails.general}`} className="foot-link inline"><Bold t={BRAND.emails.general} /></a></p>
               <Link to="/list-property" className="btn-dark mt-8" onMouseMove={magnet} onMouseLeave={unmagnet}>List a property<ArrowRight className="btn-arrow h-4 w-4" /></Link>
             </div>
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 xl:grid-cols-3 2xl:grid-cols-5">
+            <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {footerSections.map((col) => col.heading === "Properties" ? { ...col, links: [...new Set([...col.links, ...primaryCategories, ...moreCategories])] } : col).map((col) => (
                 <div key={col.heading} className="footer-panel rounded-2xl p-5">
                   <h3 className="footer-muted text-[0.8rem] font-medium uppercase">{col.heading}</h3>

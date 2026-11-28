@@ -175,7 +175,7 @@ export function SiteHeader() {
         </>)}
         {explore && !solid && (
           <div className={solid ? "flex items-center gap-2.5 px-3.5 pb-1 pt-3.5 md:hidden" : "pointer-events-auto glass-nav hk-co flex items-center gap-2.5 !px-3 !py-3 md:hidden"}>
-            <Link to="/" className="logo grid size-12 shrink-0 place-items-center" aria-label={`${BRAND.name} home`}><HodiiLogo size="h-11 w-11" /></Link>
+            <Link to="/" className="logo grid size-12 shrink-0 place-items-center" aria-label={`${BRAND.name} home`}><HodiiLogo outline size="h-10 w-10" /></Link>
             <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-12 min-w-0 flex-1 items-center gap-2.5 rounded-full bg-foreground/[0.06] px-4 text-left text-[0.95rem] font-medium text-muted-foreground">
               <Search className="size-[1.15rem] shrink-0 text-foreground" aria-hidden /><span className="truncate">Search homes, places…</span>
             </button>
@@ -187,8 +187,8 @@ export function SiteHeader() {
         )}
         <header data-tour="search" className={`${solid ? "" : "pointer-events-auto glass-nav hk-co"} ${isPropertyPage ? "max-lg:hidden" : explore ? "max-md:hidden" : ""} grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-4 ${solid ? "px-4 lg:min-h-[var(--hdr-row)]" : "pl-5 pr-2.5"} ${solid ? "lg:grid-cols-[1fr_auto_1fr]" : "lg:grid-cols-[auto_1fr_auto]"} lg:px-6 ${!solid && on ? "is-scrolled" : ""}`}>
           <Link to="/" className="logo flex min-w-0 items-center gap-2.5 text-foreground" aria-label={`${BRAND.name} home`}>
-            <HodiiLogo />
-            <span className="brand-word truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
+            <span className="lg:hidden"><HodiiLogo outline size="h-9 w-9" /></span><span className="max-lg:hidden"><HodiiLogo /></span>
+            <span className="brand-word max-sm:hidden truncate font-display text-[1.2rem] font-semibold leading-none">{BRAND.name}</span>
           </Link>
           <nav aria-label="Main" className={`hdr-nav hidden lg:flex items-center justify-center gap-7 text-[0.875rem] font-medium text-foreground/80`}>
             {NAV.map((n) => {

@@ -1949,3 +1949,11 @@ html:root[data-listing-dark="1"] .popup-frame .fcard:not(.fcard-on) { background
 html:root .popup-frame .popup-note { background: linear-gradient(135deg, rgb(253 38 122 / .12), rgb(255 96 54 / .07)) !important; border: 1px solid rgb(253 38 122 / .28) !important; }
 html:has([role="dialog"][data-state="open"]) .tour-prompt, html:has(.m-sheet[data-open="true"]) .tour-prompt { display: none !important; }
 html:root .popup-frame.glass-menu { background-image: radial-gradient(120% 55% at 0% 0%, rgb(253 38 122 / .2), transparent 62%), radial-gradient(90% 50% at 100% 0%, rgb(255 96 54 / .14), transparent 64%) !important; }
+
+/* ===== Footer: roomy columns that keep their own height, a gradient (not flat pink) brand word, links above the big word, clear of the phone tab bar ===== */
+.wb-footer .footer-panel { align-self: start; }
+.wb-footer .footer-word { pointer-events: none; background: linear-gradient(135deg, rgb(253 38 122 / .34), rgb(255 96 54 / .14) 70%) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; color: transparent !important; }
+.wb-footer .footer-card > div:not(.footer-ribs) { position: relative; z-index: 1; }
+@media (max-width: 767px) { .wb-footer footer { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); } }
+/* Dashboard "Add listing": black. */
+html:root [data-tour="add-listing"] { background: #000 !important; color: #fff !important; border: 1px solid rgb(255 255 255 / .15) !important; background-image: none !important; box-shadow: none !important; }

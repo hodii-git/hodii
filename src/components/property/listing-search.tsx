@@ -19,7 +19,7 @@ export function ListingSearch() {
   const change = (next: Partial<SearchParams>) => {
     setDeskOpen(false);
     setSheet(false);
-    void navigate({ to: "/properties", search: urlFromParams({ ...paramsFromUrl({}), ...next, page: 1 }) });
+    void navigate({ to: "/", search: urlFromParams({ ...paramsFromUrl({}), ...next, page: 1 }) });
   };
   useEffect(() => {
     const open = () => { if (window.matchMedia("(max-width: 767px)").matches) setSheet(true); else setDeskOpen(true); };

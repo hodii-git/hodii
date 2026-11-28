@@ -44,7 +44,6 @@ export function restartTour(id: TourId | "here") { if (typeof window !== "undefi
 /** Which tour belongs to this address. Nothing on admin, sign-in, forms or payment pages. */
 export function tourForPath(path: string, signedIn: boolean): TourId | null {
   if (path === "/") return "home";
-  if (path === "/properties") return "results";
   if (/^\/property\/[^/]+$/.test(path)) return "listing";
   const m = /^\/dashboard\/agency\/[^/]+(\/[a-z]+)?$/.exec(path);
   if (m && signedIn) {

@@ -26,13 +26,13 @@ const SUP: HNav[] = [
 ];
 
 const resourceCta: Record<string, { tag: string; cta: HNav; secondary: HNav }> = {
-  "buying-guide": { tag: "Buying", cta: { l: "Homes for sale", to: "/properties" }, secondary: { l: "Mortgage tools", to: "/tools" } },
-  "renting-guide": { tag: "Renting", cta: { l: "Homes to rent", to: "/properties" }, secondary: { l: "Compare homes", to: "/compare" } },
+  "buying-guide": { tag: "Buying", cta: { l: "Homes for sale", to: "/" }, secondary: { l: "Mortgage tools", to: "/tools" } },
+  "renting-guide": { tag: "Renting", cta: { l: "Homes to rent", to: "/" }, secondary: { l: "Compare homes", to: "/compare" } },
   "selling-and-letting": { tag: "Selling and letting", cta: { l: "List a property", to: "/list-property" }, secondary: { l: "See pricing", to: "/info/pricing" } },
   "safety-and-fraud": { tag: "Staying safe", cta: { l: "Report a listing", to: "/info/report-a-listing" }, secondary: { l: "Listing standards", to: "/info/listing-standards" } },
 };
 const companyRibbon: Record<string, { ribbon: string; cta: HNav }> = {
-  "about-us": { ribbon: "Built in Nairobi, for everyone looking for a place in Kenya.", cta: { l: "Browse properties", to: "/properties" } },
+  "about-us": { ribbon: "Built in Nairobi, for everyone looking for a place in Kenya.", cta: { l: "Browse properties", to: "/" } },
   "list-with-hodii": { ribbon: "List free today. Boost or go Premium when you want more eyes.", cta: { l: "Start listing", to: "/list-property" } },
   "listing-standards": { ribbon: "What every listing on Hodii must include.", cta: { l: "List a property", to: "/list-property" } },
   careers: { ribbon: "We're a small team solving a real problem. Come and help.", cta: { l: "Write to us", to: "/info/contact-us" } },

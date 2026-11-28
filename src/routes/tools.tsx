@@ -121,7 +121,7 @@ function Tools() {
             <Result big label="You could borrow about" value={kes(borrow)} />
             <Result label="Property price with your deposit" value={kes(maxPrice)} />
           </div></div>
-          {borrow > 0 && <Link to="/properties" search={{ max: String(Math.round(maxPrice)), for: "sale" }} className="cta cta-ink mt-6 inline-flex">See homes up to this price →</Link>}
+          {borrow > 0 && <Link to="/" search={{ max: String(Math.round(maxPrice)), for: "sale" }} className="cta cta-ink mt-6 inline-flex">See homes up to this price →</Link>}
         </>)}
         {tab === "rent" && (<>
           <div className="grid gap-8 lg:grid-cols-2"><div className="grid content-start gap-4 sm:grid-cols-2">
@@ -136,7 +136,7 @@ function Tools() {
             <Result label="Cash needed to move in" value={kes(upfront)} />
             <Result label="Rent as a share of income" value={income > 0 ? `${Math.round((rent / income) * 100)}%` : "—"} />
           </div></div>
-          <Link to="/properties" search={{ for: "rent", max: String(comfy) }} className="cta cta-ink mt-6 inline-flex">See rentals within this budget →</Link>
+          <Link to="/" search={{ for: "rent", max: String(comfy) }} className="cta cta-ink mt-6 inline-flex">See rentals within this budget →</Link>
         </>)}
       </section>
     </main>

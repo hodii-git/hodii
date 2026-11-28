@@ -50,7 +50,7 @@ export function SaveSearchButton({ params }: { params: Partial<SearchParams> }) 
       <span className="relative inline-flex">{hint.bubble}<PopoverTrigger asChild><button type="button" data-tour="save-search" aria-label="Save search" {...hint.handlers} className="tool-btn"><BellPlus className="h-4 w-4" aria-hidden /><span className="hidden sm:inline">Save search</span></button></PopoverTrigger></span>
       <PopoverContent align="start" className="glass-menu w-80 rounded-3xl p-4">
         {!user ? (
-          <p className="text-sm"><Link to="/auth" search={{ redirect: "/properties" }} className="font-bold text-primary underline">Sign in</Link> to save this search and get told when new properties match it.</p>
+          <p className="text-sm"><Link to="/auth" search={{ redirect: "/" }} className="font-bold text-primary underline">Sign in</Link> to save this search and get told when new properties match it.</p>
         ) : (
           <form className="grid gap-3" onSubmit={(e) => { e.preventDefault(); save.mutate(); }}>
             <div><label htmlFor="ss-name" className="text-xs font-bold text-muted-foreground">Name</label><input id="ss-name" value={name} maxLength={60} onChange={(e) => setName(e.target.value)} className="auth-input mt-1 h-10" /></div>

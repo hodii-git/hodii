@@ -42,7 +42,7 @@ function Compare() {
       <PageHero img={paintings.pines} eyebrow="Compare" title="Compare properties" description={<p>Up to four listings side by side. Copy the address of this page to share your comparison.</p>} />
       <div className="mx-auto mt-[clamp(2rem,4vw,3.5rem)] w-[var(--site-w)] max-w-[82rem] pb-20">
       {ids.length === 0 ? (
-        <div className="info-card mt-2"><p className="font-semibold">Nothing to compare yet.</p><p className="mt-1 text-sm text-muted-foreground">Use the Compare button on a listing, then come back here.</p><Link to="/properties" className="mt-4 inline-block rounded-full bg-primary px-5 py-2 font-bold text-primary-foreground">Browse properties</Link></div>
+        <div className="info-card mt-2"><p className="font-semibold">Nothing to compare yet.</p><p className="mt-1 text-sm text-muted-foreground">Use the Compare button on a listing, then come back here.</p><Link to="/" className="mt-4 inline-block rounded-full bg-primary px-5 py-2 font-bold text-primary-foreground">Browse properties</Link></div>
       ) : isPending ? <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-busy="true" aria-label="Loading comparison">{Array.from({ length: Math.max(2, ids.length) }, (_, i) => <div key={i} className="h-64 animate-pulse rounded-2xl bg-muted" />)}</div> : !data?.length ? <p className="mt-8">These listings are no longer available.</p> : (
         <div className="mt-8 w-full max-w-full overflow-x-auto">
           <table className="w-full table-auto border-separate border-spacing-0 text-sm">

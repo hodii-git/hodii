@@ -26,7 +26,7 @@ export function HeaderSearch() {
     const { understood: u } = understand(raw.trim());
     applied.current = u.criteria.q ?? "";
     const next = replaceCriteria({ ...pickCriteria(params), ...u.criteria, q: u.criteria.q });
-    void navigate({ to: "/properties", search: { ...urlFromParams({ ...params, ...next, page: 1 }), ...keepView(search) }, replace: true, resetScroll: false });
+    void navigate({ to: "/", search: { ...urlFromParams({ ...params, ...next, page: 1 }), ...keepView(search) }, replace: true, resetScroll: false });
   };
   return (
     <form role="search" className="hdr-search mx-auto flex w-full items-center gap-1.5 rounded-full bg-muted pl-6 pr-1.5 shadow-[0_10px_30px_-14px_rgb(0_0_0/0.8)] ring-1 ring-border transition-shadow" onSubmit={(e) => { e.preventDefault(); clearTimeout(timer.current); run(text); }}>
@@ -50,7 +50,7 @@ export function HeaderPills({ fade = "card" }: { fade?: "card" | "page" }) {
   const edge = fade === "page" ? "var(--background)" : "var(--card)";
   return (
     <div role="group" aria-label="Property types" data-tour="type-pills" className="flex items-center gap-2 overflow-x-auto py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ "--fade-bg": edge, WebkitMaskImage: "linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 28px), transparent 100%)", maskImage: "linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 28px), transparent 100%)" } as React.CSSProperties}>
-      <button type="button" aria-pressed={none} onClick={() => void navigate({ to: "/properties", search: { ...urlFromParams({ ...params, propertyTypes: undefined, page: 1 }), ...keepView(search) }, replace: true, resetScroll: false })} className={`${pill} ${none ? "ld-pill-on" : ""}`}>All</button>
+      <button type="button" aria-pressed={none} onClick={() => void navigate({ to: "/", search: { ...urlFromParams({ ...params, propertyTypes: undefined, page: 1 }), ...keepView(search) }, replace: true, resetScroll: false })} className={`${pill} ${none ? "ld-pill-on" : ""}`}>All</button>
       <MobileTypePills pill={pill} />
     </div>
   );
@@ -62,7 +62,7 @@ export function MobileTypePills({ pill }: { pill: string }) {
   const search = useRouterState({ select: (s) => s.location.search }) as SearchUrl;
   const params = paramsFromUrl(search);
   const sel = params.propertyTypes;
-  const set = (v: string[] | undefined) => void navigate({ to: "/properties", search: { ...urlFromParams({ ...params, propertyTypes: v as typeof params.propertyTypes, page: 1 }), ...keepView(search) }, resetScroll: false });
+  const set = (v: string[] | undefined) => void navigate({ to: "/", search: { ...urlFromParams({ ...params, propertyTypes: v as typeof params.propertyTypes, page: 1 }), ...keepView(search) }, resetScroll: false });
   return (
     <>
       {PROPERTY_TYPES.map((t) => {

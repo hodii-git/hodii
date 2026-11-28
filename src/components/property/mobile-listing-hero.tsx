@@ -40,12 +40,12 @@ export function MobileListingTopBar({ p }: { p: PropertyDetail }) {
         </svg>
       </button>
       <div className="flex min-w-0 flex-1 items-center gap-[10px] overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ WebkitMaskImage: "linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%)", maskImage: "linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%)" }}>
-        <Link to="/properties" search={{ for: p.listingType }} className={`${pill} ld-pill-on`}>{dealLabel}</Link>
-        <Link to="/properties" search={{ type: p.propertyType }} className={pill}>{typeLabel}</Link>
-        <Link to="/properties" search={thirdSearch} className={pill}>{thirdLabel}</Link>
-        {p.county && p.areaName && p.location.countySlug && <Link to="/properties" search={{ county: p.location.countySlug }} className={pill}>{p.county}</Link>}
-        {p.bedrooms !== null && p.bedrooms > 0 && <Link to="/properties" search={{ for: p.listingType, type: p.propertyType, ...(p.location.countySlug ? { county: p.location.countySlug } : {}) }} className={pill}>{p.bedrooms} Bed {typeLabel}</Link>}
-        {p.category && <Link to="/properties" search={{ q: p.category }} className={pill}>{p.category[0]!.toUpperCase() + p.category.slice(1)}</Link>}
+        <Link to="/" search={{ for: p.listingType }} className={`${pill} ld-pill-on`}>{dealLabel}</Link>
+        <Link to="/" search={{ type: p.propertyType }} className={pill}>{typeLabel}</Link>
+        <Link to="/" search={thirdSearch} className={pill}>{thirdLabel}</Link>
+        {p.county && p.areaName && p.location.countySlug && <Link to="/" search={{ county: p.location.countySlug }} className={pill}>{p.county}</Link>}
+        {p.bedrooms !== null && p.bedrooms > 0 && <Link to="/" search={{ for: p.listingType, type: p.propertyType, ...(p.location.countySlug ? { county: p.location.countySlug } : {}) }} className={pill}>{p.bedrooms} Bed {typeLabel}</Link>}
+        {p.category && <Link to="/" search={{ q: p.category }} className={pill}>{p.category[0]!.toUpperCase() + p.category.slice(1)}</Link>}
       </div>
       <button type="button" data-menu-trigger aria-label="Open menu" onClick={() => window.dispatchEvent(new CustomEvent("hodii:toggle-menu"))} className="relative grid size-10 shrink-0 place-items-center text-white active:scale-95">
         <svg viewBox="0 0 24 24" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>

@@ -7,6 +7,6 @@ export const Route = createFileRoute("/section/$slug")({
     if (params.slug === "new-developments") throw redirect({ to: "/developments", statusCode: 301 });
     const c = categorySearch(params.slug);
     if (!c) throw notFound();
-    throw redirect({ to: "/properties", search: c.search, statusCode: 301 });
+    throw redirect({ to: "/", search: c.search, statusCode: 301 });
   },
 });

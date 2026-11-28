@@ -316,7 +316,7 @@ export function SearchMap({ params, onGeo, variant = "default", overlay }: { par
           {data ? `${data.total.toLocaleString("en-KE")} listing${data.total === 1 ? "" : "s"}${data.total > data.pins.length ? ` · ${data.pins.length} on map` : ""}` : <Loader size="xs" />}
         </p>
       </div>
-      {data && !isFetching && data.pins.length === 0 && ready && <p className="absolute inset-x-0 top-1/2 z-[999] mx-auto w-fit max-w-[80%] -translate-y-1/2 rounded-full border border-border bg-background px-4 py-2 text-center text-sm shadow-lg">{data.total === 0 ? "No listings in this area." : "These listings have no map pin yet."} <Link to="/properties" className="font-bold underline">Clear everything</Link></p>}
+      {data && !isFetching && data.pins.length === 0 && ready && <p className="absolute inset-x-0 top-1/2 z-[999] mx-auto w-fit max-w-[80%] -translate-y-1/2 rounded-full border border-border bg-background px-4 py-2 text-center text-sm shadow-lg">{data.total === 0 ? "No listings in this area." : "These listings have no map pin yet."} <Link to="/" className="font-bold underline">Clear everything</Link></p>}
     </div>
   );
 }

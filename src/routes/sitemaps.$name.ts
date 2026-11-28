@@ -14,7 +14,7 @@ export const Route = createFileRoute("/sitemaps/$name")({
         const name = params.name;
         if (name === "pages.xml") {
           return xml([
-            { loc: "/", changefreq: "hourly", priority: "1.0" }, { loc: "/properties", changefreq: "hourly", priority: "0.9" }, { loc: "/agencies", changefreq: "daily", priority: "0.6" }, { loc: "/developments", changefreq: "daily", priority: "0.7" }, { loc: "/neighbourhoods", changefreq: "daily", priority: "0.7" },
+            { loc: "/", changefreq: "hourly", priority: "1.0" }, { loc: "/agencies", changefreq: "daily", priority: "0.6" }, { loc: "/developments", changefreq: "daily", priority: "0.7" }, { loc: "/neighbourhoods", changefreq: "daily", priority: "0.7" },
             { loc: "/tools", changefreq: "monthly", priority: "0.5" }, { loc: "/locations", changefreq: "weekly", priority: "0.6" },
             ...Object.keys(CATEGORY_SEARCHES).map((slug) => ({ loc: `/section/${slug}`, changefreq: "daily", priority: "0.7" })),
             ...Object.keys(infoPages).map((slug) => ({ loc: `/info/${slug}`, changefreq: "monthly", priority: "0.3" })),

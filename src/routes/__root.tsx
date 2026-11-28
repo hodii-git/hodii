@@ -147,7 +147,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       { type: "application/ld+json", children: JSON.stringify([
         { "@context": "https://schema.org", "@type": "Organization", name: SITE_NAME, legalName: BRAND.legalName, url: absUrl("/"), logo: absUrl("/icon-512.png"), email: CONTACT_EMAIL, areaServed: { "@type": "Country", name: BRAND.country } },
-        { "@context": "https://schema.org", "@type": "WebSite", name: SITE_NAME, url: absUrl("/"), potentialAction: { "@type": "SearchAction", target: `${absUrl("/properties")}?q={search_term_string}`, "query-input": "required name=search_term_string" } },
+        { "@context": "https://schema.org", "@type": "WebSite", name: SITE_NAME, url: absUrl("/"), potentialAction: { "@type": "SearchAction", target: `${absUrl("/")}?q={search_term_string}`, "query-input": "required name=search_term_string" } },
       ]) },
     ],
   }),

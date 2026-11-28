@@ -52,12 +52,12 @@ function CtaBand({ title, text, to, label }: { title: string; text: string; to: 
 
 /* ================= Guides (Resources) ================= */
 const guideLook: Record<string, { img: WbImage; Icon: typeof Home; label: string; faq: Qa[]; cta: { to: string; label: string; text: string } }> = {
-  "buying-guide": { img: paintings.valley, Icon: Home, label: "Buying guide", cta: { to: "/properties", label: "Browse homes for sale", text: "When you are ready to look, every listing is tied to a named agency or owner." }, faq: [
+  "buying-guide": { img: paintings.valley, Icon: Home, label: "Buying guide", cta: { to: "/", label: "Browse homes for sale", text: "When you are ready to look, every listing is tied to a named agency or owner." }, faq: [
     { q: "How much should I budget beyond the price?", a: "Plan for legal fees, stamp duty, valuation, and moving costs on top of the price. Ask your lawyer for a full estimate before you make an offer." },
     { q: "Should I pay a deposit before viewing?", a: "No. Never pay a deposit or fee before you have seen the property and checked who owns it." },
     { q: "How do I check a title?", a: "Ask for a copy of the title and have your advocate run an official search before you pay anything." },
   ] },
-  "renting-guide": { img: paintings.peaks, Icon: Building2, label: "Renting guide", cta: { to: "/properties", label: "Browse homes to rent", text: "Filter by county, area, price and bedrooms, and save the ones you like." }, faq: [
+  "renting-guide": { img: paintings.peaks, Icon: Building2, label: "Renting guide", cta: { to: "/", label: "Browse homes to rent", text: "Filter by county, area, price and bedrooms, and save the ones you like." }, faq: [
     { q: "What should be in a tenancy agreement?", a: "Rent, deposit, notice period, who pays which bills, and the rules about repairs. Read it fully before you sign." },
     { q: "Is it safe to pay rent before viewing?", a: "No. See the place first, then pay through a traceable method and keep every receipt." },
     { q: "Can I get my deposit back?", a: "Yes, if the agreement says so and you leave the place in good condition. Take dated photos on move-in day." },
@@ -198,7 +198,7 @@ export function AboutView({ page }: { page: InfoPage }) {
                 <span key={`b${step}`} className="rise block" style={{ animationDelay: "180ms" }}><span className="text-cocoa-hero">{founder.titles[step]?.[1]}</span></span>
               </h1>
               <p key={`p${step}`} className="rise mt-5 max-w-xl text-[clamp(1rem,1.6vw,1.25rem)] text-cream/75" style={{ animationDelay: "320ms" }}>{founder.lines[step]}</p>
-              <div className="rise mt-9" style={{ animationDelay: "450ms" }}><DarkBtn to="/properties">Browse properties</DarkBtn></div>
+              <div className="rise mt-9" style={{ animationDelay: "450ms" }}><DarkBtn to="/">Browse properties</DarkBtn></div>
             </div>
             <div className="about-ai-panel rise text-left" style={{ animationDelay: "520ms" }}>
               <p className="about-ai-label">What we stand for</p>
@@ -265,7 +265,7 @@ export function AboutView({ page }: { page: InfoPage }) {
       )}
       <Reviews />
       <Faq items={hodiiFaqs} />
-      <CtaBand title="Come on in" text="Search homes, land and commercial space, or list yours." to="/properties" label="Browse properties" />
+      <CtaBand title="Come on in" text="Search homes, land and commercial space, or list yours." to="/" label="Browse properties" />
     </WbPage>
   );
 }

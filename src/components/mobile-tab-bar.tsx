@@ -13,6 +13,8 @@ import { isSearchPage, setSheet, toggleSheet, useSheetOpen } from "@/lib/search-
  */
 export function MobileTabBar() {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
+  const filtered = path === "/" && searchStr.length > 1;
   const { user } = useAuth();
   const signedIn = !!user;
   const sheet = useSheetOpen();
@@ -46,8 +48,8 @@ export function MobileTabBar() {
 
   // On a listing page the person is looking at one property, so no tab is lit.
   const on = {
-    home: !isPropertyPage && path === "/",
-    explore: !isPropertyPage && (path.startsWith("/properties") || sheet),
+    home: !isPropertyPage && path === "/" && !filtered && !sheet,
+    explore: !isPropertyPage && (filtered || sheet),
     saved: !isPropertyPage && path.startsWith("/saved"),
     inquiries: !isPropertyPage && path.startsWith("/notifications"),
     profile: !isPropertyPage && (path.startsWith("/profile") || path.startsWith("/auth")),
@@ -70,8 +72,8 @@ export function MobileTabBar() {
       <Link to="/" className={item(on.home)} aria-current={current(on.home)}>
         <Home {...ico(on.home)} className={`size-[22px] fill-current ${on.home ? "text-primary" : ""}`} />Home
       </Link>
-      <Link to="/properties" className={item(on.explore)} aria-current={current(on.explore)} aria-expanded={sheet}
-        onClick={(e) => { if (path === "/properties") { e.preventDefault(); toggleSheet(); } else setSheet(true); }}>
+      <Link to="/" className={item(on.explore)} aria-current={current(on.explore)} aria-expanded={sheet}
+        onClick={(e) => { if (path === "/") { e.preventDefault(); toggleSheet(); } else setSheet(true); }}>
         <Compass {...ico(on.explore)} />Explore
       </Link>
       <Link to="/saved" className={item(on.saved)} aria-current={current(on.saved)}>

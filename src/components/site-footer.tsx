@@ -13,7 +13,7 @@ function FooterLink({ label, kind }: { label: string; kind: FooterColumn["kind"]
   if (label === "Neighbourhoods") return <Link to="/neighbourhoods" className={LINK}>{label}</Link>;
   const c = kind === "section" ? categorySearch(label) : null;
   return c ? (
-    <Link to="/properties" search={c.search} className={LINK}>{label}</Link>
+    <Link to="/" search={c.search} className={LINK}>{label}</Link>
   ) : (
     <Link to="/info/$slug" params={{ slug: slugify(label) }} className={LINK}>{label}</Link>
   );

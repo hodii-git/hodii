@@ -100,7 +100,7 @@ export async function sweepSavedSearches(db: Db, userId: string, now: Date) {
     const search = urlFromParams(criteria);
     await notify(db, [userId], {
       kind: "saved_search", title: `${n >= 50 ? "50+" : n} new ${n === 1 ? "property matches" : "properties match"} “${String(s["name"])}”`,
-      body: n === 1 ? String(first[0]?.["title"] ?? "") : "Open your search to see them.", link: `/properties?${new URLSearchParams(search as Record<string, string>).toString()}`,
+      body: n === 1 ? String(first[0]?.["title"] ?? "") : "Open your search to see them.", link: `/?${new URLSearchParams(search as Record<string, string>).toString()}`,
     });
   }
 }

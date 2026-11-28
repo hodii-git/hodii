@@ -54,12 +54,12 @@ function SearchList({ query }: { query: ReturnType<typeof useQuery<Awaited<Retur
   const update = useMutation({ mutationFn: (v: { id: string; frequency: (typeof ALERT_FREQUENCIES)[number] }) => updateSavedSearch({ data: v }), onSuccess: refresh, onError: (e) => toast.error((e as Error).message) });
   const remove = useMutation({ mutationFn: (id: string) => deleteSavedSearch({ data: { id } }), onSuccess: () => { toast.success("Search deleted"); refresh(); }, onError: (e) => toast.error((e as Error).message) });
   if (query.isPending) return <LoaderBlock className="py-10" />;
-  if (!query.data?.length) return <div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">No saved searches yet. Search for properties, then tap “Save search”.</p><Link to="/properties" className="mt-3 inline-block font-bold text-primary underline">Search properties</Link></div>;
+  if (!query.data?.length) return <div className="empty-card"><p className="text-sm font-semibold text-muted-foreground">No saved searches yet. Search for properties, then tap “Save search”.</p><Link to="/" className="mt-3 inline-block font-bold text-primary underline">Search properties</Link></div>;
   return (
     <ul className="grid gap-3">
       {query.data.map((s) => (
         <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
-          <Link to="/properties" search={urlFromParams(s.criteria)} className="min-w-0 font-bold hover:underline"><span className="block truncate">{s.name}</span><span className="block truncate text-xs font-normal text-muted-foreground">{nameSearch(s.criteria)}</span></Link>
+          <Link to="/" search={urlFromParams(s.criteria)} className="min-w-0 font-bold hover:underline"><span className="block truncate">{s.name}</span><span className="block truncate text-xs font-normal text-muted-foreground">{nameSearch(s.criteria)}</span></Link>
           <div className="flex items-center gap-2">
             <label className="sr-only" htmlFor={`f-${s.id}`}>How often</label>
             <Sel id={`f-${s.id}`} value={s.frequency} onChange={(e) => update.mutate({ id: s.id, frequency: e.target.value as (typeof ALERT_FREQUENCIES)[number] })} className="h-9 rounded-xl border border-input bg-background px-2 text-sm">

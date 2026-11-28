@@ -24,8 +24,8 @@ export function LocationView({ l }: { l: LocationPage }) {
       <h1 className="mt-2 text-2xl font-extrabold md:text-3xl">Property in {l.name}{l.areaSlug ? `, ${l.countyName}` : ""}</h1>
       <p className="mt-3 max-w-2xl text-lg text-muted-foreground">{locationBlurb(l)}</p>
       <div className="mt-6 flex flex-wrap gap-3">
-        <Link to="/properties" search={{ ...base, for: "sale" }} className="rounded-full bg-primary px-5 py-2.5 font-bold text-primary-foreground">For sale{l.counts.sale ? ` (${l.counts.sale})` : ""}</Link>
-        <Link to="/properties" search={{ ...base, for: "rent" }} className="rounded-full border border-input px-5 py-2.5 font-bold">To rent{l.counts.rent ? ` (${l.counts.rent})` : ""}</Link>
+        <Link to="/" search={{ ...base, for: "sale" }} className="rounded-full bg-primary px-5 py-2.5 font-bold text-primary-foreground">For sale{l.counts.sale ? ` (${l.counts.sale})` : ""}</Link>
+        <Link to="/" search={{ ...base, for: "rent" }} className="rounded-full border border-input px-5 py-2.5 font-bold">To rent{l.counts.rent ? ` (${l.counts.rent})` : ""}</Link>
       </div>
       {(l.avgSale || l.avgRent) && (
         <dl className="mt-8 grid max-w-xl grid-cols-2 gap-4">

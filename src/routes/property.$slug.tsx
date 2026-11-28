@@ -56,7 +56,7 @@ export const Route = createFileRoute("/property/$slug")({
     <main className="mx-auto max-w-xl px-4 pt-32 pb-24 text-center">
       <h1 className="text-3xl font-extrabold">This listing is no longer available</h1>
       <p className="mt-3 text-muted-foreground">It may have been let, sold or taken down. Here are similar properties.</p>
-      <Link to="/properties" className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground">Browse properties</Link>
+      <Link to="/" className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground">Browse properties</Link>
     </main>
   ),
   component: PropertyPage,

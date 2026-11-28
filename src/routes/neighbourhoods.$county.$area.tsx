@@ -47,7 +47,7 @@ function Page() {
         <RatingBars s={s} />
       </section>
       <div className="mt-4 flex flex-wrap gap-2">
-        <Link to="/properties" search={{ county: a.countyCode ? String(a.countyCode) : undefined, area: a.areaSlug } as never} className="inline-flex h-11 items-center rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground">See {a.listings} {a.listings === 1 ? "listing" : "listings"} here</Link>
+        <Link to="/" search={{ county: a.countyCode ? String(a.countyCode) : undefined, area: a.areaSlug } as never} className="inline-flex h-11 items-center rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground">See {a.listings} {a.listings === 1 ? "listing" : "listings"} here</Link>
         <Link to="/neighbourhoods/compare" search={{ a: key }} className="inline-flex h-11 items-center rounded-full border border-input px-5 text-sm font-bold">Compare with others</Link>
       </div>
       <div role="tablist" aria-label="Neighbourhood sections" className="mt-8 flex gap-2">

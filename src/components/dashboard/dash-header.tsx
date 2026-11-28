@@ -113,7 +113,7 @@ export function DashHeader({ framed = false }: { framed?: boolean } = {}) {
     right = (
       <>
         {agencies[0] && <Action to="/dashboard/agency/$slug" params={{ slug: agencies[0].slug }} icon={Users}>{agencies[0].name}</Action>}
-        <Action to="/properties" icon={Search}>Browse homes</Action>
+        <Action to="/" icon={Search}>Browse homes</Action>
         {user?.accountType === "agency" ? <Action primary to="/list-property" icon={Plus}>List a property</Action> : null}
       </>
     );

@@ -81,7 +81,7 @@ export function WbHeader({ cfg, slug }: { cfg: HeaderCfg; slug: string }) {
             {[...cfg.nav, ...(cfg.secondary ? [cfg.secondary] : [])].map((n) => (
               <WLink key={n.l} to={n.to} className="menu-link" onClick={() => setOpen(false)}>{n.l}<ChevronRight className="h-4 w-4" /></WLink>
             ))}
-            <WLink to="/properties" className="menu-link" onClick={() => setOpen(false)}>Browse properties<ChevronRight className="h-4 w-4" /></WLink>
+            <WLink to="/" className="menu-link" onClick={() => setOpen(false)}>Browse properties<ChevronRight className="h-4 w-4" /></WLink>
           </nav>
         </div>
       </div>
@@ -94,7 +94,7 @@ function FooterLink({ label, kind }: { label: string; kind: FooterColumn["kind"]
   if (label === "Neighbourhoods") return <Link to="/neighbourhoods" className="foot-link"><Bold t={label} /></Link>;
   const c = kind === "section" ? categorySearch(label) : null;
   return c ? (
-    <Link to="/properties" search={c.search} className="foot-link"><Bold t={label} /></Link>
+    <Link to="/" search={c.search} className="foot-link"><Bold t={label} /></Link>
   ) : (
     <Link to="/info/$slug" params={{ slug: slugify(label) }} className="foot-link"><Bold t={label} /></Link>
   );

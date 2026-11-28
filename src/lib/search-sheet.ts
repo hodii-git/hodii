@@ -8,4 +8,4 @@ export const setSheet = (v: boolean) => { if (open !== v) { open = v; emit(); } 
 export const toggleSheet = () => setSheet(!open);
 export const useSheetOpen = () => useSyncExternalStore((f) => { subs.add(f); return () => { subs.delete(f); }; }, () => open, () => false);
 /** Pages that carry the search card. */
-export const isSearchPage = (p: string) => p === "/" || p === "/properties";
+export const isSearchPage = (p: string) => p === "/";

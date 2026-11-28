@@ -37,7 +37,7 @@ export const Route = createFileRoute("/agency/$slug")({
     return { meta: [{ title }, { name: "description", content: desc }, { property: "og:title", content: title }, { property: "og:description", content: desc }, { property: "og:type", content: "profile" }], links: [{ rel: "canonical", href: absUrl(`/agency/${params.slug}`) }] };
   },
   notFoundComponent: () => (
-    <main className="mx-auto max-w-xl px-4 pt-32 pb-24 text-center"><h1 className="text-3xl font-extrabold">Agency not found</h1><Link to="/properties" className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground">Browse properties</Link></main>
+    <main className="mx-auto max-w-xl px-4 pt-32 pb-24 text-center"><h1 className="text-3xl font-extrabold">Agency not found</h1><Link to="/" className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground">Browse properties</Link></main>
   ),
   component: AgencyPage,
 });

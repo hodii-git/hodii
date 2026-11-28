@@ -17,15 +17,15 @@ import { categorySearch } from "@/lib/search-url";
 import { isSearchPage, setSheet, toggleSheet, useSheetOpen } from "@/lib/search-sheet";
 
 type NavItem =
-  | { label: string; to: "/properties"; search: Record<string, string>; on: (p: string, s: string) => boolean }
+  | { label: string; to: "/"; search: Record<string, string>; on: (p: string, s: string) => boolean }
   | { label: string; to: "/developments" | "/neighbourhoods"; search?: undefined; on: (p: string, s: string) => boolean };
 /** The pill look shared with the listing page's top bar. */
 const PILL = "ld-pill shrink-0 whitespace-nowrap !h-11 !text-[0.95rem]";
 
 const NAV: NavItem[] = [
-  { label: "For sale", to: "/properties", search: { for: "sale" }, on: (p, s) => p.startsWith("/properties") && s.includes("for=sale") },
-  { label: "To rent", to: "/properties", search: { for: "rent" }, on: (p, s) => p.startsWith("/properties") && s.includes("for=rent") },
-  { label: "Short stays", to: "/properties", search: { for: "short_stay" }, on: (p, s) => p.startsWith("/properties") && s.includes("for=short_stay") },
+  { label: "For sale", to: "/", search: { for: "sale" }, on: (p, s) => p.startsWith("/") && s.includes("for=sale") },
+  { label: "To rent", to: "/", search: { for: "rent" }, on: (p, s) => p.startsWith("/") && s.includes("for=rent") },
+  { label: "Short stays", to: "/", search: { for: "short_stay" }, on: (p, s) => p.startsWith("/") && s.includes("for=short_stay") },
   { label: "Developments", to: "/developments", on: (p) => p.startsWith("/development") },
   { label: "Neighbourhoods", to: "/neighbourhoods", on: (p) => p.startsWith("/neighbourhoods") },
 ];
@@ -124,11 +124,11 @@ export function SiteHeader() {
   const navigate = useNavigate();
   const sheet = useSheetOpen();
   /** Phone layout on explore pages: logo and menu sit outside, the bar in the middle is the search. */
-  const solid = path === "/properties" || path === "/"; // the explore page and the homepage: header and type pills form one solid, edge-to-edge block
+  const solid = path === "/"; // the explore page and the homepage: header and type pills form one solid, edge-to-edge block
   const showHeaderSearch = solid && !/[?&]view=map/.test(searchStr); // map view carries its own search below the map
   const explore = isSearchPage(path) || path === "/developments" || path === "/neighbourhoods" || path === "/agencies";
   const isPropertyPage = path.startsWith("/property/");
-  const openSearch = () => { setOpen(false); if (path === "/properties" || path === "/") toggleSheet(); else { void navigate({ to: "/properties" }); setSheet(true); } };
+  const openSearch = () => { setOpen(false); if (path === "/") toggleSheet(); else { void navigate({ to: "/" }); setSheet(true); } };
   const popup = (which: "filters" | "ai") => window.dispatchEvent(new CustomEvent("hodii:open-popup", { detail: which }));
   /** Second phone row: the filters icon, the search bar, and the round AI button. */
   const phoneRow = (
@@ -201,7 +201,7 @@ export function SiteHeader() {
           <div className="ph-r1 md:hidden"><div className="ph-r1-in flex items-center gap-2 pl-3 pr-14">
             <Link to="/" className="logo flex shrink-0 items-center gap-2 pr-1 text-foreground" aria-label={`${BRAND.name} home`}><HodiiLogo outline size="h-9 w-9" /></Link>
             <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ WebkitMaskImage: "linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 14px), transparent 100%)", maskImage: "linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 14px), transparent 100%)" }} data-tour="type-pills">
-              {NAV.map((n) => { const c = `${PILL} ${n.on(path, searchStr) ? "ld-pill-on" : ""}`; return n.to !== "/properties" ? <Link key={n.label} to={n.to} className={c}>{n.label}</Link> : <Link key={n.label} to="/properties" search={n.search} className={c}>{n.label}</Link>; })}
+              {NAV.map((n) => { const c = `${PILL} ${n.on(path, searchStr) ? "ld-pill-on" : ""}`; return n.to !== "/" ? <Link key={n.label} to={n.to} className={c}>{n.label}</Link> : <Link key={n.label} to="/" search={n.search} className={c}>{n.label}</Link>; })}
               <span className="h-5 w-px shrink-0 bg-white/20" aria-hidden />
               <MobileTypePills pill={PILL} />
             </div>
@@ -232,9 +232,9 @@ export function SiteHeader() {
             {ctxFor && !isPropertyPage && !explore ? ctxFor.links.map((l) => ctxLink(l, "nav-link")) : NAV.map((n) => {
               const cur = n.on(path, searchStr);
               const cls = `nav-link${cur ? " is-current" : ""}`;
-              return n.to !== "/properties"
+              return n.to !== "/"
                 ? <Link key={n.label} to={n.to} aria-current={cur ? "page" : undefined} className={cls}>{n.label}</Link>
-                : <Link key={n.label} to="/properties" search={n.search} aria-current={cur ? "page" : undefined} className={cls}>{n.label}</Link>;
+                : <Link key={n.label} to="/" search={n.search} aria-current={cur ? "page" : undefined} className={cls}>{n.label}</Link>;
             })}
           </nav>
           <div className="flex items-center justify-end gap-1.5">
@@ -266,13 +266,13 @@ export function SiteHeader() {
           )}
           <div className={isPropertyPage ? "" : ctxFor && !explore ? "" : "lg:hidden"}>
             <p className="menu-title">Go to</p>
-            {NAV.map((n) => n.to !== "/properties"
+            {NAV.map((n) => n.to !== "/"
               ? <Link key={n.label} to={n.to} className={row} onClick={close}>{Tile(ICONS[n.label] ?? Home)}<span className="mr-auto">{n.label}</span>{Chev}</Link>
-              : <Link key={n.label} to="/properties" search={n.search} className={row} onClick={close}>{Tile(ICONS[n.label] ?? Home)}<span className="mr-auto">{n.label}</span>{Chev}</Link>)}
+              : <Link key={n.label} to="/" search={n.search} className={row} onClick={close}>{Tile(ICONS[n.label] ?? Home)}<span className="mr-auto">{n.label}</span>{Chev}</Link>)}
           </div>
           <p className="menu-title">Browse by type</p>
           <div className="grid">
-            {[...primaryCategories, ...moreCategories].map((c) => { const k = categorySearch(c); return k ? <Link key={c} to="/properties" search={k.search} className={row} onClick={close}>{Tile(ICONS[c] ?? Home)}<span className="mr-auto">{c}</span>{Chev}</Link> : null; })}
+            {[...primaryCategories, ...moreCategories].map((c) => { const k = categorySearch(c); return k ? <Link key={c} to="/" search={k.search} className={row} onClick={close}>{Tile(ICONS[c] ?? Home)}<span className="mr-auto">{c}</span>{Chev}</Link> : null; })}
           </div>
           <p className="menu-title">More on {BRAND.name}</p>
           <div className="grid">

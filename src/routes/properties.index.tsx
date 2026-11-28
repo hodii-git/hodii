@@ -89,15 +89,17 @@ function PropertiesPage() {
       </aside>}
       <div className="min-w-0">
       <div className="mb-4 lg:mb-5"><ExploreBar value={params} onChange={change} result={aiResult} /></div>
-      <div className="-mt-1 mb-3">
-        <h1 title={countTitle} className="line-clamp-1 font-display text-xl font-extrabold leading-tight">{countTitle}</h1>
-        {heading.subtitle && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{heading.subtitle}</p>}
-      </div>
-      <div className="flex flex-nowrap items-center justify-end gap-2 overflow-x-auto pb-2 pt-1 [scrollbar-width:none] sm:gap-3 [&::-webkit-scrollbar]:hidden">
-        <span data-tour="layout" className="inline-flex"><LayoutPill /></span>
-        <SaveSearchButton params={params} />
-        <ShareButton title={heading.title} />
-        <div className="w-36 shrink-0 sm:w-44"><Pick label="Sort by" pillText="Sort by" value={params.sort} onChange={(v) => change({ sort: v as SearchParams["sort"], page: 1 })} options={SORTS.map(([k, l]) => ({ value: k, label: l }))} className="h-10" /></div>
+      <div className="-mt-1 mb-3 md:flex md:items-end md:justify-between md:gap-4">
+        <div className="min-w-0">
+          <h1 title={countTitle} className="line-clamp-1 font-display text-xl font-extrabold leading-tight">{countTitle}</h1>
+          {heading.subtitle && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{heading.subtitle}</p>}
+        </div>
+        <div className="flex flex-nowrap items-center justify-end gap-2 overflow-x-auto pb-1 pt-3 [scrollbar-width:none] md:shrink-0 md:pt-0 sm:gap-3 [&::-webkit-scrollbar]:hidden">
+          <span data-tour="layout" className="inline-flex"><LayoutPill /></span>
+          <SaveSearchButton params={params} />
+          <ShareButton title={heading.title} />
+          <div className="w-36 shrink-0 sm:w-44"><Pick label="Sort by" pillText="Sort by" value={params.sort} onChange={(v) => change({ sort: v as SearchParams["sort"], page: 1 })} options={SORTS.map(([k, l]) => ({ value: k, label: l }))} className="h-10" /></div>
+        </div>
       </div>
       {!map && (params.circle || params.polygon) && (
         <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm">

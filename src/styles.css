@@ -1867,3 +1867,25 @@ html:has(.site-menu-panel[data-open="true"]) body, html:has([role="dialog"][data
 @media (prefers-reduced-motion: reduce) { .wb.wb-site .site-menu-panel .menu-tile-on { animation: none; } }
 .menu-cta { display: flex; align-items: center; gap: .75rem; margin: .5rem .25rem .25rem; padding: .85rem 1rem; border-radius: 9999px; background: var(--brand-gradient); color: #fff !important; font-weight: 700; box-shadow: 0 8px 22px -10px rgb(253 38 122 / .7); transition: transform .12s, filter .15s; }
 .menu-cta:hover { filter: brightness(1.08); } .menu-cta:active { transform: scale(.97); }
+
+/* ===== Phone header: row 1 (logo, pills) folds away on scroll; filters + search rise beside the menu, the AI button fades out ===== */
+.solid-head { --r1: 4.25rem; }
+@media (max-width: 767px) {
+  .pills-row { height: auto !important; opacity: 1 !important; overflow: visible; }
+  .pills-in { height: auto; padding: .125rem .875rem .75rem .5rem; padding-right: calc(.875rem + var(--sp, 0) * 3.4rem); }
+  .ph-r1 { height: calc(var(--r1) * (1 - var(--sp, 0))); overflow: hidden; opacity: calc(1 - var(--sp, 0) * 1.7); }
+  .ph-r1-in { height: var(--r1); }
+  .solid-head[data-collapsed] .ph-r1 { pointer-events: none; }
+  .ph-menu { position: absolute; right: .5rem; top: .875rem; width: 2.5rem; height: 2.5rem; z-index: 3; }
+  .ph-ai { width: calc(2.75rem * (1 - var(--sp, 0))); margin-left: calc(-.625rem * var(--sp, 0)); opacity: calc(1 - var(--sp, 0) * 2.2); overflow: hidden; pointer-events: auto; }
+  .solid-head[data-collapsed] .ph-ai { pointer-events: none; }
+  .ph-filter::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--brand-gradient); opacity: var(--sp, 0); transition: opacity .1s; }
+  .ph-filter > svg { position: relative; }
+}
+/* The header search shrinks everything inside it with the bar: the icon and mic follow the bar's height. */
+.hdr-search-go svg { width: calc(var(--bar-h) * .34) !important; height: calc(var(--bar-h) * .34) !important; }
+.hdr-search .voice-btn-inline { width: calc(var(--bar-h) - .9rem); height: calc(var(--bar-h) - .9rem); }
+.hdr-search .voice-btn-inline svg { width: calc(var(--bar-h) * .32); height: calc(var(--bar-h) * .32); }
+/* The top pills: a soft dark surface with a faint edge (pure black read too heavy). */
+html:root .ld-pill, html:root[data-listing-dark="1"] .ld-pill { background: #141417 !important; border: 1px solid rgb(255 255 255 / .09) !important; }
+html:root .ld-pill-on, html:root[data-listing-dark="1"] .ld-pill-on { background: #1d1d22 !important; border-color: rgb(255 255 255 / .5) !important; color: #fff !important; }

@@ -95,13 +95,13 @@ export function SiteHeader() {
   /** Second phone row: the filters icon, the search bar, and the round AI button. */
   const phoneRow = (
     <div className="flex items-center gap-2.5">
-      <button type="button" aria-label="Filters" aria-haspopup="dialog" onClick={() => popup("filters")} className="grid size-11 shrink-0 place-items-center text-white active:scale-95">
+      <button type="button" aria-label="Filters" aria-haspopup="dialog" onClick={() => popup("filters")} className="ph-filter relative grid size-11 shrink-0 place-items-center rounded-full text-white active:scale-95">
         <svg viewBox="0 0 28 28" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden><path d="M3 8h11M22 8h3M3 20h3M14 20h11" /><circle cx="18" cy="8" r="3.4" /><circle cx="10" cy="20" r="3.4" /></svg>
       </button>
       <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-full bg-foreground/[0.06] px-4 text-left text-[0.95rem] font-medium text-muted-foreground">
         <Search className="size-[1.1rem] shrink-0 text-foreground" aria-hidden /><span className="truncate">Search homes, places…</span>
       </button>
-      <button type="button" aria-label="Ask AI" aria-haspopup="dialog" onClick={() => popup("ai")} className="grid size-11 shrink-0 place-items-center rounded-full text-white active:scale-95" style={{ background: "var(--brand-gradient)" }}>
+      <button type="button" aria-label="Ask AI" aria-haspopup="dialog" onClick={() => popup("ai")} className="ph-ai grid size-11 shrink-0 place-items-center rounded-full text-white active:scale-95" style={{ background: "var(--brand-gradient)" }}>
         <Sparkles className="size-5" aria-hidden />
       </button>
     </div>
@@ -154,20 +154,20 @@ export function SiteHeader() {
       {!isPropertyPage && <div className="hdr-scrim" data-open={open} onClick={close} aria-hidden="true" />}
       {!solid && <div aria-hidden="true" className={`nav-blur-zone ${isPropertyPage ? "max-lg:hidden" : ""} ${on ? "is-scrolled" : ""}`} />}
       <div ref={ref} className={solid ? "solid-head glass-nav pointer-events-auto fixed inset-x-0 top-0 z-50" : `pointer-events-none fixed inset-x-0 z-50 mx-auto w-[var(--site-w)] ${isPropertyPage ? "top-12 md:top-4 lg:top-5" : "top-3 sm:top-4 lg:top-5"}`} data-floating>
-        {explore && solid && (
-          <div className="flex items-center gap-2 pb-1 pl-3 pr-2 pt-3.5 md:hidden">
+        {explore && solid && (<>
+          <div className="ph-r1 md:hidden"><div className="ph-r1-in flex items-center gap-2 pl-3 pr-14">
             <Link to="/" className="logo flex shrink-0 items-center gap-2 pr-1 text-foreground" aria-label={`${BRAND.name} home`}><HodiiLogo outline size="h-9 w-9" /></Link>
             <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ WebkitMaskImage: "linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 14px), transparent 100%)", maskImage: "linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 14px), transparent 100%)" }} data-tour="type-pills">
               {NAV.map((n) => { const c = `${PILL} ${n.on(path, searchStr) ? "ld-pill-on" : ""}`; return n.to !== "/properties" ? <Link key={n.label} to={n.to} className={c}>{n.label}</Link> : <Link key={n.label} to="/properties" search={n.search} className={c}>{n.label}</Link>; })}
               <span className="h-5 w-px shrink-0 bg-white/20" aria-hidden />
               <MobileTypePills pill={PILL} />
             </div>
-            <button type="button" className="relative grid size-10 shrink-0 place-items-center text-white active:scale-95" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
+          </div></div>
+          <button type="button" className="ph-menu md:hidden grid place-items-center text-white active:scale-95" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               {open ? <X className="size-[26px]" strokeWidth={2.3} /> : <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>}
-              {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-foreground" aria-hidden />}
+              {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-primary" aria-hidden />}
             </button>
-          </div>
-        )}
+        </>)}
         {explore && !solid && (
           <div className={solid ? "flex items-center gap-2.5 px-3.5 pb-1 pt-3.5 md:hidden" : "pointer-events-auto glass-nav hk-co flex items-center gap-2.5 !px-3 !py-3 md:hidden"}>
             <Link to="/" className="logo grid size-12 shrink-0 place-items-center" aria-label={`${BRAND.name} home`}><HodiiLogo size="h-11 w-11" /></Link>

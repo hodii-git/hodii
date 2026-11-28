@@ -32,8 +32,8 @@ type Msg =
 type Props = { value: SearchParams; onApply: (next: Partial<SearchParams>) => void; result?: AiResult };
 
 /**
- * Chat search. The conversation keeps its own filters: a new chat always starts from nothing, so filters picked by hand earlier can
- * never leak into it. Each answer says what it understood and what it added, changed or removed.
+ * Chat search. A new chat starts from whatever filters are already set (picked by hand or by an earlier search), as if they were
+ * part of the original request; with no filters it starts from nothing. Each answer says what it understood and what it added, changed or removed.
  */
 export function useAiSearch({ value, onApply, result }: Props) {
   const { user } = useAuth();
@@ -51,14 +51,15 @@ export function useAiSearch({ value, onApply, result }: Props) {
   const fresh = useRef(true);
 
   const run = useMutation({
-    mutationFn: (t: string) => aiSearch({ data: { text: t, current: fresh.current ? {} : pickCriteria(latest.current), history: history.current } }),
+    mutationFn: (t: string) => aiSearch({ data: { text: t, current: pickCriteria(latest.current), history: history.current } }),
     onSuccess: (r, t) => {
       void qc.invalidateQueries({ queryKey: aiStatusQuery.queryKey });
       if (!r.ok) { setOut({ resetsAt: r.status.resetsAt, limit: r.status.limit }); setMsgs((m) => m.slice(0, -1)); return; }
       history.current = [...history.current, { role: "user", content: t }, { role: "assistant", content: r.reply }].slice(-8) as Turn[];
-      const before = criteriaChips(mine.current as Partial<SearchParams>);
+      const seeded = fresh.current && Object.keys(pickCriteria(latest.current)).length > 0; // filters picked by hand count as part of the original search
+      const before = criteriaChips((seeded ? pickCriteria(latest.current) : mine.current) as Partial<SearchParams>);
       const after = criteriaChips(r.criteria as Partial<SearchParams>);
-      const wasFresh = fresh.current;
+      const wasFresh = fresh.current && !seeded;
       mine.current = r.criteria as Record<string, unknown>;
       fresh.current = false;
       setMsgs((m) => {

@@ -47,13 +47,13 @@ function Compare() {
         <div className="mt-8 w-full max-w-full overflow-x-auto">
           <table className="w-full table-auto border-separate border-spacing-0 text-sm">
             <thead>
-              <tr><th className="w-[5.25rem] p-1 sm:w-[7.5rem] sm:p-2" />{data.map((p) => (
+              <tr><th scope="col" className="w-[5.25rem] p-1 text-left align-top sm:w-[7.5rem] sm:p-2"><span className="block text-sm font-extrabold leading-tight sm:text-base">{data.length} homes</span><span className="mt-1 block text-[0.7rem] font-normal leading-snug text-muted-foreground sm:text-xs">Side by side</span></th>{data.map((p) => (
                 <th key={p.id} scope="col" className="min-w-[8.5rem] p-1.5 text-left align-top font-normal sm:min-w-[13rem] sm:p-2">
-                  <div className="surface group relative overflow-hidden rounded-2xl transition">
+                  <div className="group relative">
                     <Link to="/property/$slug" params={{ slug: p.slug }} className="absolute inset-0 z-0" aria-label={p.title} />
-                    {p.image ? <img src={p.image.thumbUrl ?? p.image.url} alt={p.image.alt || p.title} loading="lazy" className="aspect-[4/3] w-full object-cover" /> : <div className="aspect-[4/3] w-full bg-muted" />}
+                    {p.image ? <img src={p.image.thumbUrl ?? p.image.url} alt={p.image.alt || p.title} loading="lazy" className="aspect-[4/3] w-full rounded-2xl bg-skeleton object-cover" /> : <div className="aspect-[4/3] w-full rounded-2xl bg-skeleton" />}
                     {!raw && <button type="button" onClick={() => toggleCompare(p.id)} aria-label={`Remove ${p.title} from compare`} className="close-circle absolute right-2 top-2 z-10"><X className="size-4" aria-hidden /></button>}
-                    <div className="px-3 py-2.5"><span className="line-clamp-2 text-sm font-bold leading-snug">{p.title}</span></div>
+                    <div className="px-0.5 pt-2"><span className="line-clamp-2 text-[0.8rem] font-normal leading-snug text-muted-foreground sm:text-[0.8125rem]">{p.title}</span></div>
                   </div>
                 </th>))}</tr>
             </thead>

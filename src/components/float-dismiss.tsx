@@ -1,16 +1,20 @@
 import { useEffect } from "react";
 
 const SEL = ".fb-fab, .view-pill, .compare-tray, .tour-prompt:not([role=dialog])";
+const STORE = "hodii-float-hidden", DAY = 24 * 60 * 60 * 1000;
+/** Put-away buttons stay away for a day, then come back by themselves. */
+const readHidden = (): Record<string, number> => { try { const o = JSON.parse(localStorage.getItem(STORE) ?? "{}") as Record<string, number>; const now = Date.now(); return Object.fromEntries(Object.entries(o).filter(([, t]) => t > now)); } catch { return {}; } };
 const keyOf = (el: Element) => (el.classList.contains("fb-fab") ? "fb" : el.classList.contains("view-pill") ? "view" : el.classList.contains("compare-tray") ? "tray" : "tour");
 
 /**
  * The floating pills (feedback, guide, List/Map, compare) can be put away three ways: a small ✕ that appears on hover,
- * a swipe sideways, or a long press. Put away until the page is reloaded; nothing is lost.
+ * a swipe sideways, or a long press. Put away for a day; nothing is lost.
  */
 export function FloatDismiss() {
   useEffect(() => {
     const root = document.documentElement;
-    const hide = (el: Element) => { const k = keyOf(el); const cur = new Set((root.getAttribute("data-hide") ?? "").split(" ").filter(Boolean)); cur.add(k); root.setAttribute("data-hide", [...cur].join(" ")); x.style.display = "none"; };
+    const saved = Object.keys(readHidden()); if (saved.length) root.setAttribute("data-hide", saved.join(" "));
+    const hide = (el: Element) => { const k = keyOf(el); const cur = new Set((root.getAttribute("data-hide") ?? "").split(" ").filter(Boolean)); cur.add(k); root.setAttribute("data-hide", [...cur].join(" ")); try { localStorage.setItem(STORE, JSON.stringify({ ...readHidden(), [k]: Date.now() + DAY })); } catch { /* ignore */ } x.style.display = "none"; };
     const x = document.createElement("button");
     x.type = "button"; x.setAttribute("aria-label", "Remove this button"); x.textContent = "×"; x.className = "float-x";
     x.style.display = "none"; document.body.appendChild(x);

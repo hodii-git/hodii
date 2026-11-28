@@ -167,3 +167,15 @@
 :root .wb .btn-split[data-tone="light"] { background: var(--paper); color: var(--ink); }
 
 /* Gradient text and icon rules live at the end of styles.css ("Brand pass"). */
+
+/* Active pills and segmented tabs (including the default "All"): a subtle glass fill with a gradient edge, like the guide card. */
+@layer base {
+  html:root .ld-pill-on, html:root .seg-on, html:root .ld-pill[aria-pressed="true"] {
+    color: #fff !important;
+    border: 1px solid transparent !important;
+    background:
+      linear-gradient(135deg, rgb(253 38 122 / .20), rgb(255 96 54 / .12)) padding-box,
+      linear-gradient(#0a0a0c, #0a0a0c) padding-box,
+      var(--brand-gradient) border-box !important;
+  }
+}

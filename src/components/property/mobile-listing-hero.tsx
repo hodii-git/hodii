@@ -163,16 +163,16 @@ export function MobileListingHeroBody({
       {/* Pulled up over the photo by about two title lines (2 x 1.28rem x 1.2), so the photo's fade ends where line 2 ends. */}
       <div className="relative z-[2] -mt-[2.2rem] px-4 pb-3 md:mt-4 md:px-8 lg:mt-4 lg:px-0 lg:max-w-[52rem]">
         <div className="pointer-events-none flex min-h-[3.072rem] items-end md:hidden">
-          <h1 className="line-clamp-2 text-[1.28rem] font-bold leading-[1.2] text-white md:text-[1.75rem] md:leading-[1.2]">{p.title}</h1>
+          <h1 className="line-clamp-2 text-[1.2rem] font-bold leading-[1.2] text-white md:text-[1.75rem] md:leading-[1.2]">{p.title}</h1>
         </div>
-        {desc && <p className="mt-2 line-clamp-3 text-[0.94rem] md:mt-3 md:line-clamp-4 md:text-[1.1rem] font-normal leading-[1.38] text-[#c9c9cc]">{desc}</p>}
+        {desc && <p className="mt-2 line-clamp-3 text-[0.88rem] md:mt-3 md:line-clamp-4 md:text-[1.1rem] font-normal leading-[1.38] text-[#c9c9cc]">{desc}</p>}
 
         <div className="mt-6 flex min-w-0 flex-nowrap items-center gap-5 whitespace-nowrap md:hidden">
-          <p className="min-w-0 shrink truncate text-[clamp(0.95rem,5.1vw,1.24rem)] md:text-[1.6rem] font-bold leading-tight text-[#52e36b]">{formatPrice(p.price)}</p>
+          <p className="min-w-0 shrink truncate text-[clamp(0.9rem,4.8vw,1.14rem)] md:text-[1.6rem] font-bold leading-tight text-[#52e36b]">{formatPrice(p.price)}</p>
           {locText && (
             <>
               <span className="h-[22px] w-[1.5px] shrink-0 bg-[#9a9a9e]" aria-hidden />
-              <p className="flex min-w-0 shrink items-center gap-2.5 text-[clamp(0.8rem,4.1vw,0.96rem)] md:text-[1.1rem] font-normal text-white">
+              <p className="flex min-w-0 shrink items-center gap-2.5 text-[clamp(0.76rem,3.9vw,0.9rem)] md:text-[1.1rem] font-normal text-white">
                 <svg viewBox="0 0 24 24" className="size-[1.15em] shrink-0" aria-hidden><path fill="#fff" d="M12 1.8a7.6 7.6 0 0 0-7.6 7.6c0 5.6 7.6 13 7.6 13s7.6-7.4 7.6-13A7.6 7.6 0 0 0 12 1.8Zm0 10.6a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" /></svg>
                 <span className="truncate">{locText}</span>
               </p>
@@ -181,7 +181,7 @@ export function MobileListingHeroBody({
         </div>
 
         {(bedText || bathText || sizeText || parkText) && (
-          <div className="mt-6 flex flex-nowrap items-center justify-between gap-5 whitespace-nowrap text-[clamp(0.76rem,3.9vw,0.9rem)] md:hidden md:justify-start md:gap-10 md:text-[1.05rem] font-normal text-white">
+          <div className="mt-6 flex flex-nowrap items-center justify-between gap-5 whitespace-nowrap text-[clamp(0.72rem,3.7vw,0.84rem)] md:hidden md:justify-start md:gap-10 md:text-[1.05rem] font-normal text-white">
             {bedText && <span className="inline-flex min-w-0 items-center gap-3"><svg viewBox="0 0 28 20" className="h-[1.1em] w-[1.55em] shrink-0" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" aria-hidden><path d="M2 3v15M26 11v7M2 15h24M2 11h24M6 11V7.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5V11M15 11V7.5A1.5 1.5 0 0 1 16.5 6h4A1.5 1.5 0 0 1 22 7.5V11" /></svg><span className="truncate">{bedText}</span></span>}
             {bathText && <span className="inline-flex min-w-0 items-center gap-3"><svg viewBox="0 0 26 22" className="h-[1.2em] w-[1.4em] shrink-0" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M2 11h22M4 11v3.5A5.5 5.5 0 0 0 9.5 20h7a5.5 5.5 0 0 0 5.5-5.5V11M7 20l-1 1.5M19 20l1 1.5M6 11V4.5A2.5 2.5 0 0 1 8.5 2c1.2 0 2 .8 2.3 1.8M9 5.5h3.5" /></svg><span className="truncate">{bathText}</span></span>}
             {sizeText && <span className="inline-flex min-w-0 items-center gap-3"><svg viewBox="0 0 24 24" className="size-[1.2em] shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M3 8V3h5M16 3h5v5M21 16v5h-5M8 21H3v-5M3 3l5 5M21 3l-5 5M21 21l-5-5M3 21l5-5" /></svg><span className="truncate">{sizeText}</span></span>}

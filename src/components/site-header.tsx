@@ -126,6 +126,7 @@ export function SiteHeader() {
     <div className="flex items-center gap-2.5">
       <button type="button" aria-label="Filters" aria-haspopup="dialog" onClick={() => popup("filters")} className="ph-filter relative grid size-11 shrink-0 place-items-center rounded-full text-white active:scale-95">
         <svg viewBox="0 0 28 28" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden><path d="M3 8h11M22 8h3M3 20h3M14 20h11" /><circle cx="18" cy="8" r="3.4" /><circle cx="10" cy="20" r="3.4" /></svg>
+        <svg viewBox="0 0 28 28" className="size-[26px] ph-filter-grad" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden><path d="M3 8h11M22 8h3M3 20h3M14 20h11" /><circle cx="18" cy="8" r="3.4" /><circle cx="10" cy="20" r="3.4" /></svg>
         <FilterBadge n={filterN} />
       </button>
       <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-full bg-foreground/[0.06] px-4 text-left text-[0.95rem] font-medium text-muted-foreground">
@@ -193,7 +194,7 @@ export function SiteHeader() {
               <MobileTypePills pill={PILL} />
             </div>
           </div></div>
-          <button type="button" className="ph-menu md:hidden grid place-items-center text-white active:scale-95" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
+          <button type="button" className={`ph-menu md:hidden grid place-items-center text-white active:scale-95 ${open ? "invisible" : ""}`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>
               {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-primary" aria-hidden />}
             </button>
@@ -204,7 +205,7 @@ export function SiteHeader() {
             <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-12 min-w-0 flex-1 items-center gap-2.5 rounded-full bg-foreground/[0.06] px-4 text-left text-[0.95rem] font-medium text-muted-foreground">
               <Search className="size-[1.15rem] shrink-0 text-foreground" aria-hidden /><span className="truncate">Search homes, places…</span>
             </button>
-            <button type="button" className="relative grid size-10 shrink-0 place-items-center text-white active:scale-95" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
+            <button type="button" className={`relative grid size-10 shrink-0 place-items-center text-white active:scale-95 ${open ? "invisible" : ""}`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>
               {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-foreground" aria-hidden />}
             </button>
@@ -228,7 +229,7 @@ export function SiteHeader() {
             <span className="hidden lg:inline-flex"><Link to="/list-property" data-tour="list" className="btn-dark btn-compact whitespace-nowrap" onMouseMove={magnet} onMouseLeave={unmagnet}>List a property<ArrowRight className="btn-arrow h-4 w-4" /></Link></span>
             {signedIn && <span data-tour="bell" className="inline-flex"><NotificationBell /></span>}
             <span data-tour="account" className="inline-flex"><AccountButton /></span>
-            <button type="button" className="menu-btn relative" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
+            <button type="button" className={`menu-btn relative ${open ? "invisible" : ""}`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 5h18M8 12h13M13 19h8" /></svg>
               {compareCount > 0 && <span className="absolute right-1.5 top-1.5 size-2.5 rounded-full bg-primary" aria-hidden />}
             </button>

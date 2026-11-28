@@ -1572,7 +1572,9 @@ html[data-listing-dark="1"] .wb {
 }
 html[data-listing-dark="1"] .wb .glass-nav, html[data-listing-dark="1"] .wb.wb-site header.glass-nav { background: rgb(20 20 22 / .88) !important; color: #f4f4f5; }
 html[data-listing-dark="1"] .wb .glass-nav a:not(.btn-dark):not(.btn-light) { color: #e4e4e7; }
-html[data-listing-dark="1"] :is(input[type="search"], input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], textarea):not([data-bare]) { background-color: var(--ld-surface-2) !important; color: #f4f4f5; }
+html[data-listing-dark="1"] :is(input[type="search"], input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"], textarea):not([data-bare]):not(.bg-transparent):not(:is(.input-glass, .home-search, [role="search"], .hk-search, .admin-search, .hdr-search, .voice-field) *) { background-color: var(--ld-surface-2) !important; color: #f4f4f5; }
+/* Typing areas inside search bars and AI chat boxes never get their own rectangle: the bar is the surface. */
+html:root :is(.input-glass, .home-search, [role="search"], .hk-search, .admin-search, .hdr-search, .voice-field) :is(input, textarea) { background: transparent !important; box-shadow: none !important; border: 0 !important; }
 html[data-listing-dark="1"] input::placeholder, html[data-listing-dark="1"] textarea::placeholder { color: #8b8b93; }
 
 /* =====================================================================================
@@ -1879,8 +1881,10 @@ html:has(.site-menu-panel[data-open="true"]) body, html:has([role="dialog"][data
   .ph-menu { position: absolute; right: .5rem; top: .875rem; width: 2.5rem; height: 2.5rem; z-index: 3; }
   .ph-ai { width: calc(2.75rem * (1 - var(--sp, 0))); margin-left: calc(-.625rem * var(--sp, 0)); opacity: calc(1 - var(--sp, 0) * 2.2); overflow: hidden; pointer-events: auto; }
   .solid-head[data-collapsed] .ph-ai { pointer-events: none; }
-  .ph-filter::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--brand-gradient); opacity: var(--sp, 0); transition: opacity .1s; }
+  /* On scroll the icon lines (not the button) take the gradient: a second gradient-stroked copy fades in over the white one. */
   .ph-filter > svg { position: relative; }
+  .ph-filter > svg.ph-filter-grad { position: absolute; inset: 0; margin: auto; stroke: url(#hodii-grad); opacity: var(--sp, 0); pointer-events: none; }
+  .ph-filter > svg:not(.ph-filter-grad) { opacity: calc(1 - var(--sp, 0)); }
 }
 /* The header search shrinks everything inside it with the bar: the icon and mic follow the bar's height. */
 .hdr-search-go svg { width: calc(var(--bar-h) * .34) !important; height: calc(var(--bar-h) * .34) !important; }

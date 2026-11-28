@@ -123,7 +123,7 @@ function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs:
   return (
     <section aria-label="Chat with AI search" className="ai-chat order-1 mt-4 rounded-3xl bg-card p-3 shadow-[0_0_0_1px_rgb(15_23_42/0.08),0_30px_60px_-30px_rgb(15_23_42/0.45)] sm:p-5">
       <div className="mb-3 flex items-center gap-2 pl-2">
-        <Sparkles className="size-4 text-foreground" aria-hidden />
+        <Sparkles className="ml-1.5 size-4 text-foreground" aria-hidden />
         <h3 className="text-sm font-extrabold">Chat search</h3>
         <button type="button" onClick={onNew} className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold text-muted-foreground hover:bg-muted hover:text-foreground"><RotateCcw className="size-3.5" aria-hidden />New search</button>
         <button type="button" aria-label="Close chat" onClick={onClose} className="close-circle shrink-0"><X className="size-4" /></button>
@@ -134,7 +134,7 @@ function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs:
           <div key={m.id} className="flex justify-end"><p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-white/15 px-3.5 py-2 text-sm text-foreground">{m.text}</p></div>
         ) : (
           <div key={m.id} className="rounded-2xl rounded-bl-md bg-muted p-3.5 text-sm">
-            <p className="flex items-start gap-2"><Sparkles className="mt-0.5 size-4 shrink-0 text-foreground" aria-hidden /><span>{m.text}</span></p>
+            <p className="flex items-start gap-2"><Sparkles className="ml-1.5 mt-0.5 size-4 shrink-0 text-foreground" aria-hidden /><span>{m.text}</span></p>
             {m.changes.length > 0 ? (
               <div className="mt-3"><p className="mb-1.5 text-xs font-bold uppercase text-muted-foreground">What I changed</p>
                 <ul className="flex flex-wrap gap-1.5">{m.changes.map((c) => { const I = KindIcon[c.kind]; return (

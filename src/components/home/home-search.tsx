@@ -154,7 +154,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
     <div className={`flex min-w-0 flex-col ${ai.open ? "ai-layout" : ""}`}>
       <form role="search" aria-label="Search properties" data-tour="hero-search" onSubmit={(e) => { e.preventDefault(); submit(); }} className={`home-search glass-solid ${ai.open ? "order-2 mt-3" : "mt-8 lg:mt-12"} flex w-full min-w-0 flex-col gap-3 rounded-[2rem] p-3 sm:p-4 ${typing || sheetLike ? "" : "2xl:flex-row 2xl:items-center"}`}>
         <div className={`input-glass relative flex min-w-0 items-start gap-3 rounded-[1.75rem] px-5 py-4 ${typing ? "w-full" : "flex-1"}`}>
-          {ai.open ? <Sparkles className="ai-star mt-0.5 h-5 w-5 shrink-0" style={{ stroke: "url(#hodii-grad)" }} aria-hidden /> : <Search className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={1.7} aria-hidden />}
+          {ai.open ? <Sparkles className="ai-star ml-2 mt-0.5 h-5 w-5 shrink-0" style={{ stroke: "url(#hodii-grad)" }} aria-hidden /> : <Search className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={1.7} aria-hidden />}
           <label htmlFor="home-q" className="sr-only">Describe the place you want</label>
           <textarea id="home-q" ref={box} rows={1} maxLength={300} value={text}
             onChange={(e) => { const v = e.target.value; setText(v); clearTimeout(timer.current); if (!ai.open && !deferred) { if (v.trim() === "") search(""); else timer.current = setTimeout(() => search(v), 800); } }}

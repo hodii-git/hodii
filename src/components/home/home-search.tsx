@@ -1,10 +1,11 @@
 import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Send, Bath, BedDouble, Building2, Coins, LayoutGrid, LocateFixed, MapPin, Ruler, Search, ShieldCheck, SlidersHorizontal, Sofa, Sparkles, Star, Wallet, Wrench, X, type LucideIcon } from "lucide-react";
+import { Send, Bath, BedDouble, Building2, Coins, LayoutGrid, LocateFixed, MapPin, Ruler, Search, ShieldCheck, Sofa, Sparkles, Star, Wallet, Wrench, X, type LucideIcon } from "lucide-react";
 import { ToneIcon, type Tone } from "@/components/ui/tone-icon";
 import { Pick, type PickOption } from "@/components/ui/pick";
 import { MultiPick } from "@/components/ui/multi-pick";
+import { FilterBadge, FiltersIcon } from "@/components/ui/filters-icon";
 import { POPUP_CARD, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CATEGORY_TYPE_OPTIONS, COUNTY_OPTIONS, toOptions } from "@/lib/pick-options";
 import { CONDITIONS, FEATURES, FURNISHINGS, LISTING_TYPES, PROPERTY_CATEGORIES, PROPERTY_TYPES, featuresFor } from "@/lib/mongodb/taxonomy";
@@ -70,6 +71,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
   useEffect(() => { if (!phone && !pinned && !isPopup) setSheet(ai.open); }, [ai.open, phone, pinned, isPopup]);
   // Pinned (map page on wide screens): the chat is open from the start.
   useEffect(() => { if (pinned && !phone) ai.show(); }, [pinned, phone]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (popup === "ai") ai.show(); }, [popup]); // eslint-disable-line react-hooks/exhaustive-deps
   const clearAll = () => { clearTimeout(timer.current); ai.close(); setText(""); setNotes([]); fromText.current = []; applied.current = ""; onChange({ ...CLEAR_ALL }); };
   /** The X: closes the chat and clears the box. Words typed without chat only lose what they set. */
   const clearBox = () => { clearTimeout(timer.current); if (ai.open) { clearAll(); return; } setText(""); search(""); };
@@ -105,32 +107,32 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
   const filtersBody = (
             <div>
               <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className={fcard}><L icon={MapPin} tone="other">Location</L><Pick label="Location" clearLabel="Anywhere in Kenya" leading={{ label: "Use my location", icon: <LocateFixed className="h-4 w-4" aria-hidden />, onClick: () => locateMe(5000, (circle) => set({ circle, polygon: undefined, countyCodes: undefined })) }} panelClassName="glass-menu" className={field} value={value.circle ? "geo:circle" : value.polygon ? "geo:poly" : county ? String(county) : ""} onChange={(v) => { if (v.startsWith("geo:")) return; set({ countyCodes: v ? [Number(v)] : undefined, circle: undefined, polygon: undefined }); }} options={locOptions} searchable /></div>
-                <div className={fcard}><L icon={Wallet} tone="idea">Max price</L><Pick label="Max price" clearLabel="Any price" panelClassName="glass-menu" className={field} value={value.priceMax ? String(value.priceMax) : ""} onChange={(v) => set({ priceMax: v ? Number(v) : undefined })} options={priceOptions} custom={{ placeholder: "Type a max price (KES)", label: (v) => `Up to ${kes(Number(v))}` }} /></div>
+                <div className={`${fcard} ${!!(value.circle || value.polygon || county) ? "fcard-on" : ""}`}><L icon={MapPin} tone="other">Location</L><Pick label="Location" clearLabel="Anywhere in Kenya" leading={{ label: "Use my location", icon: <LocateFixed className="h-4 w-4" aria-hidden />, onClick: () => locateMe(5000, (circle) => set({ circle, polygon: undefined, countyCodes: undefined })) }} panelClassName="glass-menu" className={field} value={value.circle ? "geo:circle" : value.polygon ? "geo:poly" : county ? String(county) : ""} onChange={(v) => { if (v.startsWith("geo:")) return; set({ countyCodes: v ? [Number(v)] : undefined, circle: undefined, polygon: undefined }); }} options={locOptions} searchable /></div>
+                <div className={`${fcard} ${!!value.priceMax ? "fcard-on" : ""}`}><L icon={Wallet} tone="idea">Max price</L><Pick label="Max price" clearLabel="Any price" panelClassName="glass-menu" className={field} value={value.priceMax ? String(value.priceMax) : ""} onChange={(v) => set({ priceMax: v ? Number(v) : undefined })} options={priceOptions} custom={{ placeholder: "Type a max price (KES)", label: (v) => `Up to ${kes(Number(v))}` }} /></div>
               </div>
               <p className="mb-2 mt-5 text-sm font-bold">Buy, rent or stay</p><div className="mb-5 inline-flex max-w-full overflow-x-auto rounded-full border border-border bg-muted p-1 [scrollbar-width:none]" role="tablist" aria-label="Listing type">
                 {[{ key: undefined as string | undefined, label: "All" }, ...LISTING_TYPES.map((t) => ({ key: t.key as string | undefined, label: t.short }))].map((t) => (
-                  <Button variant="ghost" key={t.label} type="button" role="tab" aria-selected={value.listingType === t.key} onClick={() => set({ listingType: (filterSelection(value.listingType ?? "", t.key ?? "", true) || undefined) as SearchParams["listingType"], priceMin: undefined, priceMax: undefined })} className={`h-auto rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${value.listingType === t.key ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}>{t.label}</Button>
+                  <Button variant="ghost" key={t.label} type="button" role="tab" aria-selected={value.listingType === t.key} onClick={() => set({ listingType: (filterSelection(value.listingType ?? "", t.key ?? "", true) || undefined) as SearchParams["listingType"], priceMin: undefined, priceMax: undefined })} className={`h-auto rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${value.listingType === t.key ? "seg-on" : "text-muted-foreground hover:text-foreground"}`}>{t.label}</Button>
                 ))}
                 <Link to="/developments" search={county ? { county } : {}} className="rounded-full px-3.5 py-1.5 text-sm font-semibold text-muted-foreground transition hover:text-foreground">Developments</Link>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className={fcard}><L icon={LayoutGrid} tone="bug">Category</L>
+                <div className={`${fcard} ${!!value.category ? "fcard-on" : ""}`}><L icon={LayoutGrid} tone="bug">Category</L>
                   <Pick label="Category or type" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.propertyTypes?.length === 1 ? `type:${value.propertyTypes[0]}` : value.category ? `cat:${value.category}` : ""} options={CATEGORY_TYPE_OPTIONS}
                     onChange={(v) => set(v.startsWith("type:") ? { category: PROPERTY_TYPES.find((t) => t.key === v.slice(5))?.category as SearchParams["category"], propertyTypes: [v.slice(5) as never], features: undefined } : { category: (v.slice(4) || undefined) as SearchParams["category"], propertyTypes: undefined, features: undefined })} /></div>
-                <div className={fcard}><L icon={Building2} tone="other">Property type</L><MultiPick label="Property type" allLabel="Any type" className={field} values={value.propertyTypes ?? []} onChange={(v) => set({ propertyTypes: v.length ? (v as never) : undefined })} options={types} /></div>
-                <div className={fcard}><L icon={Coins} tone="idea">Min price</L><Pick label="Minimum price" clearLabel="No min" panelClassName="glass-menu" className={field} value={value.priceMin ? String(value.priceMin) : ""} onChange={(v) => set({ priceMin: v ? Number(v) : undefined })} options={minOptions} custom={{ placeholder: "Type a min price (KES)", label: (v) => kes(Number(v)) }} /></div>
-                <div className={fcard}><L icon={BedDouble} tone="confusing">Bedrooms</L><Pick label="Bedrooms" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.bedroomsMin === undefined ? "" : String(value.bedroomsMin)} onChange={(v) => set({ bedroomsMin: v === "" ? undefined : Number(v) })} options={BEDS} /></div>
-                <div className={fcard}><L icon={Bath} tone="other">Bathrooms</L><Pick label="Bathrooms" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.bathroomsMin === undefined ? "" : String(value.bathroomsMin)} onChange={(v) => set({ bathroomsMin: v === "" ? undefined : Number(v) })} options={BATHS} /></div>
-                <div className={fcard}><L icon={Sofa} tone="bug">Furnishing</L><Pick label="Furnishing" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.furnishing ?? ""} onChange={(v) => set({ furnishing: (v || undefined) as SearchParams["furnishing"] })} options={toOptions(FURNISHINGS)} /></div>
-                <div className={fcard}><L icon={Wrench} tone="down">Condition</L><Pick label="Condition" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.conditions?.[0] ?? ""} onChange={(v) => set({ conditions: v ? [v as never] : undefined })} options={toOptions(CONDITIONS)} /></div>
-                <div className={fcard}><L icon={Ruler} tone="down">Size (m²)</L>
+                <div className={`${fcard} ${!!value.propertyTypes?.length ? "fcard-on" : ""}`}><L icon={Building2} tone="other">Property type</L><MultiPick label="Property type" allLabel="Any type" className={field} values={value.propertyTypes ?? []} onChange={(v) => set({ propertyTypes: v.length ? (v as never) : undefined })} options={types} /></div>
+                <div className={`${fcard} ${!!value.priceMin ? "fcard-on" : ""}`}><L icon={Coins} tone="idea">Min price</L><Pick label="Minimum price" clearLabel="No min" panelClassName="glass-menu" className={field} value={value.priceMin ? String(value.priceMin) : ""} onChange={(v) => set({ priceMin: v ? Number(v) : undefined })} options={minOptions} custom={{ placeholder: "Type a min price (KES)", label: (v) => kes(Number(v)) }} /></div>
+                <div className={`${fcard} ${value.bedroomsMin !== undefined ? "fcard-on" : ""}`}><L icon={BedDouble} tone="confusing">Bedrooms</L><Pick label="Bedrooms" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.bedroomsMin === undefined ? "" : String(value.bedroomsMin)} onChange={(v) => set({ bedroomsMin: v === "" ? undefined : Number(v) })} options={BEDS} /></div>
+                <div className={`${fcard} ${value.bathroomsMin !== undefined ? "fcard-on" : ""}`}><L icon={Bath} tone="other">Bathrooms</L><Pick label="Bathrooms" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.bathroomsMin === undefined ? "" : String(value.bathroomsMin)} onChange={(v) => set({ bathroomsMin: v === "" ? undefined : Number(v) })} options={BATHS} /></div>
+                <div className={`${fcard} ${!!value.furnishing ? "fcard-on" : ""}`}><L icon={Sofa} tone="bug">Furnishing</L><Pick label="Furnishing" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.furnishing ?? ""} onChange={(v) => set({ furnishing: (v || undefined) as SearchParams["furnishing"] })} options={toOptions(FURNISHINGS)} /></div>
+                <div className={`${fcard} ${!!value.conditions?.length ? "fcard-on" : ""}`}><L icon={Wrench} tone="down">Condition</L><Pick label="Condition" clearLabel="Any" panelClassName="glass-menu" className={field} value={value.conditions?.[0] ?? ""} onChange={(v) => set({ conditions: v ? [v as never] : undefined })} options={toOptions(CONDITIONS)} /></div>
+                <div className={`${fcard} ${!!(value.areaSqmMin || value.areaSqmMax) ? "fcard-on" : ""}`}><L icon={Ruler} tone="down">Size (m²)</L>
                   <div className="flex items-center gap-2">
                     <input inputMode="numeric" aria-label="Minimum size" placeholder="Min" defaultValue={value.areaSqmMin ?? ""} key={`a${value.areaSqmMin ?? ""}`} onBlur={(e) => set({ areaSqmMin: num(e.target.value) })} className={field} />
                     <input inputMode="numeric" aria-label="Maximum size" placeholder="Max" defaultValue={value.areaSqmMax ?? ""} key={`b${value.areaSqmMax ?? ""}`} onBlur={(e) => set({ areaSqmMax: num(e.target.value) })} className={field} />
                   </div></div>
-                <div className={`${fcard} sm:col-span-2`}><L icon={Star} tone="confusing">Must have (up to 10)</L><MultiPick label="Must have" allLabel="Nothing specific" className={field} max={10} values={value.features ?? []} onChange={(v) => set({ features: v.length ? (v as never) : undefined })} options={feats} /></div>
-                <label className={`${fcard} flex cursor-pointer items-center gap-3 ${value.verifiedOnly ? "border-foreground/60 bg-foreground/10" : ""}`}><ToneIcon icon={ShieldCheck} tone="bug" /><span className="min-w-0 flex-1"><span className="block text-sm font-bold">Verified agencies only</span><span className="block text-xs text-muted-foreground">Checked by the Hodii team</span></span><input type="checkbox" checked={value.verifiedOnly ?? false} onChange={(e) => set({ verifiedOnly: e.target.checked || undefined })} className="h-4 w-4 accent-white" /></label>
+                <div className={`${fcard} sm:col-span-2 ${value.features?.length ? "fcard-on" : ""}`}><L icon={Star} tone="confusing">Must have (up to 10)</L><MultiPick label="Must have" allLabel="Nothing specific" className={field} max={10} values={value.features ?? []} onChange={(v) => set({ features: v.length ? (v as never) : undefined })} options={feats} /></div>
+                <label className={`${fcard} flex cursor-pointer items-center gap-3 ${value.verifiedOnly ? "fcard-on" : ""}`}><ToneIcon icon={ShieldCheck} tone="bug" /><span className="min-w-0 flex-1"><span className="block text-sm font-bold">Verified agencies only</span><span className="block text-xs text-muted-foreground">Checked by the Hodii team</span></span><input type="checkbox" checked={value.verifiedOnly ?? false} onChange={(e) => set({ verifiedOnly: e.target.checked || undefined })} className="h-4 w-4 accent-white" /></label>
                 {active > 0 && <button type="button" onClick={() => set({ listingType: undefined, countyCodes: undefined, circle: undefined, polygon: undefined, priceMax: undefined, category: undefined, propertyTypes: undefined, priceMin: undefined, bedroomsMin: undefined, bathroomsMin: undefined, areaSqmMin: undefined, areaSqmMax: undefined, features: undefined, furnishing: undefined, conditions: undefined, verifiedOnly: undefined })} className="inline-flex items-center justify-center gap-1.5 justify-self-end rounded-full border border-input px-4 py-2 text-sm font-semibold transition hover:bg-muted"><X className="h-3.5 w-3.5" aria-hidden />Clear filters</button>}
               </div>
             </div>
@@ -142,24 +144,24 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
           {filtersOpen && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[90]" onClick={closeFilters} />, document.body)}
           <Dialog open={filtersOpen} onOpenChange={(o) => { if (!o) closeFilters(); else setMoreOpen(true); }} modal={false}>
           <DialogContent data-filters-popup onInteractOutside={(e) => { if ((e.target as Element | null)?.closest?.("[data-floating-panel]")) e.preventDefault(); }} className={`${POPUP_CARD} z-[91] sm:max-w-xl md:max-w-2xl [&>*]:min-w-0`}>
-            <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><ToneIcon icon={SlidersHorizontal} tone="other" />More filters</DialogTitle><DialogDescription className="popup-note mt-3 text-left">Results update as you choose. Pick only what matters to you.</DialogDescription></DialogHeader>
+            <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><span className="ai-tile" aria-hidden><FiltersIcon className="size-5 text-white" strokeWidth={2.4} /></span>More filters</DialogTitle><DialogDescription className="popup-note mt-3 text-left">Results update as you choose. Pick only what matters to you.</DialogDescription></DialogHeader>
             {filtersBody}
           </DialogContent>
           </Dialog>
     </>
   );
   const sheetBody = (
-    <>
-      <form role="search" aria-label="Search properties" data-tour="hero-search" onSubmit={(e) => { e.preventDefault(); submit(); }} className={`home-search glass-solid ${popup === "ai" ? "mt-1" : ai.open ? "mt-4 lg:mt-5" : "mt-8 lg:mt-12"} flex w-full min-w-0 flex-col gap-3 rounded-[2rem] p-3 sm:p-4 ${typing || sheetLike ? "" : "2xl:flex-row 2xl:items-center"}`}>
+    <div className={`flex min-w-0 flex-col ${ai.open ? "ai-layout" : ""}`}>
+      <form role="search" aria-label="Search properties" data-tour="hero-search" onSubmit={(e) => { e.preventDefault(); submit(); }} className={`home-search glass-solid ${ai.open ? "order-2 mt-3" : "mt-8 lg:mt-12"} flex w-full min-w-0 flex-col gap-3 rounded-[2rem] p-3 sm:p-4 ${typing || sheetLike ? "" : "2xl:flex-row 2xl:items-center"}`}>
         <div className={`input-glass relative flex min-w-0 items-start gap-3 rounded-[1.75rem] px-5 py-4 ${typing ? "w-full" : "flex-1"}`}>
-          <Search className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={1.7} aria-hidden />
+          {ai.open ? <Sparkles className="ai-star mt-0.5 h-5 w-5 shrink-0" style={{ stroke: "url(#hodii-grad)" }} aria-hidden /> : <Search className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={1.7} aria-hidden />}
           <label htmlFor="home-q" className="sr-only">Describe the place you want</label>
           <textarea id="home-q" ref={box} rows={1} maxLength={300} value={text}
             onChange={(e) => { const v = e.target.value; setText(v); clearTimeout(timer.current); if (!ai.open && !deferred) { if (v.trim() === "") search(""); else timer.current = setTimeout(() => search(v), 800); } }}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
-            placeholder={ai.open ? "Reply to refine: “make it Kiambu”…" : "Try “2 bedroom in Kilimani under 80k”"}
-            className={`min-h-6 min-w-0 flex-1 resize-none bg-transparent ${text.length > 0 && !ai.open ? "pr-[7.4rem]" : "pr-[5.4rem]"} text-base leading-6 md:text-[1.05rem] outline-hidden placeholder:text-muted-foreground md:placeholder:text-[0.9rem] ${typing ? "max-h-[30dvh] overflow-y-auto overscroll-contain" : "h-6 overflow-hidden whitespace-nowrap placeholder:truncate"}`} />
-          {text.length > 0 && !ai.open && <button type="button" onClick={clearBox} aria-label={ai.open ? "Close chat and clear everything" : "Clear what I typed"} title={ai.open ? "Close chat and clear" : "Clear"} className="close-circle absolute right-[5.25rem] top-1/2 -translate-y-1/2"><X className="size-4" /></button>}
+            placeholder={ai.open ? "Describe the place, or reply to refine…" : "Try “2 bedroom in Kilimani under 80k”"}
+            className={`min-h-6 min-w-0 flex-1 resize-none bg-transparent ${text.length > 0 && !ai.open ? "pr-[8.6rem]" : "pr-[6.4rem]"} text-base leading-6 md:text-[1.05rem] outline-hidden placeholder:text-muted-foreground md:placeholder:text-[0.9rem] ${typing ? "max-h-[30dvh] overflow-y-auto overscroll-contain" : "h-6 overflow-hidden whitespace-nowrap placeholder:truncate"}`} />
+          {text.length > 0 && !ai.open && <button type="button" onClick={clearBox} aria-label={ai.open ? "Close chat and clear everything" : "Clear what I typed"} title={ai.open ? "Close chat and clear" : "Clear"} className="close-circle absolute right-[5.9rem] top-1/2 -translate-y-1/2"><X className="size-4" /></button>}
           <span data-tour="voice" className="ai-mic inline-flex"><VoiceButton onText={(t) => { if (ai.open) ai.send(t); else { setText(t); search(t); } }} /></span>
           <button type="submit" aria-label={ai.open ? "Send message" : "Search"} disabled={ai.pending} className="send-icon absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:text-foreground disabled:opacity-60">{ai.pending ? <Loader size="xs" /> : <Send className="size-5" aria-hidden />}</button>
         </div>
@@ -167,24 +169,23 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
         <div className={`flex min-w-0 flex-row flex-nowrap items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:justify-between sm:gap-3 ${typing || sheetLike ? "w-full" : "2xl:shrink-0"}`}>
         <div ref={moreRef} className={`input-glass flex w-auto shrink-0 items-center rounded-full px-4 ${typing || sheetLike ? "" : "2xl:h-14 2xl:px-5"}`}>
           <Button variant="ghost" type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen((o) => !o)} className={`flex h-10 w-full justify-start gap-2 ${sheetLike ? "" : "2xl:h-full"} bg-transparent p-0 text-left text-sm hover:bg-transparent`}>
-            <SlidersHorizontal className="h-4 w-4 shrink-0 text-foreground" strokeWidth={2} aria-hidden />
-            <span className="relative shrink-0 whitespace-nowrap pr-2 font-semibold text-foreground">More filters
-              {active > 0 && <span className="cta absolute -right-0.5 -top-3 grid h-[1.1rem] min-w-[1.1rem] place-items-center rounded-full px-1 text-[0.65rem] font-bold leading-none">{active}</span>}</span>
+            <span className="relative grid shrink-0"><FiltersIcon className="size-[1.15rem] text-foreground" strokeWidth={2.4} /><FilterBadge n={active} /></span>
+            <span className="shrink-0 whitespace-nowrap pr-1 font-semibold text-foreground">More filters</span>
           </Button>
           {!isPopup && filtersDialog}
         </div>
         <div className="ml-auto flex shrink-0 items-center justify-end gap-1">
           {(hasFilters(value) || text.length > 0 || ai.open) && <button type="button" data-tour="clear-all" onClick={clearAll} className={`inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-full ${sheetLike ? "" : "2xl:h-14"} px-3.5 text-sm font-bold text-foreground shadow-sm transition hover:bg-muted`}><X className="size-3.5" aria-hidden />Clear all</button>}
-          <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`ask-ai-btn inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 ${sheetLike ? "" : "2xl:h-14 2xl:px-6"} text-sm font-bold ${ai.open ? "max-md:hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
+          <Button type="button" data-tour="ask-ai" disabled={ai.pending} onClick={submitAi} title={ai.open ? "Send your message to the AI" : "Let AI read what you typed"} className={`ask-ai-btn inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 ${sheetLike ? "" : "2xl:h-14 2xl:px-6"} text-sm font-bold ${ai.open ? "hidden" : ""} transition hover:opacity-90 disabled:opacity-85`}>
             {ai.pending ? <Loader size="xs" /> : <Sparkles className="h-4 w-4" aria-hidden />}{ai.open ? "Refine" : "Ask AI"}
           </Button>
         </div>
         </div>
       </form>
-      {notes.length > 0 && <p className="mt-3 px-2 text-sm text-muted-foreground">Understood: {notes.join(" · ")}</p>}
+      {notes.length > 0 && !ai.open && <p className="mt-3 px-2 text-sm text-muted-foreground">Understood: {notes.join(" · ")}</p>}
       {ai.panel}
       {ai.dialog}
-    </>
+    </div>
   );
   if (isPopup) {
     return (
@@ -193,7 +194,7 @@ export function HomeSearch({ value, onChange, result, deferred = false, pinned =
         <Dialog open={popup === "ai"} onOpenChange={(o) => { if (!o) onPopupClose?.(); }} modal={false}>
           {popup === "ai" && typeof document !== "undefined" && createPortal(<div aria-hidden className="popup-scrim fixed inset-0 z-[80]" onClick={() => onPopupClose?.()} />, document.body)}
           <DialogContent onInteractOutside={(e) => { if (moreOpen || (e.target as Element | null)?.closest?.("[data-floating-panel], [data-filters-popup]")) e.preventDefault(); }} onEscapeKeyDown={(e) => { if (moreOpen) e.preventDefault(); }} className={`${POPUP_CARD} z-[81] sm:max-w-xl md:max-w-2xl [&>*]:min-w-0`}>
-            <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><ToneIcon icon={Search} tone="other" />Search</DialogTitle><DialogDescription className="sr-only">Describe the place you want, set filters or ask AI.</DialogDescription></DialogHeader>
+            <DialogHeader className="mb-1 text-left"><DialogTitle className="flex items-center gap-3"><span className="ai-tile" aria-hidden><Sparkles className="size-5 text-white" /></span>Ask AI</DialogTitle><DialogDescription className="sr-only">Tell me what you want in your own words, then keep refining it.</DialogDescription></DialogHeader>
             {sheetBody}
           </DialogContent>
         </Dialog>

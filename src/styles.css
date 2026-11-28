@@ -1889,3 +1889,63 @@ html:has(.site-menu-panel[data-open="true"]) body, html:has([role="dialog"][data
 /* The top pills: a soft dark surface with a faint edge (pure black read too heavy). */
 html:root .ld-pill, html:root[data-listing-dark="1"] .ld-pill { background: #141417 !important; border: 1px solid rgb(255 255 255 / .09) !important; }
 html:root .ld-pill-on, html:root[data-listing-dark="1"] .ld-pill-on { background: #1d1d22 !important; border-color: rgb(255 255 255 / .5) !important; color: #fff !important; }
+
+/* ===== Life for the popups and every search control: gradient accents, soft glow, real hover and press effects ===== */
+.fbadge { position: absolute; right: -.45rem; top: -.4rem; display: grid; place-items: center; min-width: .95rem; height: .95rem; padding: 0 .22rem; border-radius: 9999px; background: var(--brand-gradient); color: #fff; font-size: .58rem; font-weight: 800; line-height: 1; box-shadow: 0 0 0 1.5px rgb(0 0 0 / .55); pointer-events: none; }
+.ph-filter .fbadge { right: .1rem; top: .1rem; }
+.ai-tile { display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: .8rem; background: var(--brand-gradient); box-shadow: 0 8px 20px -8px rgb(253 38 122 / .65); }
+
+/* Popup cards glow softly from the top corners instead of sitting flat grey. */
+html:root[data-listing-dark="1"] .popup-frame.glass-menu, html:root .popup-frame.popup-clean { background-image: radial-gradient(120% 55% at 0% 0%, rgb(253 38 122 / .13), transparent 60%), radial-gradient(90% 50% at 100% 0%, rgb(255 96 54 / .09), transparent 62%) !important; border-color: rgb(253 38 122 / .22) !important; }
+/* Filter cards: a chosen value turns the card into a gradient-edged tile so you can see what is on. */
+html:root[data-listing-dark="1"] .popup-frame .fcard-on, html:root .fcard-on { background: linear-gradient(135deg, rgb(253 38 122 / .16), rgb(255 96 54 / .09)) !important; border-color: rgb(253 38 122 / .55) !important; box-shadow: 0 0 0 1px rgb(253 38 122 / .18) inset; }
+html:root .popup-frame [class*="rounded-2xl"][class*="p-3"]:hover { border-color: rgb(253 38 122 / .35); }
+html:root .seg-on { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: 0 6px 16px -8px rgb(253 38 122 / .8); }
+/* Checkboxes everywhere inside popups and pickers use the gradient when ticked. */
+html:root :is(.popup-frame, .m-sheet, [data-floating-panel], .glass-menu) input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 1.25rem; height: 1.25rem; flex: none; border-radius: .4rem; border: 1.5px solid rgb(255 255 255 / .35); background: transparent; display: inline-grid; place-items: center; cursor: pointer; transition: background .15s, border-color .15s, transform .1s; }
+html:root :is(.popup-frame, .m-sheet, [data-floating-panel], .glass-menu) input[type="checkbox"]:checked { background: var(--brand-gradient); border-color: transparent; background-image: var(--brand-gradient), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 10.5l3.5 3.5 7.5-8'/%3E%3C/svg%3E"); background-size: 100% 100%, 80% 80%; background-repeat: no-repeat; background-position: center; }
+html:root :is(.popup-frame, .m-sheet, [data-floating-panel], .glass-menu) input[type="checkbox"]:active { transform: scale(.88); }
+html:root :is(.popup-frame, .m-sheet, [data-floating-panel], .glass-menu) input[type="checkbox"]:focus-visible { outline: 2px solid rgb(253 38 122 / .6); outline-offset: 2px; }
+/* Selected options in lists and pickers. */
+html:root [data-floating-panel] :is([aria-selected="true"], [data-state="checked"], [aria-checked="true"]) { background: linear-gradient(135deg, rgb(253 38 122 / .2), rgb(255 96 54 / .12)) !important; }
+
+/* AI popup and every AI chat: the conversation first, the typing area at the bottom. */
+.ai-layout { min-height: 0; }
+.ai-layout > .ai-chat { margin-top: 0; }
+.popup-frame .ai-chat { background: transparent !important; box-shadow: none !important; padding: 0 !important; margin-top: .25rem; }
+.popup-frame .ai-chat > div:first-child > :is(svg, h3, .close-circle) { display: none; }
+.popup-frame .ai-chat .ai-log { max-height: clamp(14rem, 44dvh, 30rem); }
+.ai-chat .rounded-bl-md { background: linear-gradient(135deg, rgb(253 38 122 / .12), rgb(255 96 54 / .07)) !important; border: 1px solid rgb(253 38 122 / .2); }
+.ai-chat .rounded-br-md { background: var(--brand-gradient) !important; color: #fff !important; }
+.ai-chat .ai-log > p.rounded-xl { background: linear-gradient(135deg, rgb(253 38 122 / .10), rgb(255 96 54 / .06)) !important; border: 1px solid rgb(253 38 122 / .16); }
+.ai-chat .ai-log svg { color: #ff5a6e; }
+/* Send and mic: colour, plus real hover and press effects, with a clear gap between the two circles. */
+html:root[data-listing-dark="1"] :is(.m-sheet, .popup-frame, .ls-card, .home-search, form) .send-icon.send-icon, html:root .send-icon.send-icon { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: 0 6px 16px -6px rgb(253 38 122 / .75) !important; transition: transform .12s, filter .15s, box-shadow .15s; }
+html:root .send-icon.send-icon:hover { filter: brightness(1.1); transform: translateY(-50%) scale(1.07) !important; box-shadow: 0 8px 20px -6px rgb(253 38 122 / .9) !important; }
+html:root .send-icon.send-icon:active { transform: translateY(-50%) scale(.9) !important; }
+html:root .send-icon.send-icon:disabled { filter: grayscale(.4); }
+html:root .ai-mic .voice-btn { right: 3.35rem !important; }
+html:root :is(.voice-btn, .voice-btn-inline) { background: rgb(255 255 255 / .08); color: var(--foreground) !important; transition: transform .12s, background .15s, box-shadow .15s; }
+html:root :is(.voice-btn, .voice-btn-inline):hover { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: 0 6px 16px -8px rgb(253 38 122 / .8); }
+html:root :is(.voice-btn, .voice-btn-inline):active { transform: translateY(-50%) scale(.9); }
+html:root .voice-btn-inline:active { transform: scale(.9); }
+html:root :is(.voice-btn, .voice-btn-inline)[data-state="rec"] { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: 0 0 0 3px rgb(253 38 122 / .25); }
+/* Search, clear and similar round buttons inside every search bar. */
+html:root :is(.hdr-search-go, [role="search"] button[type="submit"]):not(.send-icon) { transition: transform .12s, filter .15s, box-shadow .15s; }
+html:root :is(.hdr-search-go, [role="search"] button[type="submit"]):not(.send-icon):hover { filter: brightness(1.12); transform: scale(1.06); box-shadow: 0 6px 16px -6px rgb(253 38 122 / .8); }
+html:root :is(.hdr-search-go, [role="search"] button[type="submit"]):not(.send-icon):active { transform: scale(.92); }
+html:root [role="search"] button[aria-label^="Clear"]:hover { background: rgb(253 38 122 / .22); }
+/* Every pill, chip and header button reacts: lift on hover, press on click, gradient edge when active. */
+html:root :is(.ld-pill, .xbtn, .ask-ai-btn, .tool-btn, .view-pill, .pill-soft) { transition: transform .12s, border-color .15s, background .15s, box-shadow .15s; }
+html:root :is(.ld-pill, .xbtn):hover { border-color: rgb(253 38 122 / .55) !important; box-shadow: 0 6px 18px -10px rgb(253 38 122 / .8); }
+html:root :is(.ld-pill, .xbtn, .ask-ai-btn):active { transform: scale(.95); }
+html:root .ld-pill-on { border-color: transparent !important; background: linear-gradient(#1b1b20, #1b1b20) padding-box, var(--brand-gradient) border-box !important; border: 1.5px solid transparent !important; }
+/* Large-screen Filters and Ask AI buttons: a visible hairline, gradient on hover. */
+html:root .xbtn { background: #141417; border-color: rgb(255 255 255 / .16); }
+html:root .ask-ai-btn { transition: transform .12s, filter .15s; } html:root .ask-ai-btn:hover { filter: brightness(1.15); }
+
+/* Popups: filter cards carry a faint gradient wash, notes are tinted, and floating tour prompts step aside while a popup is open. */
+html:root[data-listing-dark="1"] .popup-frame .fcard:not(.fcard-on) { background-image: linear-gradient(135deg, rgb(253 38 122 / .05), rgb(255 96 54 / .02) 55%, transparent); }
+html:root .popup-frame .popup-note { background: linear-gradient(135deg, rgb(253 38 122 / .12), rgb(255 96 54 / .07)) !important; border: 1px solid rgb(253 38 122 / .28) !important; }
+html:has([role="dialog"][data-state="open"]) .tour-prompt, html:has(.m-sheet[data-open="true"]) .tour-prompt { display: none !important; }
+html:root .popup-frame.glass-menu { background-image: radial-gradient(120% 55% at 0% 0%, rgb(253 38 122 / .2), transparent 62%), radial-gradient(90% 50% at 100% 0%, rgb(255 96 54 / .14), transparent 64%) !important; }

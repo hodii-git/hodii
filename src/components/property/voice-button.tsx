@@ -136,7 +136,7 @@ export function VoiceButton({ onText, inline = false, className = "" }: { onText
 
   return (<>
     <button ref={btn} type="button" onClick={state === "rec" ? stop : start} disabled={state === "busy"} aria-label={state === "rec" ? "Stop recording" : "Search by voice"} aria-pressed={state === "rec"} title={state === "rec" ? "Tap to stop" : "Speak your search"}
-      className={`${inline ? "voice-btn-inline relative isolate size-9" : "voice-btn absolute right-1.5 top-1/2 size-9 -translate-y-1/2"} inline-grid shrink-0 place-items-center rounded-full text-xs font-bold ${state === "rec" ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted"} ${className}`}>
+      data-state={state} className={`${inline ? "voice-btn-inline relative isolate size-9" : "voice-btn absolute right-1.5 top-1/2 size-9 -translate-y-1/2"} inline-grid shrink-0 place-items-center rounded-full text-xs font-bold ${state === "rec" ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted"} ${className}`}>
       {state === "busy" ? <Loader2 className="size-4 animate-spin" aria-hidden /> : state === "rec" ? <><span className="voice-ring" aria-hidden /><span className="voice-ring voice-ring-2" aria-hidden /><Mic className="relative size-5" aria-hidden /></> : <Mic className="size-5" aria-hidden />}
     </button>
     <Dialog open={info !== null} onOpenChange={(o) => { if (!o) setInfo(null); }}>

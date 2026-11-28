@@ -1,6 +1,8 @@
 import { HeaderPills, HeaderSearch, MobileTypePills } from "@/components/header-search";
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { installApp, updateApp, usePwa } from "@/lib/pwa";
+import { FilterBadge, countFilters } from "@/components/ui/filters-icon";
+import { paramsFromUrl, type SearchUrl } from "@/lib/search-url";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Bell, Download, RefreshCw, Tag, KeyRound, BedDouble, Construction, MapPinned, LandPlot, Landmark, HardHat, DoorOpen, Building, Building2, BedSingle, GraduationCap, ConciergeBell, Briefcase, Store, Warehouse, Tractor, Palmtree, ArrowRight, Calculator, ChevronRight, Home, PlusCircle, Scale, Search, Sparkles, UserRound, Users, X } from "lucide-react";
 import { useCompare } from "@/lib/compare";
@@ -79,6 +81,8 @@ export function SiteHeader() {
   const compareCount = useCompare().length;
   const path = useRouterState({ select: (s) => s.location.pathname });
   const searchStr = useRouterState({ select: (s) => s.location.searchStr });
+  const rawSearch = useRouterState({ select: (s) => s.location.search }) as SearchUrl;
+  const filterN = countFilters(paramsFromUrl(rawSearch));
   const signedIn = !!useAuth().user;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -97,6 +101,7 @@ export function SiteHeader() {
     <div className="flex items-center gap-2.5">
       <button type="button" aria-label="Filters" aria-haspopup="dialog" onClick={() => popup("filters")} className="ph-filter relative grid size-11 shrink-0 place-items-center rounded-full text-white active:scale-95">
         <svg viewBox="0 0 28 28" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden><path d="M3 8h11M22 8h3M3 20h3M14 20h11" /><circle cx="18" cy="8" r="3.4" /><circle cx="10" cy="20" r="3.4" /></svg>
+        <FilterBadge n={filterN} />
       </button>
       <button type="button" onClick={openSearch} aria-expanded={sheet} aria-label="Search properties" className="flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-full bg-foreground/[0.06] px-4 text-left text-[0.95rem] font-medium text-muted-foreground">
         <Search className="size-[1.1rem] shrink-0 text-foreground" aria-hidden /><span className="truncate">Search homes, places…</span>

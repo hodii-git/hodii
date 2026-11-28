@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { LocateFixed, Search, SlidersHorizontal, X } from "lucide-react";
+import { LocateFixed, Search, X } from "lucide-react";
+import { FiltersIcon } from "@/components/ui/filters-icon";
 import { COUNTY_LIST } from "@/lib/mongodb/kenya";
 import { locateMe } from "@/components/property/use-my-location";
 import { CONDITIONS, FEATURES, FURNISHINGS, LISTING_TYPES, PROPERTY_CATEGORIES, PROPERTY_TYPES, featuresFor } from "@/lib/mongodb/taxonomy";
@@ -111,7 +112,7 @@ function SearchFormInner({ value, onChange, side = false, result }: Props & { re
           </button>
           {(hasFilters(value) || q.length > 0 || ai.open) && <button type="button" onClick={clearAll} className="inline-flex h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-4 text-[0.95rem] font-semibold text-muted-foreground hover:bg-muted hover:text-foreground"><X className="size-4" aria-hidden />Clear all</button>}
           <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className={`inline-flex h-12 items-center gap-2 rounded-xl border border-input bg-background px-5 text-[0.95rem] font-semibold ${side ? "lg:hidden" : ""}`}>
-            <SlidersHorizontal className="h-4 w-4" aria-hidden />Filters{active ? <span className="rounded-full bg-primary px-1.5 text-xs text-primary-foreground">{active}</span> : null}
+            <FiltersIcon className="h-[1.1rem] w-[1.1rem]" strokeWidth={2.4} />Filters{active ? <span className="rounded-full bg-primary px-1.5 text-xs text-primary-foreground">{active}</span> : null}
           </button>
         </div>
       </div>

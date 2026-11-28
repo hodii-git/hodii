@@ -3,7 +3,8 @@ import { COUNTY_OPTIONS, toOptions } from "@/lib/pick-options";
 import { Pick } from "@/components/ui/pick";
 import { createPortal } from "react-dom";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowUp, BadgeCheck, MapPin, Search, SlidersHorizontal, X } from "lucide-react";
+import { FiltersIcon } from "@/components/ui/filters-icon";
+import { ArrowUp, BadgeCheck, MapPin, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VoiceButton } from "@/components/property/voice-button";
 import { POPUP_CARD, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -55,7 +56,7 @@ function AgencySearch({ q, onQ, children, more, onClear, active }: { q: string; 
       <div className="flex min-w-0 flex-row flex-nowrap items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="input-glass flex w-auto shrink-0 items-center rounded-xl px-3">
           <Button variant="ghost" type="button" aria-expanded={moreOpen} onClick={() => setMoreOpen(true)} className="flex h-10 items-center gap-2 bg-transparent p-0 text-sm hover:bg-transparent">
-            <SlidersHorizontal className="size-4 shrink-0" strokeWidth={2} aria-hidden />
+            <FiltersIcon className="size-[1.1rem] shrink-0" strokeWidth={2.4} />
             <span className="relative whitespace-nowrap pr-2 font-semibold">More filters{active > 0 && <span className="cta absolute -right-0.5 -top-3 grid h-[1.1rem] min-w-[1.1rem] place-items-center rounded-full px-1 text-[0.65rem] font-bold leading-none">{active}</span>}</span>
           </Button>
         </div>

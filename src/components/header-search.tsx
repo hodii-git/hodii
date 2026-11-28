@@ -40,12 +40,20 @@ export function HeaderSearch() {
   );
 }
 
-/** The property-type pills under the header on the explore page; they read and change the address themselves. */
+/** The property types as one row of pills (the same look as on the phone) that scrolls sideways; used under the header on tablets and beside Filters on large screens. */
 export function HeaderPills({ fade = "card" }: { fade?: "card" | "page" }) {
   const navigate = useNavigate();
   const search = useRouterState({ select: (s) => s.location.search }) as SearchUrl;
   const params = paramsFromUrl(search);
-  return <TypePills fade={fade} selected={params.propertyTypes} onChange={(v) => void navigate({ to: "/properties", search: { ...urlFromParams({ ...params, propertyTypes: v as typeof params.propertyTypes, page: 1 }), ...keepView(search) }, replace: true, resetScroll: false })} />;
+  const none = !params.propertyTypes?.length;
+  const pill = "ld-pill shrink-0 whitespace-nowrap !h-10 !text-[0.9rem]";
+  const edge = fade === "page" ? "var(--background)" : "var(--card)";
+  return (
+    <div role="group" aria-label="Property types" data-tour="type-pills" className="flex items-center gap-2 overflow-x-auto py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ "--fade-bg": edge, WebkitMaskImage: "linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 28px), transparent 100%)", maskImage: "linear-gradient(to right, transparent 0, #000 10px, #000 calc(100% - 28px), transparent 100%)" } as React.CSSProperties}>
+      <button type="button" aria-pressed={none} onClick={() => void navigate({ to: "/properties", search: { ...urlFromParams({ ...params, propertyTypes: undefined, page: 1 }), ...keepView(search) }, replace: true, resetScroll: false })} className={`${pill} ${none ? "ld-pill-on" : ""}`}>All</button>
+      <MobileTypePills pill={pill} />
+    </div>
+  );
 }
 
 /** The same property types as the chips, as small pills for the phone header's scrolling row (they read and change the address themselves). */

@@ -121,7 +121,7 @@ function ChatPanel({ msgs, pending, result, remaining, onNew, onClose }: { msgs:
   useEffect(() => { end.current?.scrollIntoView({ block: "nearest", behavior: "smooth" }); }, [msgs.length, pending, result?.total, result?.loading]);
   const lastAi = [...msgs].reverse().find((m) => m.role === "ai")?.id;
   return (
-    <section aria-label="Chat with AI search" className="ai-chat mt-4 rounded-3xl bg-card p-3 shadow-[0_0_0_1px_rgb(15_23_42/0.08),0_30px_60px_-30px_rgb(15_23_42/0.45)] sm:p-5">
+    <section aria-label="Chat with AI search" className="ai-chat order-1 mt-4 rounded-3xl bg-card p-3 shadow-[0_0_0_1px_rgb(15_23_42/0.08),0_30px_60px_-30px_rgb(15_23_42/0.45)] sm:p-5">
       <div className="mb-3 flex items-center gap-2 pl-2">
         <Sparkles className="size-4 text-foreground" aria-hidden />
         <h3 className="text-sm font-extrabold">Chat search</h3>

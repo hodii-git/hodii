@@ -206,7 +206,7 @@ function RootComponent() {
           <LiveUpdates />
           {isFramedPath(pathname) ? null : isDashboardPath(pathname) ? <DashHeader /> : <SiteHeader />}
           {paused ? (
-            <main className="flex flex-1 items-center justify-center px-4 pt-28 pb-24">
+            <main className="flex flex-1 items-center justify-center px-4 pt-[calc(var(--head-h,9.75rem)+2rem)] pb-24">
               <div className="empty-card max-w-lg p-8 text-center">
                 <h1 className="text-3xl">We'll be right back</h1>
                 <p className="mt-3 text-muted-foreground">{site?.maintenance_message || "The site is paused for maintenance."}</p>

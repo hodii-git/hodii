@@ -29,7 +29,7 @@ const HINTS: Record<string, string> = { Location: "A county, or your spot on the
 const L = ({ icon, tone, children }: { icon: LucideIcon; tone: Tone; children: ReactNode }) => (
   <span className="mb-3 flex items-start gap-3"><ToneIcon icon={icon} tone={tone} /><span className="min-w-0"><span className="block text-sm font-bold text-foreground">{children}</span><span className="block text-xs text-muted-foreground">{HINTS[String(children)] ?? ""}</span></span></span>
 );
-const fcard = "min-w-0 rounded-2xl border border-border bg-muted p-3 transition focus-within:border-border";
+const fcard = "fcard min-w-0 rounded-2xl border border-border p-3 transition focus-within:border-border";
 const kes = (n: number) => `KES ${n.toLocaleString("en-KE")}`;
 const RENT = [10_000, 20_000, 30_000, 50_000, 80_000, 120_000, 200_000, 400_000];
 const SALE = [2_000_000, 5_000_000, 8_000_000, 12_000_000, 20_000_000, 40_000_000, 80_000_000, 200_000_000];

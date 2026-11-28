@@ -88,7 +88,7 @@ function HomePage() {
 
       </div>
       {!filtering && (data.unavailable ? <div className="mx-auto mt-6 max-w-[112rem]"><DataUnavailable /></div> : (
-        <div className="mx-auto mt-6 max-w-[112rem] space-y-10 md:mt-8">
+        <div className="home-sections mx-auto -mt-2 max-w-[112rem] space-y-10 md:mt-2">
           {(() => {
             const items = [...featured.filter((c) => c.tier === "premium"), ...featured.filter((c) => c.tier === "boost")];
             return items.length > 0 && (

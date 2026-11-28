@@ -66,10 +66,11 @@ function useHeaderScroll(el: RefObject<HTMLDivElement | null>, on: boolean) {
     const node = el.current;
     if (!on || !node) return;
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const phone = window.matchMedia("(max-width: 767px)");
     let target = 0, cur = 0, last = window.scrollY, raf = 0;
     const paint = () => { node.style.setProperty("--sp", cur.toFixed(4)); if (cur > 0.6) node.setAttribute("data-collapsed", ""); else node.removeAttribute("data-collapsed"); };
     const loop = () => {
-      cur += (target - cur) * (calm ? 1 : 0.14);
+      cur += (target - cur) * (calm ? 1 : phone.matches ? 0.3 : 0.14);
       if (Math.abs(target - cur) < 0.002) cur = target;
       paint();
       raf = cur === target ? 0 : requestAnimationFrame(loop);
@@ -77,7 +78,7 @@ function useHeaderScroll(el: RefObject<HTMLDivElement | null>, on: boolean) {
     const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
     const onScroll = () => {
       const y = window.scrollY, dy = y - last; last = y;
-      target = y < 24 ? 0 : Math.min(1, Math.max(0, target + dy / 240));
+      target = y < 24 ? 0 : Math.min(1, Math.max(0, target + dy / (phone.matches ? 130 : 240)));
       kick();
     };
     const size = () => document.documentElement.style.setProperty("--head-h", `${node.getBoundingClientRect().height}px`);
@@ -178,6 +179,9 @@ export function SiteHeader() {
   };
   const Tile = (I: typeof Home) => <span className="menu-tile grid size-8 shrink-0 place-items-center rounded-lg"><I className="size-4" aria-hidden /></span>;
   const Chev = <ChevronRight className="h-4 w-4" aria-hidden />;
+  const compareLink = (
+    <Link to="/compare" className={`${row} ${compareCount ? "menu-link-active" : ""}`} onClick={close}><span className={`menu-tile ${compareCount ? "menu-tile-on" : ""} relative grid size-8 shrink-0 place-items-center rounded-lg`}><Scale className="size-4" aria-hidden />{compareCount > 0 && <span className="menu-count">{compareCount}</span>}</span><span className="mr-auto">Compare{compareCount ? ` (${compareCount})` : ""}</span>{Chev}</Link>
+  );
 
   return (
     <div className="wb wb-site">
@@ -196,7 +200,7 @@ export function SiteHeader() {
           </div></div>
           <button type="button" className={`ph-menu md:hidden grid place-items-center text-white active:scale-95 ${open ? "invisible" : ""}`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>
-              {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-primary" aria-hidden />}
+              {compareCount > 0 && <span className="brand-dot absolute right-1 top-1 size-2 rounded-full" style={{ background: "var(--brand-gradient)" }} aria-hidden />}
             </button>
         </>)}
         {explore && !solid && (
@@ -207,7 +211,7 @@ export function SiteHeader() {
             </button>
             <button type="button" className={`relative grid size-10 shrink-0 place-items-center text-white active:scale-95 ${open ? "invisible" : ""}`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               <svg viewBox="0 0 24 24" aria-hidden="true" className="size-[26px]" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M4 6.5h16M10 12h10M14 17.5h6" /></svg>
-              {compareCount > 0 && <span className="absolute right-1 top-1 size-2 rounded-full bg-foreground" aria-hidden />}
+              {compareCount > 0 && <span className="brand-dot absolute right-1 top-1 size-2 rounded-full" style={{ background: "var(--brand-gradient)" }} aria-hidden />}
             </button>
           </div>
         )}
@@ -231,7 +235,7 @@ export function SiteHeader() {
             <span data-tour="account" className="inline-flex"><AccountButton /></span>
             <button type="button" className={`menu-btn relative ${open ? "invisible" : ""}`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
               <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 5h18M8 12h13M13 19h8" /></svg>
-              {compareCount > 0 && <span className="absolute right-1.5 top-1.5 size-2.5 rounded-full bg-primary" aria-hidden />}
+              {compareCount > 0 && <span className="brand-dot absolute right-1.5 top-1.5 size-2.5 rounded-full" style={{ background: "var(--brand-gradient)" }} aria-hidden />}
             </button>
           </div>
         </header>
@@ -266,10 +270,15 @@ export function SiteHeader() {
           <div className="grid">
             <Link to="/agencies" className={row} onClick={close}>{Tile(Users)}<span className="mr-auto">Agents and developers</span>{Chev}</Link>
             <Link to="/tools" className={row} onClick={close}>{Tile(Calculator)}<span className="mr-auto">Calculators</span>{Chev}</Link>
-            <Link to="/compare" className={`${row} ${compareCount ? "menu-link-active" : ""}`} onClick={close}><span className={`menu-tile ${compareCount ? "menu-tile-on" : ""} relative grid size-8 shrink-0 place-items-center rounded-lg`}><Scale className="size-4" aria-hidden />{compareCount > 0 && <span className="menu-count">{compareCount}</span>}</span><span className="mr-auto">Compare{compareCount ? ` (${compareCount})` : ""}</span>{Chev}</Link>
-            <Link to="/list-property" className="menu-cta lg:hidden" onClick={close}><PlusCircle className="size-5" aria-hidden /><span className="mr-auto">List a property</span><ArrowRight className="size-4" aria-hidden /></Link>
+            {!compareCount && compareLink}
           </div>
-        </div></div>
+        </div>
+        {/* Pinned under the scrolling list, so Compare (when something is picked) and List a property never need a scroll to reach. */}
+        <div className={`menu-foot ${compareCount ? "" : "lg:hidden"}`}>
+          {compareCount > 0 && compareLink}
+          <Link to="/list-property" className="menu-cta lg:hidden" onClick={close}><PlusCircle className="size-5" aria-hidden /><span className="mr-auto">List a property</span><ArrowRight className="size-4" aria-hidden /></Link>
+        </div>
+        </div>
       </div>
     </div>
   );

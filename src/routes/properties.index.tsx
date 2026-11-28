@@ -78,7 +78,7 @@ function PropertiesPage() {
   const setGeo = (g: Pick<SearchParams, "circle" | "polygon">) => change({ circle: undefined, polygon: undefined, ...g, page: 1 });
 
   return (
-    <main className="pt-[calc(var(--head-h,9.75rem)+1rem)] pb-24 max-sm:px-4 lg:pt-[calc(var(--head-h,11rem)+1.5rem)]">
+    <main className="props-page pt-[calc(var(--head-h,9.75rem)+1rem)] pb-24 max-sm:px-4 lg:pt-[calc(var(--head-h,11rem)+1.5rem)]">
       {!(map && wide) && <div className="mx-auto max-w-[112rem]">
         <div className="mx-auto mt-4 max-w-4xl lg:hidden"><HomeSearch value={params} onChange={change} result={aiResult} /></div>
       </div>}

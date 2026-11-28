@@ -1434,8 +1434,9 @@ html[data-sheet] .listing-dock { display: none; }
   html[data-listing-dark="1"] .compare-tray .cta-ink { background: var(--brand-gradient) !important; color: #fff !important; box-shadow: none !important; }
   html[data-listing-dark="1"] .compare-tray .close-circle { background: #26262a !important; color: #fff !important; border: 1px solid rgb(255 255 255 / .12) !important; }
 }
+/* Only while a listing page's action dock is showing does the strip ride above it; everywhere else it stays on the bottom row. */
 @media (max-width: 767px) {
-  html[data-listing-dark="1"] .compare-tray { bottom: calc(var(--tab-h) + 6.6rem) !important; }
+  html[data-listing-dark="1"][data-dock="shown"] .compare-tray { bottom: calc(var(--tab-h, 0px) + 6.6rem) !important; }
 }
 
 /* Large screens: the page behind is plain dark (no cover-photo wash), and the original floating header keeps its light look. */
@@ -1964,3 +1965,31 @@ html:root .popup-frame.glass-menu { background-image: radial-gradient(120% 55% a
 @media (max-width: 767px) { .wb-footer footer { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)); } }
 /* Dashboard "Add listing": black. */
 html:root [data-tour="add-listing"] { background: #000 !important; color: #fff !important; border: 1px solid rgb(255 255 255 / .15) !important; background-image: none !important; box-shadow: none !important; }
+
+/* ===== Fixes, 28 Nov (last word) ===== */
+
+/* Floating stack: the compare strip always sits on the bottom row (above the tab bar when there is one), and the List / Map pill sits directly above it. The dark listing rule used to lift the strip 6.6rem on every page, which put it mid-screen and on top of the pill. */
+html:root .compare-tray { bottom: calc(var(--tab-h, 0px) + var(--stack-gap, .6rem)) !important; }
+html:root[data-listing-dark="1"][data-dock="hidden"] .compare-tray { bottom: calc(var(--tab-h, 0px) + var(--stack-gap, .6rem)) !important; }
+
+/* Menu: the close button sits at the right end of its row. */
+.wb.wb-site .menu-title-row { display: flex !important; align-items: center; justify-content: space-between; margin-inline: .75rem -.1rem !important; }
+.wb.wb-site .menu-title-row .menu-close { margin-left: auto; flex: none; }
+
+/* Menu: Compare (when something is picked) and List a property are pinned under the scrolling list. */
+.wb.wb-site .site-menu-panel > .menu-foot { flex: none; position: relative; display: grid; gap: .5rem; padding: .9rem 1rem calc(.9rem + env(safe-area-inset-bottom, 0px)); background: #141416; }
+.wb.wb-site .site-menu-panel > .menu-foot::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 1.75rem; background: linear-gradient(to top, #141416, transparent); pointer-events: none; }
+.wb.wb-site .site-menu-panel > .menu-foot .menu-cta { margin: 0; }
+html:root[data-listing-dark="1"] .wb.wb-site .site-menu-panel { padding-bottom: 0 !important; }
+
+/* Filters popup: the cards use the same soft tint as the "Results update as you choose" note, and that note runs the full width of the popup (the head used to keep room on the right for the close button, which squeezed the note). */
+html:root .fcard { background-color: color-mix(in oklab, var(--foreground) 4%, transparent) !important; background-image: none !important; }
+.popup-frame .popup-head { padding-right: 1.25rem; }
+@media (min-width: 640px) { .popup-frame .popup-head { padding-right: 1.5rem; } }
+.popup-frame .popup-head h2 { padding-right: 2.75rem; }
+.popup-frame .popup-head .popup-note { width: 100%; }
+
+/* Properties page: no border lines. The active pill keeps its gradient edge. */
+html:root .props-page :is(.border, [class*="border-"], .seg-pill, .xbtn, .surface, .tool-btn, .pill-soft, .empty-card, .glass-menu, .close-circle):not([class*="border-dashed"]):not([class*="border-primary"]):not(.leaflet-container *) { border-color: transparent !important; }
+html:root:has(.props-page) .solid-head, html:root:has(.props-page) .wb.wb-site .solid-head.glass-nav { border-bottom-color: transparent !important; }
+html:root:has(.props-page) .ld-pill:not(.ld-pill-on) { border-color: transparent !important; }
